@@ -1,4 +1,4 @@
-::@echo off
+@echo off
 
 ::variables that are the same for every mod
 set hyphens=-------------------------------
@@ -12,20 +12,20 @@ if exist "*.exe" (
     echo Hello Bro
     echo Please place this .bat in the same folder as your mod
     echo %hyphens%
-    set /p modName=What's the mods name? No spaces or weird characters
+    set /p "modName=What's the mods name? No spaces or weird characters"
 )
 
 ::folders that are the same in psych and codename. Shoutout to this website for this script: https://www.tutorialspoint.com/batch_script/batch_script_arrays.htm
 for /D %%A in (fonts,music,shaders,sounds,images,videos) do (
-    robocopy %%A %modName%\%%A
+    robocopy %%A "%modName%\%%A"
 )
 
 
-robocopy weeks\ %modName%\data\weeks\weeks\
+robocopy weeks\ "%modName%\data\weeks\weeks\"
 
-robocopy /s songs\ %modName%\songs\
+robocopy /s songs\ "%modName%\songs\"
 
-for %%A in (%modName%\songs\) do (
+for %%A in ("%modName%\songs\") do (
     robocopy /s *.ogg song\
 )
 
@@ -38,4 +38,4 @@ echo            Done!
 echo You can close this window now
 pause
 
-rd /q /s %modName%
+::rd /q /s %modName%
