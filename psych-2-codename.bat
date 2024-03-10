@@ -1,46 +1,42 @@
 ::@echo off
 
 ::variables that are the same for every mod
-set hyphens=-------------------------------
+set hyphens=---------------------------------------
 set difficulties="easy" "normal" "hard"
-set modName=%~dp0
 title FNF Porter v1
-if exist "*.exe" (
-    color 04
-    echo Whoops! No .exe mods. /mods folder mods only.
-    pause 
-) else ( 
-    echo Hello Bro
-    echo Please place this .bat in the same folder as your mod
-    echo for example
-    echo 17 bucks
-    echo    characters
-    echo    data
-    echo    images
-    echo    ...
-    echo    %~n0%~x0
-    echo %hyphens%
-)
+echo Hello Bro
+echo Put this in your PsychEngine folder
+echo Your mods:
+dir /AD /B mods\
+echo %hyphens%
+set /p "modName=What mod would you like to port? Enter the exact folder name: "
 
-::folders that are the same in psych and codename. Shoutout to this website for this script: https://www.tutorialspoint.com/batch_script/batch_script_arrays.htm
+
+
+set output=psych-to-codename-output\%modName%
+set input=mods\%modName%
+
+::folders that are the same in psych and codename
 for /D %%A in (fonts,music,shaders,sounds,images,videos) do (
-    robocopy %%A "%modName%"\%%A
+    robocopy /s %input%\%%~A %output%\%%~A
 )
 
 
-robocopy weeks\ "%modName%"\data\weeks\weeks\
+robocopy %input%\weeks %output%\data\weeks\weeks\
 
-for %%A in (songs\) do (
-    robocopy /s songs\ "%modName%"\songs\songName\song
+for %%A in (.) do (
+    robocopy /s %input%\songs\ %output%\songs\
+    robocopy /s %input%\weeks\ %output%\data\weeks\week\
 )
 
-for %%A in (data\*\.json) do (
-    echo %%A
+for /D %%A in (.) do (
+    robocopy /s /mov %output%\songs\ %output%\songs\song\ *.ogg
 )
+
+cd %output%
+echo Ported with FNF Porter v1. By Gusborg and BombasticTom. Download for yourself: https://gamebanana.com/mods/ > fnf-porter.txt
+cd ..\..\
 
 echo %hyphens%
-echo            Done!             
-echo You can close this window now
+echo Done!
 pause
-
-rd /q /s "%modName%"
