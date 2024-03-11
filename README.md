@@ -7,11 +7,12 @@ Ports FNF mods between engines using the command prompt. For now its a windows t
 (note all the folders mentioned are under the mod name)
 - [x] Move fonts, images, music, shaders, sounds, videos
 ### Data folder
-- [ ] Move characters to data\characters
+- [x] Move characters to data\characters
   - [ ] and convert lua to haxe
+  - [x] and convert json to xml
 - [ ] Move credits to data\config
-- [ ] Move dialogue (boxes and characters) to data\dialogue
-- [ ] Move note splashes to data\splashes
+- [x] Move dialogue (boxes and characters) to data\dialogue
+- [x] Move note splashes to data\splashes
 - [ ] Move stages to data\stages
 - [x] Move weeks to data\weeks
 ### Songs folder
@@ -24,4 +25,4 @@ Ports FNF mods between engines using the command prompt. For now its a windows t
 - [ ] Move scripts to songs
   - [ ] and convert lua to haxe
 ## Codename to Psych
-wehhhhhhhhh i dont wanna do it
+ ehhhhh maybe some other day
