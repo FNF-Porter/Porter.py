@@ -25,8 +25,6 @@ for /D %%A in (fonts,music,shaders,sounds,images,videos) do (
 
 robocopy %input%\weeks %output%\data\weeks\weeks\
 
-robocopy %input%\characters %output%\data\characters
-
 ::for %%A in (%output%\data\characters\) do (
 ::    python json-to-xml.py %modName%
 ::)
@@ -44,6 +42,9 @@ for /D %%A in (%output%\songs\*) do (
         move %%B "%%A\!filename:~0,-4!\" >nul 2>&1
     )
 )
+
+:: In very early stages, right now it only converts character JSONs
+python json-to-xml.py %modName%
 
 ::for /D %%A in (%output%\songs\) do (
 ::    ren %output%\songs\%%A\ 
