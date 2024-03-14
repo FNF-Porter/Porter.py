@@ -6,7 +6,7 @@ import utils
 class XMLFile(etree.ElementBase):
 
 	defaultAttr = {}
-	renameValues = {}
+	# renameValues = {} screw this
 
 	@property
 	def doctype(self):
@@ -19,21 +19,24 @@ class XMLFile(etree.ElementBase):
 
 		self.json = None
 
-	def setup(self):
+	def setup(self, directory:str):
+		self.fileName = directory
+		for cuh, aaa in self.defaultAttr.items():
+			self.attrib[cuh] = aaa
 		return self
 
-	def defaultCheck(self, key:str, val:any, dictionary:dict=None):
-		if (dictionary is None):
-			dictionary = self.defaultAttr
-
-		key = self.renameValues.get(key, key)
+	def basicCheck(self, key:str, val:any):
+		# key = self.renameValues.get(key, key)
 		val = utils.toString(val)
 
-		dKey = dictionary.get(key)
-		if dKey == val and self.attrib.get(key) is not None:
+		if self.attrib[key] == val:
 			del self.attrib[key]
-		elif dKey != val:
+		else:
 			self.attrib[key] = val
+		
+	def advancedCheck(self, values:dict):
+		for key, val in values.items():
+			self.basicCheck(key, val)
 
 	def loadFromJson(self):
 		if (self.fileName == None):
@@ -59,18 +62,10 @@ class CharacterXML(XMLFile):
 		"camy": "0",
 		"holdTime": "4",
 		"flipX": "false",
-		"icon": None,
+		"icon": "",
 		"scale": "1",
 		"antialiasing": "true",
-		"sprite": None
-	}
-
-	renameValues = {
-		"sing_duration": "holdTime",
-		"flip_x": "flipX",
-		"healthicon": "icon",
-		"no_antialiasing": "antialiasing",
-		"image": "sprite"
+		"sprite": ""
 	}
 
 	def _init(self):
@@ -78,8 +73,11 @@ class CharacterXML(XMLFile):
 		self._xmlType = "character"
 
 	def setup(self, directory:str):
-		self.fileName = directory
+		super().setup(directory)
 		self.character = os.path.basename(directory)
+		self.attrib["icon"] = self.character
+		self.attrib["sprite"] = self.character
+
 		self.loadFromJson()
 
 		return self
@@ -88,44 +86,40 @@ class CharacterXML(XMLFile):
 		super().loadFromJson()
 
 		json = self.json
+		animations = json.pop("animations")
+		position = json.pop("position")
+		camera_position = json.pop("camera_position")
 
-		self.defaultCheck("isPlayer", self.character.startswith("bf"))
-		self.defaultCheck("isGF", self.character.startswith("gf"))
+		self.advancedCheck({
+			"isPlayer": self.character.startswith("bf"),
+			"isGF": self.character.startswith("gf"),
+			"x": position[0],
+			"y": position[1],
+			"camx": camera_position[0],
+			"camy": camera_position[1],
+			"holdTime": json.get("sing_duration"),
+			"flipX": json.get("flip_x"),
+			"icon": json.get("healthicon"),
+			"scale": json.get("scale"),
+			"antialiasing": not json.get("no_antialiasing"),
+			"sprite": os.path.basename(json.get("image"))
+		})
 
-		for key, item in json.items():
-			match(key):
-				case "animations":
-					for anim in item:
-						offsets = anim.get("offsets")
-						indices = ",".join(str(frame) for frame in anim.get("indices"))
+		for anim in animations:
+			offsets = anim.get("offsets")
+			indices = ",".join(str(frame) for frame in anim.get("indices"))
 
-						subAnim = etree.SubElement(self, "anim", {
-							"name": anim.get("name"),
-							"anim": anim.get("anim"),
-							"fps": str(anim.get("fps")),
-							"loop": str(anim.get("loop")).lower(),
-							"x": str(offsets[0]),
-							"y": str(offsets[1])
-						})
+			subAnim = etree.SubElement(self, "anim", {
+				"name": anim.get("name"),
+				"anim": anim.get("anim"),
+				"fps": str(anim.get("fps")),
+				"loop": str(anim.get("loop")).lower(),
+				"x": str(offsets[0]),
+				"y": str(offsets[1])
+			})
 
-						if len(indices) > 0:
-							subAnim.attrib["indices"] = indices
-				case "position":
-					self.defaultCheck("x", item[0])
-					self.defaultCheck("y", item[1])
-				case "camera_position":
-					self.defaultCheck("camx", item[0])
-					self.defaultCheck("camy", item[1])
-				case "healthbar_colors":
-					continue
-				case "healthicon":
-					self.defaultCheck(key, item, {"icon": self.character})
-				case "image":
-					self.defaultCheck(key, os.path.basename(item), {"sprite": self.character})
-				case "no_antialiasing":
-					self.defaultCheck(key, not item)
-				case _:
-					self.defaultCheck(key, item)
+			if len(indices) > 0:
+				subAnim.attrib["indices"] = indices
 
 	def save(self, directory:str):
 		etree.ElementTree(self).write(f"{os.path.join(directory, self.character)}.xml", pretty_print=True, doctype=self.doctype)
