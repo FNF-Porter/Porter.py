@@ -1,6 +1,10 @@
+## Folders
 __pycache__/*
 mods/*
 output/*
+
+## Files
+CodeTest.py
 LICENSE
 README.md
 fnf-porter.code-workspace
