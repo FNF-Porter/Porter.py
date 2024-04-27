@@ -1,0 +1,8 @@
+<!DOCTYPE codename-engine-character>
+<character x="130" y="80" holdTime="6.1" icon="rushroom" scale="1.3" sprite="shrooms">
+  <anim name="idle instance" anim="idle" fps="24" loop="false" x="0" y="0"/>
+  <anim name="left instance" anim="singLEFT" fps="24" loop="false" x="4" y="-3"/>
+  <anim name="down instance" anim="singDOWN" fps="24" loop="false" x="82" y="-85"/>
+  <anim name="up instance" anim="singUP" fps="24" loop="false" x="17" y="14"/>
+  <anim name="right instance" anim="singRIGHT" fps="24" loop="false" x="-26" y="-8"/>
+</character>

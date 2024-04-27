@@ -1,0 +1,78 @@
+{
+	"animations": [
+		{
+			"offsets": [
+				0,
+				0
+			],
+			"loop": false,
+			"fps": 24,
+			"anim": "idle",
+			"indices": [],
+			"name": "toad_idle"
+		},
+		{
+			"offsets": [
+				44,
+				-72
+			],
+			"loop": false,
+			"fps": 24,
+			"anim": "singDOWN",
+			"indices": [],
+			"name": "toad_down"
+		},
+		{
+			"offsets": [
+				18,
+				10
+			],
+			"loop": false,
+			"fps": 24,
+			"anim": "singUP",
+			"indices": [],
+			"name": "toad_up"
+		},
+		{
+			"offsets": [
+				54,
+				-26
+			],
+			"indices": [],
+			"fps": 24,
+			"anim": "singLEFT",
+			"loop": false,
+			"name": "toad_right"
+		},
+		{
+			"offsets": [
+				-57,
+				-5
+			],
+			"indices": [],
+			"fps": 24,
+			"anim": "singRIGHT",
+			"loop": false,
+			"name": "toad_left"
+		}
+	],
+	"no_antialiasing": false,
+	"image": "characters/btoad_ourp",
+	"position": [
+		20,
+		140
+	],
+	"healthicon": "btourple",
+	"flip_x": false,
+	"healthbar_colors": [
+		253,
+		99,
+		87
+	],
+	"camera_position": [
+		0,
+		120
+	],
+	"sing_duration": 6.1,
+	"scale": 0.8
+}

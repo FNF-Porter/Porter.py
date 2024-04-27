@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="boof.png">
+	<!-- Created with Adobe Animate version 21.0.6.41649 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="oof instance 10000" x="10" y="10" width="351" height="381" frameX="0" frameY="-17" frameWidth="351" frameHeight="398"/>
+	<SubTexture name="oof instance 10001" x="10" y="10" width="351" height="381" frameX="0" frameY="-17" frameWidth="351" frameHeight="398"/>
+	<SubTexture name="oof instance 10002" x="1448" y="10" width="341" height="387" frameX="-5" frameY="-11" frameWidth="351" frameHeight="398"/>
+	<SubTexture name="oof instance 10003" x="1448" y="10" width="341" height="387" frameX="-5" frameY="-11" frameWidth="351" frameHeight="398"/>
+	<SubTexture name="oof instance 10004" x="1091" y="10" width="337" height="394" frameX="-7" frameY="-4" frameWidth="351" frameHeight="398"/>
+	<SubTexture name="oof instance 10005" x="1091" y="10" width="337" height="394" frameX="-7" frameY="-4" frameWidth="351" frameHeight="398"/>
+	<SubTexture name="oof instance 10006" x="381" y="10" width="335" height="398" frameX="-8" frameY="0" frameWidth="351" frameHeight="398"/>
+	<SubTexture name="oof instance 10007" x="381" y="10" width="335" height="398" frameX="-8" frameY="0" frameWidth="351" frameHeight="398"/>
+	<SubTexture name="oof instance 10008" x="736" y="10" width="335" height="398" frameX="-8" frameY="0" frameWidth="351" frameHeight="398"/>
+	<SubTexture name="oof instance 10009" x="736" y="10" width="335" height="398" frameX="-8" frameY="0" frameWidth="351" frameHeight="398"/>
+	<SubTexture name="oof instance 10010" x="736" y="10" width="335" height="398" frameX="-8" frameY="0" frameWidth="351" frameHeight="398"/>
+	<SubTexture name="oof instance 10011" x="736" y="10" width="335" height="398" frameX="-8" frameY="0" frameWidth="351" frameHeight="398"/>
+	<SubTexture name="oof instance 10012" x="736" y="10" width="335" height="398" frameX="-8" frameY="0" frameWidth="351" frameHeight="398"/>
+	<SubTexture name="oof instance 10013" x="736" y="10" width="335" height="398" frameX="-8" frameY="0" frameWidth="351" frameHeight="398"/>
+</TextureAtlas>

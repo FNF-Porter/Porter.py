@@ -1,0 +1,5 @@
+Make Lyrics Appear on screen
+COLOR MUST BE IN HEX VALUE!!!
+Color Example: 69fff0
+Value 1: The lyrics ya fuck
+Value 2: Color (Default is White)

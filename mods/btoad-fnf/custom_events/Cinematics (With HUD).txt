@@ -1,0 +1,9 @@
+CINEMATIC TYPE : With HUD Assets
+Value 1 : SPEED
+	Mark this with with how fast you would like the
+	bars move In/Out in seconds.
+	(Minimum is 0.2).
+Value 2 : DISTANCE
+	Mark this with how far you want to bars to move in.
+	(Recommended 90)
+	(If marked with 0, then the event will end).

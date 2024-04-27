@@ -1,0 +1,45 @@
+{
+	"animations": [
+		{
+			"offsets": [
+				0,
+				-9
+			],
+			"indices": [],
+			"fps": 24,
+			"anim": "danceLeft",
+			"loop": false,
+			"name": "pillowDanceLeft instance"
+		},
+		{
+			"offsets": [
+				-20,
+				-29
+			],
+			"indices": [],
+			"fps": 24,
+			"anim": "danceRight",
+			"loop": false,
+			"name": "pillowDanceRight instance"
+		}
+	],
+	"no_antialiasing": false,
+	"image": "characters/pillow",
+	"position": [
+		170,
+		440
+	],
+	"healthicon": "gf",
+	"flip_x": false,
+	"healthbar_colors": [
+		165,
+		0,
+		77
+	],
+	"camera_position": [
+		-120,
+		0
+	],
+	"sing_duration": 4,
+	"scale": 1.3
+}

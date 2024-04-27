@@ -1,0 +1,78 @@
+{
+	"animations": [
+		{
+			"loop": false,
+			"offsets": [
+				0,
+				0
+			],
+			"anim": "idle",
+			"fps": 24,
+			"name": "btoad2 idle",
+			"indices": []
+		},
+		{
+			"loop": false,
+			"offsets": [
+				53,
+				-1
+			],
+			"anim": "singLEFT",
+			"fps": 24,
+			"name": "btoad2 left",
+			"indices": []
+		},
+		{
+			"loop": false,
+			"offsets": [
+				3,
+				-39
+			],
+			"anim": "singDOWN",
+			"fps": 24,
+			"name": "btoad2 down",
+			"indices": []
+		},
+		{
+			"loop": false,
+			"offsets": [
+				69,
+				30
+			],
+			"anim": "singUP",
+			"fps": 24,
+			"name": "btoad2 up",
+			"indices": []
+		},
+		{
+			"loop": false,
+			"offsets": [
+				106,
+				-9
+			],
+			"anim": "singRIGHT",
+			"fps": 24,
+			"name": "btoad2 right",
+			"indices": []
+		}
+	],
+	"no_antialiasing": false,
+	"image": "characters/btoad2_assets",
+	"position": [
+		90,
+		110
+	],
+	"healthicon": "btoadp2",
+	"flip_x": false,
+	"healthbar_colors": [
+		190,
+		71,
+		70
+	],
+	"camera_position": [
+		-30,
+		0
+	],
+	"sing_duration": 6.1,
+	"scale": 1.1
+}

@@ -1,0 +1,9 @@
+Sets an image over the screen. 
+
+Value 1: Image 
+ex. "Test" "fancy/BG1" "effects/epic/Screen Crack" 
+
+Value 2: Scroll Factor (X, Y)
+ex. "0.5, 0" "1.0, 0.5" 
+(Note: 1.0 makes the background scroll at
+the same speed as the characters.)

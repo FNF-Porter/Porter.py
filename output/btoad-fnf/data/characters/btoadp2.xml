@@ -1,0 +1,8 @@
+<!DOCTYPE codename-engine-character>
+<character x="90" y="110" camx="-30" holdTime="6.1" scale="1.1" sprite="btoad2_assets">
+  <anim name="btoad2 idle" anim="idle" fps="24" loop="false" x="0" y="0"/>
+  <anim name="btoad2 left" anim="singLEFT" fps="24" loop="false" x="53" y="-1"/>
+  <anim name="btoad2 down" anim="singDOWN" fps="24" loop="false" x="3" y="-39"/>
+  <anim name="btoad2 up" anim="singUP" fps="24" loop="false" x="69" y="30"/>
+  <anim name="btoad2 right" anim="singRIGHT" fps="24" loop="false" x="106" y="-9"/>
+</character>

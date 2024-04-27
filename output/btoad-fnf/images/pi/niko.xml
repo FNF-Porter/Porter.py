@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="niko.png">
+	<!-- Created with Adobe Animate version 21.0.6.41649 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="niko instance 10000" x="10" y="281" width="197" height="247" frameX="-5" frameY="-4" frameWidth="203" frameHeight="251"/>
+	<SubTexture name="niko instance 10001" x="10" y="281" width="197" height="247" frameX="-5" frameY="-4" frameWidth="203" frameHeight="251"/>
+	<SubTexture name="niko instance 10002" x="227" y="281" width="197" height="245" frameX="-6" frameY="-6" frameWidth="203" frameHeight="251"/>
+	<SubTexture name="niko instance 10003" x="227" y="281" width="197" height="245" frameX="-6" frameY="-6" frameWidth="203" frameHeight="251"/>
+	<SubTexture name="niko instance 10004" x="444" y="279" width="197" height="248" frameX="-4" frameY="-3" frameWidth="203" frameHeight="251"/>
+	<SubTexture name="niko instance 10005" x="444" y="279" width="197" height="248" frameX="-4" frameY="-3" frameWidth="203" frameHeight="251"/>
+	<SubTexture name="niko instance 10006" x="444" y="10" width="197" height="249" frameX="-2" frameY="-2" frameWidth="203" frameHeight="251"/>
+	<SubTexture name="niko instance 10007" x="444" y="10" width="197" height="249" frameX="-2" frameY="-2" frameWidth="203" frameHeight="251"/>
+	<SubTexture name="niko instance 10008" x="10" y="10" width="197" height="251" frameX="0" frameY="0" frameWidth="203" frameHeight="251"/>
+	<SubTexture name="niko instance 10009" x="10" y="10" width="197" height="251" frameX="0" frameY="0" frameWidth="203" frameHeight="251"/>
+	<SubTexture name="niko instance 10010" x="227" y="10" width="197" height="251" frameX="0" frameY="0" frameWidth="203" frameHeight="251"/>
+	<SubTexture name="niko instance 10011" x="227" y="10" width="197" height="251" frameX="0" frameY="0" frameWidth="203" frameHeight="251"/>
+	<SubTexture name="niko instance 10012" x="227" y="10" width="197" height="251" frameX="0" frameY="0" frameWidth="203" frameHeight="251"/>
+	<SubTexture name="niko instance 10013" x="227" y="10" width="197" height="251" frameX="0" frameY="0" frameWidth="203" frameHeight="251"/>
+</TextureAtlas>

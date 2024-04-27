@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="menu_btoad_new.png">
+	<!-- Created with Adobe Animate version 22.0.5.191 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="storyMenu_Idle0000" x="0" y="0" width="337" height="394" frameX="0" frameY="0" frameWidth="341" frameHeight="394"/>
+	<SubTexture name="storyMenu_Idle0001" x="0" y="0" width="337" height="394" frameX="0" frameY="0" frameWidth="341" frameHeight="394"/>
+	<SubTexture name="storyMenu_Idle0002" x="337" y="0" width="330" height="393" frameX="-9" frameY="-1" frameWidth="341" frameHeight="394"/>
+	<SubTexture name="storyMenu_Idle0003" x="337" y="0" width="330" height="393" frameX="-9" frameY="-1" frameWidth="341" frameHeight="394"/>
+	<SubTexture name="storyMenu_Idle0004" x="667" y="0" width="323" height="391" frameX="-18" frameY="-2" frameWidth="341" frameHeight="394"/>
+	<SubTexture name="storyMenu_Idle0005" x="667" y="0" width="323" height="391" frameX="-18" frameY="-2" frameWidth="341" frameHeight="394"/>
+	<SubTexture name="storyMenu_Idle0006" x="990" y="0" width="316" height="391" frameX="-25" frameY="-2" frameWidth="341" frameHeight="394"/>
+	<SubTexture name="storyMenu_Idle0007" x="990" y="0" width="316" height="391" frameX="-25" frameY="-2" frameWidth="341" frameHeight="394"/>
+	<SubTexture name="storyMenu_Idle0008" x="990" y="0" width="316" height="391" frameX="-25" frameY="-2" frameWidth="341" frameHeight="394"/>
+	<SubTexture name="storyMenu_Idle0009" x="990" y="0" width="316" height="391" frameX="-25" frameY="-2" frameWidth="341" frameHeight="394"/>
+	<SubTexture name="storyMenu_Idle0010" x="990" y="0" width="316" height="391" frameX="-25" frameY="-2" frameWidth="341" frameHeight="394"/>
+	<SubTexture name="storyMenu_Idle0011" x="990" y="0" width="316" height="391" frameX="-25" frameY="-2" frameWidth="341" frameHeight="394"/>
+	<SubTexture name="storyMenu_Idle0012" x="990" y="0" width="316" height="391" frameX="-25" frameY="-2" frameWidth="341" frameHeight="394"/>
+	<SubTexture name="storyMenu_Idle0013" x="990" y="0" width="316" height="391" frameX="-25" frameY="-2" frameWidth="341" frameHeight="394"/>
+	<SubTexture name="storyMenu_Idle0014" x="990" y="0" width="316" height="391" frameX="-25" frameY="-2" frameWidth="341" frameHeight="394"/>
+	<SubTexture name="storyMenu_Idle0015" x="990" y="0" width="316" height="391" frameX="-25" frameY="-2" frameWidth="341" frameHeight="394"/>
+	<SubTexture name="storyMenu_Idle0016" x="990" y="0" width="316" height="391" frameX="-25" frameY="-2" frameWidth="341" frameHeight="394"/>
+	<SubTexture name="storyMenu_Idle0017" x="990" y="0" width="316" height="391" frameX="-25" frameY="-2" frameWidth="341" frameHeight="394"/>
+</TextureAtlas>

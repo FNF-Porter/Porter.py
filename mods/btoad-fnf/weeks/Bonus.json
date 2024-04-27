@@ -1,0 +1,41 @@
+{
+	"storyName": "covers",
+	"difficulties": "hard",
+	"hideFreeplay": false,
+	"weekBackground": "stage",
+	"freeplayColor": [
+		146,
+		113,
+		253
+	],
+	"weekBefore": "tutorial",
+	"startUnlocked": true,
+	"weekCharacters": [
+		"dad",
+		"bf",
+		"gf"
+	],
+	"songs": [
+		[
+			"lore",
+			"btourple",
+			[
+				246,
+				73,
+				93
+			]
+		],
+		[
+			"boiling-point",
+			"boiltoad",
+			[
+				226,
+				73,
+				253
+			]
+		]
+	],
+	"hideStoryMode": true,
+	"weekName": "Custom Week",
+	"hiddenUntilUnlocked": false
+}

@@ -1,0 +1,78 @@
+{
+	"animations": [
+		{
+			"offsets": [
+				0,
+				0
+			],
+			"loop": false,
+			"fps": 24,
+			"anim": "idle",
+			"indices": [],
+			"name": "idle instance"
+		},
+		{
+			"offsets": [
+				4,
+				-3
+			],
+			"loop": false,
+			"fps": 24,
+			"anim": "singLEFT",
+			"indices": [],
+			"name": "left instance"
+		},
+		{
+			"offsets": [
+				82,
+				-85
+			],
+			"loop": false,
+			"fps": 24,
+			"anim": "singDOWN",
+			"indices": [],
+			"name": "down instance"
+		},
+		{
+			"offsets": [
+				17,
+				14
+			],
+			"loop": false,
+			"fps": 24,
+			"anim": "singUP",
+			"indices": [],
+			"name": "up instance"
+		},
+		{
+			"offsets": [
+				-26,
+				-8
+			],
+			"loop": false,
+			"fps": 24,
+			"anim": "singRIGHT",
+			"indices": [],
+			"name": "right instance"
+		}
+	],
+	"no_antialiasing": false,
+	"image": "characters/shrooms",
+	"position": [
+		130,
+		80
+	],
+	"healthicon": "rushroom",
+	"flip_x": false,
+	"healthbar_colors": [
+		254,
+		144,
+		115
+	],
+	"camera_position": [
+		0,
+		0
+	],
+	"sing_duration": 6.1,
+	"scale": 1.3
+}

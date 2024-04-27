@@ -1,0 +1,8 @@
+<!DOCTYPE codename-engine-character>
+<character x="50" y="110" holdTime="6.4" icon="boiltoad" scale="1.1">
+  <anim name="Tood_Idle" anim="idle" fps="24" loop="false" x="0" y="0"/>
+  <anim name="Tood_Left" anim="singLEFT" fps="24" loop="false" x="112" y="28"/>
+  <anim name="Tood_down" anim="singDOWN" fps="24" loop="false" x="-7" y="-18"/>
+  <anim name="Tood_Up" anim="singUP" fps="24" loop="false" x="60" y="139"/>
+  <anim name="Tood_Right" anim="singRIGHT" fps="24" loop="false" x="-43" y="2"/>
+</character>

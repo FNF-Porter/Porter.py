@@ -1,0 +1,11 @@
+{
+	"idle_anim": "storyMenu_Idle",
+	"image": "menu_btoad",
+	"position": [
+		18,
+		18
+	],
+	"flipX": false,
+	"scale": 1,
+	"confirm_anim": "M Dad Idle"
+}

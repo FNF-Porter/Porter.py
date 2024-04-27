@@ -1,0 +1,7 @@
+{
+	"name": "VS btoad",
+	"description": "friday night funking vs btoad for real",
+	"restart":false,
+	"runsGlobally": false,
+	"color": [170, 0, 255]
+}

@@ -1,0 +1,5 @@
+Change Note Position to da middle
+
+value1 = 1 to actually move the notes and 0 to undo move
+value2 = 1 if you want dad's notes hidden or 0 if you 
+want to see them again

@@ -1,0 +1,78 @@
+{
+	"animations": [
+		{
+			"offsets": [
+				0,
+				0
+			],
+			"loop": false,
+			"fps": 24,
+			"anim": "idle",
+			"indices": [],
+			"name": "Tood_Idle"
+		},
+		{
+			"offsets": [
+				112,
+				28
+			],
+			"loop": false,
+			"fps": 24,
+			"anim": "singLEFT",
+			"indices": [],
+			"name": "Tood_Left"
+		},
+		{
+			"offsets": [
+				-7,
+				-18
+			],
+			"loop": false,
+			"fps": 24,
+			"anim": "singDOWN",
+			"indices": [],
+			"name": "Tood_down"
+		},
+		{
+			"offsets": [
+				60,
+				139
+			],
+			"loop": false,
+			"fps": 24,
+			"anim": "singUP",
+			"indices": [],
+			"name": "Tood_Up"
+		},
+		{
+			"offsets": [
+				-43,
+				2
+			],
+			"loop": false,
+			"fps": 24,
+			"anim": "singRIGHT",
+			"indices": [],
+			"name": "Tood_Right"
+		}
+	],
+	"no_antialiasing": false,
+	"image": "characters/btoad_p3",
+	"position": [
+		50,
+		110
+	],
+	"healthicon": "boiltoad",
+	"flip_x": false,
+	"healthbar_colors": [
+		85,
+		24,
+		45
+	],
+	"camera_position": [
+		0,
+		0
+	],
+	"sing_duration": 6.4,
+	"scale": 1.1
+}

@@ -1,0 +1,8 @@
+<!DOCTYPE codename-engine-character>
+<character x="230" y="370" camx="130" holdTime="6.1" flipX="true" icon="btoadPI" scale="1.3" sprite="Btoad_PI">
+  <anim name="idle" anim="idle" fps="24" loop="false" x="3" y="-1"/>
+  <anim name="left" anim="singLEFT" fps="24" loop="false" x="19" y="3"/>
+  <anim name="down" anim="singDOWN" fps="24" loop="false" x="36" y="-18"/>
+  <anim name="up" anim="singUP" fps="24" loop="false" x="33" y="23"/>
+  <anim name="right" anim="singRIGHT" fps="24" loop="false" x="-16" y="1"/>
+</character>

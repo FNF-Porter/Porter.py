@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="Tbhtoad.png">
+	<!-- Created with Adobe Animate version 23.0.1.70 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="Down instance 10000" x="10" y="10" width="299" height="187"/>
+	<SubTexture name="Down instance 10001" x="319" y="10" width="299" height="187"/>
+	<SubTexture name="Down instance 10002" x="628" y="10" width="299" height="187"/>
+	<SubTexture name="Down instance 10003" x="937" y="10" width="299" height="187"/>
+	<SubTexture name="Down instance 10004" x="1246" y="10" width="299" height="187"/>
+	<SubTexture name="Down instance 10005" x="1555" y="10" width="299" height="187"/>
+	<SubTexture name="Idle instance 10000" x="1864" y="10" width="253" height="248"/>
+	<SubTexture name="Idle instance 10001" x="2127" y="10" width="253" height="248"/>
+	<SubTexture name="Idle instance 10002" x="2390" y="10" width="253" height="248"/>
+	<SubTexture name="Idle instance 10003" x="2653" y="10" width="253" height="248"/>
+	<SubTexture name="Idle instance 10004" x="2916" y="10" width="253" height="248"/>
+	<SubTexture name="Idle instance 10005" x="2916" y="10" width="253" height="248"/>
+	<SubTexture name="Idle instance 10006" x="1864" y="10" width="253" height="248"/>
+	<SubTexture name="Left2 instance 10000" x="10" y="268" width="920" height="546"/>
+	<SubTexture name="Left2 instance 10001" x="940" y="268" width="920" height="546"/>
+	<SubTexture name="Left2 instance 10002" x="1870" y="268" width="920" height="546"/>
+	<SubTexture name="Left2 instance 10003" x="2800" y="268" width="920" height="546"/>
+	<SubTexture name="Left2 instance 10004" x="10" y="824" width="920" height="546"/>
+	<SubTexture name="Left2 instance 10005" x="940" y="824" width="920" height="546"/>
+	<SubTexture name="Left2 instance 10006" x="1870" y="824" width="920" height="546"/>
+	<SubTexture name="Right1 instance 10000" x="10" y="1380" width="1472" height="521"/>
+	<SubTexture name="Right1 instance 10001" x="1492" y="1380" width="1472" height="521"/>
+	<SubTexture name="Right1 instance 10002" x="10" y="1911" width="1472" height="521"/>
+	<SubTexture name="Right1 instance 10003" x="1492" y="1911" width="1472" height="521"/>
+	<SubTexture name="Right1 instance 10004" x="10" y="2442" width="1472" height="521"/>
+	<SubTexture name="Right1 instance 10005" x="1492" y="2442" width="1472" height="521"/>
+	<SubTexture name="Right1 instance 10006" x="10" y="2973" width="1472" height="521"/>
+	<SubTexture name="Up instance 10000" x="1492" y="2973" width="219" height="321"/>
+	<SubTexture name="Up instance 10001" x="1721" y="2973" width="219" height="321"/>
+	<SubTexture name="Up instance 10002" x="1950" y="2973" width="219" height="321"/>
+	<SubTexture name="Up instance 10003" x="2179" y="2973" width="219" height="321"/>
+	<SubTexture name="Up instance 10004" x="2408" y="2973" width="219" height="321"/>
+	<SubTexture name="Up instance 10005" x="1492" y="2973" width="219" height="321"/>
+	<SubTexture name="Yippee instance 10000" x="2637" y="2973" width="258" height="250"/>
+	<SubTexture name="Yippee instance 10001" x="2905" y="2973" width="258" height="250"/>
+	<SubTexture name="Yippee instance 10002" x="2905" y="2973" width="258" height="250"/>
+	<SubTexture name="Yippee instance 10003" x="3173" y="2973" width="258" height="250"/>
+	<SubTexture name="Yippee instance 10004" x="3441" y="2973" width="258" height="250"/>
+	<SubTexture name="Yippee instance 10005" x="3709" y="2973" width="258" height="250"/>
+	<SubTexture name="Yippee instance 10006" x="10" y="3504" width="258" height="250"/>
+	<SubTexture name="Yippee instance 10007" x="278" y="3504" width="258" height="250"/>
+	<SubTexture name="Yippee instance 10008" x="278" y="3504" width="258" height="250"/>
+	<SubTexture name="Yippee instance 10009" x="546" y="3504" width="258" height="250"/>
+	<SubTexture name="Yippee instance 10010" x="814" y="3504" width="258" height="250"/>
+	<SubTexture name="Yippee instance 10011" x="814" y="3504" width="258" height="250"/>
+	<SubTexture name="Yippee instance 10012" x="814" y="3504" width="258" height="250"/>
+	<SubTexture name="Yippee instance 10013" x="814" y="3504" width="258" height="250"/>
+	<SubTexture name="Yippee instance 10014" x="814" y="3504" width="258" height="250"/>
+	<SubTexture name="Yippee instance 10015" x="814" y="3504" width="258" height="250"/>
+	<SubTexture name="Yippee instance 10016" x="814" y="3504" width="258" height="250"/>
+</TextureAtlas>

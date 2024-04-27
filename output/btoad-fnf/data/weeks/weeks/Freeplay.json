@@ -1,0 +1,59 @@
+{
+	"storyName": "Freeplay",
+	"difficulties": "hard",
+	"hideFreeplay": false,
+	"weekBackground": "stage",
+	"freeplayColor": [
+		146,
+		113,
+		253
+	],
+	"weekBefore": "tutorial",
+	"startUnlocked": true,
+	"weekCharacters": [
+		"dad",
+		"bf",
+		"gf"
+	],
+	"songs": [
+		[
+			"tbhtoad",
+			"tbhtoad",
+			[
+				166,
+				195,
+				235
+			]
+		],
+		[
+			"rushroom",
+			"rushroom",
+			[
+				246,
+				173,
+				113
+			]
+		],
+		[
+			"public-incident",
+			"btoadPI",
+			[
+				255,
+				255,
+				255
+			]
+		],
+		[
+			"sins",
+			"nmtoad",
+			[
+				46,
+				33,
+				153
+			]
+		]
+	],
+	"hideStoryMode": true,
+	"weekName": "Freeplay",
+	"hiddenUntilUnlocked": false
+}

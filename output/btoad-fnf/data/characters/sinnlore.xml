@@ -1,0 +1,8 @@
+<!DOCTYPE codename-engine-character>
+<character x="-560" y="250" camx="-220" camy="-260" holdTime="5.7" scale="1.2">
+  <anim name="sinnlore idle" anim="idle" fps="12" loop="false" x="0" y="260"/>
+  <anim name="sinnlore left" anim="singLEFT" fps="12" loop="false" x="-7" y="247"/>
+  <anim name="sinnlore down" anim="singDOWN" fps="12" loop="false" x="-50" y="267"/>
+  <anim name="sinnlore up" anim="singUP" fps="12" loop="false" x="0" y="256"/>
+  <anim name="sinnlore right" anim="singRIGHT" fps="12" loop="false" x="1" y="261"/>
+</character>

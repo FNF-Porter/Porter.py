@@ -1,0 +1,8 @@
+<!DOCTYPE codename-engine-character>
+<character x="20" y="140" camy="120" holdTime="6.1" icon="btourple" scale="0.8" sprite="btoad_ourp">
+  <anim name="toad_idle" anim="idle" fps="24" loop="false" x="0" y="0"/>
+  <anim name="toad_down" anim="singDOWN" fps="24" loop="false" x="44" y="-72"/>
+  <anim name="toad_up" anim="singUP" fps="24" loop="false" x="18" y="10"/>
+  <anim name="toad_right" anim="singLEFT" fps="24" loop="false" x="54" y="-26"/>
+  <anim name="toad_left" anim="singRIGHT" fps="24" loop="false" x="-57" y="-5"/>
+</character>

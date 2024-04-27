@@ -1,0 +1,44 @@
+{
+	"dialogue": [
+		{
+			"sound": "",
+			"speed": 0.05,
+			"portrait": "gf",
+			"boxState": "normal",
+			"expression": "talk",
+			"text": "we ran out of budget for another cutscene so pretend this is animated"
+		},
+		{
+			"sound": "",
+			"speed": 0.05,
+			"portrait": "bf",
+			"boxState": "normal",
+			"expression": "talk",
+			"text": "huehehehehehe rap battle"
+		},
+		{
+			"sound": "",
+			"speed": 0.05,
+			"portrait": "btoad",
+			"boxState": "normal",
+			"expression": "talk",
+			"text": "that's it its arson time"
+		},
+		{
+			"sound": "",
+			"speed": 0.05,
+			"portrait": "gf",
+			"boxState": "normal",
+			"expression": "talk",
+			"text": "btoad lights matchstick and boom waa its on fire idk"
+		},
+		{
+			"sound": "",
+			"speed": 0.05,
+			"portrait": "btoad",
+			"boxState": "normal",
+			"expression": "evil",
+			"text": "oh whoa im evil now"
+		}
+	]
+}

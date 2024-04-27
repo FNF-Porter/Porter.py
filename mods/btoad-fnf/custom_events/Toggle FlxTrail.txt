@@ -1,0 +1,5 @@
+Value 1: Which character 'dad', 'gf' or 'boyfriend'?
+Value 2: Turn trail 'on' or 'off'?
+
+Also if you say 'all' in Value 1 it affects each character.
+              Might remove due to future ideas.

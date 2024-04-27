@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="flip.png">
+	<!-- Created with Adobe Animate version 21.0.6.41649 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="flip bop instance 10000" x="10" y="10" width="160" height="226" frameX="0" frameY="-15" frameWidth="160" frameHeight="241"/>
+	<SubTexture name="flip bop instance 10001" x="10" y="10" width="160" height="226" frameX="0" frameY="-15" frameWidth="160" frameHeight="241"/>
+	<SubTexture name="flip bop instance 10002" x="702" y="10" width="154" height="224" frameX="-4" frameY="-17" frameWidth="160" frameHeight="241"/>
+	<SubTexture name="flip bop instance 10003" x="702" y="10" width="154" height="224" frameX="-4" frameY="-17" frameWidth="160" frameHeight="241"/>
+	<SubTexture name="flip bop instance 10004" x="530" y="10" width="152" height="231" frameX="-5" frameY="-10" frameWidth="160" frameHeight="241"/>
+	<SubTexture name="flip bop instance 10005" x="530" y="10" width="152" height="231" frameX="-5" frameY="-10" frameWidth="160" frameHeight="241"/>
+	<SubTexture name="flip bop instance 10006" x="360" y="10" width="150" height="240" frameX="-5" frameY="-1" frameWidth="160" frameHeight="241"/>
+	<SubTexture name="flip bop instance 10007" x="360" y="10" width="150" height="240" frameX="-5" frameY="-1" frameWidth="160" frameHeight="241"/>
+	<SubTexture name="flip bop instance 10008" x="190" y="10" width="150" height="241" frameX="-5" frameY="0" frameWidth="160" frameHeight="241"/>
+	<SubTexture name="flip bop instance 10009" x="190" y="10" width="150" height="241" frameX="-5" frameY="0" frameWidth="160" frameHeight="241"/>
+	<SubTexture name="flip bop instance 10010" x="190" y="10" width="150" height="241" frameX="-5" frameY="0" frameWidth="160" frameHeight="241"/>
+	<SubTexture name="flip bop instance 10011" x="190" y="10" width="150" height="241" frameX="-5" frameY="0" frameWidth="160" frameHeight="241"/>
+	<SubTexture name="flip bop instance 10012" x="190" y="10" width="150" height="241" frameX="-5" frameY="0" frameWidth="160" frameHeight="241"/>
+	<SubTexture name="flip bop instance 10013" x="190" y="10" width="150" height="241" frameX="-5" frameY="0" frameWidth="160" frameHeight="241"/>
+</TextureAtlas>

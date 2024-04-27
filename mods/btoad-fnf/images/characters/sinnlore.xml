@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='utf-8'?>
+<TextureAtlas imagePath="sinnlore.png">
+<SubTexture name="sinnlore down0000" x="0" y="0" width="457" height="418" frameX="-512" frameY="-330" frameWidth="1640" frameHeight="810" />
+<SubTexture name="sinnlore down0001" x="705" y="485" width="454" height="429" frameX="-509" frameY="-319" frameWidth="1640" frameHeight="810" />
+<SubTexture name="sinnlore idle0000" x="1160" y="485" width="320" height="476" frameX="-648" frameY="-252" frameWidth="1640" frameHeight="810" />
+<SubTexture name="sinnlore idle0001" x="458" y="0" width="320" height="480" frameX="-648" frameY="-248" frameWidth="1640" frameHeight="810" />
+<SubTexture name="sinnlore idle0002" x="779" y="0" width="320" height="485" frameX="-648" frameY="-243" frameWidth="1640" frameHeight="810" />
+<SubTexture name="sinnlore idle0003" x="1100" y="0" width="320" height="485" frameX="-648" frameY="-243" frameWidth="1640" frameHeight="810" />
+<SubTexture name="sinnlore idle0004" x="0" y="485" width="320" height="485" frameX="-648" frameY="-243" frameWidth="1640" frameHeight="810" />
+<SubTexture name="sinnlore left0000" x="321" y="485" width="383" height="496" frameX="-585" frameY="-230" frameWidth="1640" frameHeight="810" />
+<SubTexture name="sinnlore left0001" x="0" y="981" width="386" height="498" frameX="-581" frameY="-229" frameWidth="1640" frameHeight="810" />
+<SubTexture name="sinnlore right0000" x="387" y="981" width="358" height="483" frameX="-647" frameY="-244" frameWidth="1640" frameHeight="810" />
+<SubTexture name="sinnlore right0001" x="746" y="981" width="363" height="489" frameX="-640" frameY="-239" frameWidth="1640" frameHeight="810" />
+<SubTexture name="sinnlore up0000" x="1110" y="981" width="376" height="495" frameX="-597" frameY="-230" frameWidth="1640" frameHeight="810" />
+<SubTexture name="sinnlore up0001" x="0" y="1479" width="378" height="487" frameX="-595" frameY="-238" frameWidth="1640" frameHeight="810" />
+</TextureAtlas>

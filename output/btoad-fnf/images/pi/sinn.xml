@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="sinn.png">
+	<!-- Created with Adobe Animate version 21.0.6.41649 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="sinn instance 10000" x="618" y="477" width="284" height="445" frameX="-6" frameY="-7" frameWidth="297" frameHeight="452"/>
+	<SubTexture name="sinn instance 10001" x="618" y="477" width="284" height="445" frameX="-6" frameY="-7" frameWidth="297" frameHeight="452"/>
+	<SubTexture name="sinn instance 10002" x="314" y="481" width="284" height="443" frameX="0" frameY="-9" frameWidth="297" frameHeight="452"/>
+	<SubTexture name="sinn instance 10003" x="314" y="481" width="284" height="443" frameX="0" frameY="-9" frameWidth="297" frameHeight="452"/>
+	<SubTexture name="sinn instance 10004" x="618" y="10" width="284" height="447" frameX="-3" frameY="-5" frameWidth="297" frameHeight="452"/>
+	<SubTexture name="sinn instance 10005" x="618" y="10" width="284" height="447" frameX="-3" frameY="-5" frameWidth="297" frameHeight="452"/>
+	<SubTexture name="sinn instance 10006" x="314" y="10" width="284" height="451" frameX="-10" frameY="-1" frameWidth="297" frameHeight="452"/>
+	<SubTexture name="sinn instance 10007" x="314" y="10" width="284" height="451" frameX="-10" frameY="-1" frameWidth="297" frameHeight="452"/>
+	<SubTexture name="sinn instance 10008" x="10" y="10" width="284" height="452" frameX="-13" frameY="0" frameWidth="297" frameHeight="452"/>
+	<SubTexture name="sinn instance 10009" x="10" y="10" width="284" height="452" frameX="-13" frameY="0" frameWidth="297" frameHeight="452"/>
+	<SubTexture name="sinn instance 10010" x="10" y="10" width="284" height="452" frameX="-13" frameY="0" frameWidth="297" frameHeight="452"/>
+	<SubTexture name="sinn instance 10011" x="10" y="10" width="284" height="452" frameX="-13" frameY="0" frameWidth="297" frameHeight="452"/>
+	<SubTexture name="sinn instance 10012" x="10" y="10" width="284" height="452" frameX="-13" frameY="0" frameWidth="297" frameHeight="452"/>
+	<SubTexture name="sinn instance 10013" x="10" y="10" width="284" height="452" frameX="-13" frameY="0" frameWidth="297" frameHeight="452"/>
+</TextureAtlas>

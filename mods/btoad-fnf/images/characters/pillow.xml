@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="pillow.png">
+	<!-- Created with Adobe Animate version 21.0.6.41649 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="pillowDanceLeft instance 10000" x="226" y="10" width="194" height="177" frameX="-1" frameY="-2" frameWidth="196" frameHeight="180"/>
+	<SubTexture name="pillowDanceLeft instance 10001" x="226" y="10" width="194" height="177" frameX="-1" frameY="-2" frameWidth="196" frameHeight="180"/>
+	<SubTexture name="pillowDanceLeft instance 10002" x="10" y="10" width="196" height="180"/>
+	<SubTexture name="pillowDanceLeft instance 10003" x="10" y="10" width="196" height="180"/>
+	<SubTexture name="pillowDanceLeft instance 10004" x="440" y="10" width="194" height="177" frameX="-1" frameY="-2" frameWidth="196" frameHeight="180"/>
+	<SubTexture name="pillowDanceLeft instance 10005" x="440" y="10" width="194" height="177" frameX="-1" frameY="-2" frameWidth="196" frameHeight="180"/>
+	<SubTexture name="pillowDanceLeft instance 10006" x="654" y="10" width="191" height="168" frameX="-2" frameY="-7" frameWidth="196" frameHeight="180"/>
+	<SubTexture name="pillowDanceLeft instance 10007" x="654" y="10" width="191" height="168" frameX="-2" frameY="-7" frameWidth="196" frameHeight="180"/>
+	<SubTexture name="pillowDanceLeft instance 10008" x="654" y="198" width="183" height="155" frameX="-5" frameY="-15" frameWidth="196" frameHeight="180"/>
+	<SubTexture name="pillowDanceLeft instance 10009" x="654" y="198" width="183" height="155" frameX="-5" frameY="-15" frameWidth="196" frameHeight="180"/>
+	<SubTexture name="pillowDanceLeft instance 10010" x="654" y="198" width="183" height="155" frameX="-5" frameY="-15" frameWidth="196" frameHeight="180"/>
+	<SubTexture name="pillowDanceLeft instance 10011" x="654" y="198" width="183" height="155" frameX="-5" frameY="-15" frameWidth="196" frameHeight="180"/>
+	<SubTexture name="pillowDanceLeft instance 10012" x="654" y="198" width="183" height="155" frameX="-5" frameY="-15" frameWidth="196" frameHeight="180"/>
+	<SubTexture name="pillowDanceLeft instance 10013" x="654" y="198" width="183" height="155" frameX="-5" frameY="-15" frameWidth="196" frameHeight="180"/>
+	<SubTexture name="pillowDanceRight instance 10000" x="10" y="210" width="190" height="140" frameX="-1" frameY="-7" frameWidth="193" frameHeight="150"/>
+	<SubTexture name="pillowDanceRight instance 10001" x="10" y="210" width="190" height="140" frameX="-1" frameY="-7" frameWidth="193" frameHeight="150"/>
+	<SubTexture name="pillowDanceRight instance 10002" x="226" y="207" width="193" height="146" frameX="0" frameY="-4" frameWidth="193" frameHeight="150"/>
+	<SubTexture name="pillowDanceRight instance 10003" x="226" y="207" width="193" height="146" frameX="0" frameY="-4" frameWidth="193" frameHeight="150"/>
+	<SubTexture name="pillowDanceRight instance 10004" x="213" y="373" width="187" height="136" frameX="-1" frameY="-8" frameWidth="193" frameHeight="150"/>
+	<SubTexture name="pillowDanceRight instance 10005" x="213" y="373" width="187" height="136" frameX="-1" frameY="-8" frameWidth="193" frameHeight="150"/>
+	<SubTexture name="pillowDanceRight instance 10006" x="10" y="370" width="183" height="145" frameX="-1" frameY="-3" frameWidth="193" frameHeight="150"/>
+	<SubTexture name="pillowDanceRight instance 10007" x="10" y="370" width="183" height="145" frameX="-1" frameY="-3" frameWidth="193" frameHeight="150"/>
+	<SubTexture name="pillowDanceRight instance 10008" x="439" y="207" width="182" height="150" frameX="0" frameY="0" frameWidth="193" frameHeight="150"/>
+	<SubTexture name="pillowDanceRight instance 10009" x="439" y="207" width="182" height="150" frameX="0" frameY="0" frameWidth="193" frameHeight="150"/>
+	<SubTexture name="pillowDanceRight instance 10010" x="439" y="207" width="182" height="150" frameX="0" frameY="0" frameWidth="193" frameHeight="150"/>
+	<SubTexture name="pillowDanceRight instance 10011" x="439" y="207" width="182" height="150" frameX="0" frameY="0" frameWidth="193" frameHeight="150"/>
+	<SubTexture name="pillowDanceRight instance 10012" x="439" y="207" width="182" height="150" frameX="0" frameY="0" frameWidth="193" frameHeight="150"/>
+	<SubTexture name="pillowDanceRight instance 10013" x="439" y="207" width="182" height="150" frameX="0" frameY="0" frameWidth="193" frameHeight="150"/>
+</TextureAtlas>

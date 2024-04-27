@@ -1,5 +1,7 @@
-# Test shenanigans for objects.py
-from objects import CharacterXML
+from src.XMLTools import WeekXML
+from src.Paths import Paths
 
-xml = CharacterXML().setup("mods/btoad-fnf/characters/btoad")
-xml.save("output")
+Paths.assetsDir = "./mods/btoad-fnf"
+
+# print(Paths.parseJson("weeks\story1Btoad"))
+test = WeekXML().setup("weeks\story1Btoad")

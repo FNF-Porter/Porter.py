@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="btoad.png">
+	<!-- Created with Adobe Animate version 20.0.0.17400 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="btoadNormal00" x="45" y="371" width="337" height="282"/>
+	<SubTexture name="btoadBruh00" x="409" y="371" width="337" height="282"/>
+	<SubTexture name="BtoadAngry00" x="785" y="369" width="337" height="282"/>
+</TextureAtlas>

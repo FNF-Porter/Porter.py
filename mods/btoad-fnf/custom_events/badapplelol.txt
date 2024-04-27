@@ -1,0 +1,6 @@
+Does the shadow thing like in Indie Cross.
+
+Value 1: 'a' to make the BG white and characters black, 'b' to reverse it.
+Value 2: Leave Blank.
+
+Script by Saltyboii#2461
