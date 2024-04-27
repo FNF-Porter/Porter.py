@@ -1,2 +1,0 @@
-centers camera
-you can specify if you want it to be closer to one character

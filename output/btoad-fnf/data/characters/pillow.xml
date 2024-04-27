@@ -1,5 +1,0 @@
-<!DOCTYPE codename-engine-character>
-<character x="170" y="440" camx="-120" icon="gf" scale="1.3">
-  <anim name="pillowDanceLeft instance" anim="danceLeft" fps="24" loop="false" x="0" y="-9"/>
-  <anim name="pillowDanceRight instance" anim="danceRight" fps="24" loop="false" x="-20" y="-29"/>
-</character>

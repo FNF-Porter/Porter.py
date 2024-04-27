@@ -1,8 +1,0 @@
-<!DOCTYPE codename-engine-character>
-<character x="160" y="200" camx="-110" icon="nmtoad" scale="2">
-  <anim name="Left" anim="singLEFT" fps="24" loop="false" x="180" y="5"/>
-  <anim name="Down" anim="singDOWN" fps="24" loop="false" x="-20" y="-110"/>
-  <anim name="Up" anim="singUP" fps="24" loop="false" x="140" y="60"/>
-  <anim name="Right" anim="singRIGHT" fps="24" loop="false" x="-10" y="-20"/>
-  <anim name="Idle" anim="idle" fps="24" loop="true" x="-1" y="0"/>
-</character>
