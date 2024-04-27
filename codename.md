@@ -1,0 +1,78 @@
+- data
+  - characters
+    - character.hx
+    - character.xml
+  - config
+    - credits.xml
+    - discord.json
+    - menuItems.txt
+    - options.xml
+  - dialogue
+    - boxes
+      - dialogue-box.xml
+      - dialogue-box.hx
+    - characters
+      - dialogue-character.xml
+  - notes
+    - note.hx
+  - scripts
+    - script.hx
+  - splashes
+    - splash.xml
+  - stages
+    - stage.hx
+    - stage.xml
+  - titlescreen
+    - introText.txt
+    - titlescreen.xml
+  - weeks
+    - characters
+      - week-character.xml (scale and position)
+    - weeks
+      - your-week.xml
+    - weeks.txt
+  - alphabet.xml
+  - freeplaySonglist.txt
+  - global.hx
+- fonts
+- images
+  - characters
+  - credits
+  - dialogue
+    - boxes
+    - characters
+  - game
+    - cutscenes
+    - notes
+    - score
+    - splashes
+    - ready, set, go, healthbar, restart png
+  - icons
+  - menus
+    - mainmenu
+    - options
+    - pauseAlt
+    - storymenu
+    - titlescreen
+    - update
+    - menuBG.png
+  - stages
+- music
+- shaders
+- songs
+  - your-song
+    - charts
+      - chart.json
+    - scripts
+      - script.hx
+    - song
+      - Inst.ogg
+      - Voices.ogg
+    - events.json
+    - cutscene.hx
+    - dialogue.xml
+    - meta.json
+  - global-script.hx
+- sounds
+- videos
+- paths.json
