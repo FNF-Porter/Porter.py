@@ -22,7 +22,8 @@ IDK the directory yet
 - [x] polymod-icon.png
 
 ### Psych to Codename
-**On pause**
+**On pause, will resume later**
+
 [thank you codename engine wiki for this one](https://github.com/FNF-CNE-Devs/CodenameEngine/wiki#file-structure--table-of-contents)
 
 Strikethrough: not in Psych Engine 
