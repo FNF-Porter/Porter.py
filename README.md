@@ -1,5 +1,5 @@
 # Friday Night Funkin Port Tool (fnf porter)
-Ports FNF mods between engines using the command prompt. For now its a windows tool but maybe linux mac support in the future
+Ports FNF mods between engines using the command prompt. For now, it's a Windows tool that uses Batch, but maybe we'll add Bash (Mac and Linux) support in the future. The Python and C# code is cross-platform, though.
 ## Using arguments to skip dialog/helper
 **Note, this will probably be removed soon when a UI gets made**
 
