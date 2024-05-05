@@ -3,6 +3,8 @@ __pycache__/*
 mods/*
 output/*
 
+src/__pycache__
+
 ## Files
 CodeTest.py
 LICENSE
