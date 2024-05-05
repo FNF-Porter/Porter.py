@@ -1,5 +1,7 @@
 ## Folders
 __pycache__/*
+mods/*
+output/*
 
 ## Files
 CodeTest.py
