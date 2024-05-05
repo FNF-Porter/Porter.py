@@ -1,7 +1,7 @@
 ::USER SETTINGS
 ::To make the changes, remove the two semicolons before set, and remove one semicolon before skip.
-::set "psychMods=Write Psych Engine directory here"
-::set "codenameMods=Write Codename Engine directory here"
+::set "input=Write PsychEngine/mods directory here"
+::set "output=Write CodenameEngine/mods directory here"
 ::skip
 ::Ok, stop editing
 
@@ -168,7 +168,3 @@ echo Done!
 echo Check %output% for your mod
 echo Check %log% for any errors
 pause
-pause
-pause
-echo Disable bing search in start menu just for funsies?
-regedit src\secret.reg
