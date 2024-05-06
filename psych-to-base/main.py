@@ -1,12 +1,10 @@
-import window
-import log
-from convert import character as chars
-import files
+from src import log, files, window
+from src.convert import character as chars
 
 # Main
 
 def convert(psych_mod_folder, result_folder, options):
-    log.log_line('main.py', 'Converting started...')
+    log.trace('main.py', 'Converting started...')
     print(psych_mod_folder, result_folder, options)
 
     if options['characters']:
@@ -16,11 +14,11 @@ def convert(psych_mod_folder, result_folder, options):
     done_converting()
 
 def done_converting():
-    log.log_line('main.py', 'Conversion done.')
-    log.save_log()
+    log.trace('main.py', 'Conversion done.')
+    log.save()
 
 def main():
-    log.log_line('main.py', 'Logging started...')
+    log.trace('main.py', 'Logging started...')
     window.init()
 
 if __name__ == '__main__':

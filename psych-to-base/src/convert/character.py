@@ -1,8 +1,6 @@
 import json
-import log
 import copy
-import files as filename
-import window
+from src import log, window, files as filename
 
 characterTemplate = {
     "version": "1.0.0",
@@ -32,11 +30,11 @@ def character_convert(file):
 
     template = copy.deepcopy(characterTemplate)
 
-    log.log_line('convert/character.py', f'Requesting information for {char_name}')
+    log.trace('convert/character.py', f'Requesting information for {char_name}')
 
     character_name = window.prompt('input', f'Enter {char_name}\'s name', [['Character Name', 'Your Character Name']], 'character.py')
 
-    log.log_line('convert/character.py', f'Converting character {char_name}')
+    log.trace('convert/character.py', f'Converting character {char_name}')
 
     template['name'] = character_name[0]
     template['assetPath'] = char['image']
@@ -55,6 +53,6 @@ def character_convert(file):
 
         template['animations'].append(animTemplate)
 
-    log.log_line('convert/character.py', f'Character {char_name} successfully converted')
+    log.trace('convert/character.py', f'Character {char_name} successfully converted')
 
     return template

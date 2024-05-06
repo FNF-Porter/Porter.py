@@ -1,8 +1,8 @@
 ## Folders
 ## For all pycache
 **/__pycache__/
+**/output/*
 mods/*
-output/*
 
 **/log_*.txt
 
