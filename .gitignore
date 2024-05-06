@@ -1,9 +1,8 @@
 ## Folders
-__pycache__/*
+## For all pycache
+**/__pycache__/
 mods/*
 output/*
-
-src/__pycache__
 
 ## Files
 CodeTest.py
