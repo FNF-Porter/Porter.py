@@ -2,7 +2,7 @@
 # PHEW! SO FAR SO GOOD!
 
 import os
-from src.ChartTools import ChartObject
+from src.tools.ChartTools import ChartObject
 
 songPath = "lit-up"
 

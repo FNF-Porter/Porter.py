@@ -55,3 +55,25 @@ BASE_CHART = {
 	"notes": {},
 	"generatedBy": "FNF Mod Converter"
 }
+
+CHARACTER = {
+    "version": "1.0.0",
+    "name": None,
+    "assetPath": None,
+    "singTime": None,
+    "isPixel": None,
+    "scale": None,
+    "healthIcon": {
+        "id": None,
+        "isPixel": None,
+        "flipX": False,
+		"scale": 1
+    },
+    "animations": []
+}
+
+ANIMATION = {
+    "name": None,
+    "prefix": None,
+    "offsets": [0, 0]
+}

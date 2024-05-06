@@ -1,5 +1,5 @@
 from src import log, files, window
-from src.convert import character as chars
+from src.tools.CharacterTools import CharacterObject
 
 # Main
 
@@ -9,7 +9,10 @@ def convert(psych_mod_folder, result_folder, options):
 
     if options['characters']:
         for character in files.findAll('', ''):
-            print(chars.character_convert(character))
+            converted_char = CharacterObject(character)
+
+            converted_char.convert()
+            converted_char.save()
 
     done_converting()
 

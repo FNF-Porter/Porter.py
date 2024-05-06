@@ -73,7 +73,7 @@ class ChartObject:
 
 		metadata["playData"]["difficulties"] = self.difficulties
 		metadata["playData"]["characters"]["player"] = Utils.character(sampleChart.get("player1"))
-		metadata["playData"]["characters"]["girlfriend"] = Utils.character(sampleChart.get("gfVersion"))
+		metadata["playData"]["characters"]["girlfriend"] = Utils.character(sampleChart.get("gfVersion", sampleChart.get("player3")))
 		metadata["playData"]["characters"]["opponent"] = Utils.character(sampleChart.get("player2"))
 		metadata["playData"]["stage"] = Utils.stage(sampleChart.get("stage"))
 
