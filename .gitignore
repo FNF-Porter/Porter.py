@@ -4,6 +4,8 @@
 mods/*
 output/*
 
+**/log_*.txt
+
 ## Files
 CodeTest.py
 fnf-porter.code-workspace

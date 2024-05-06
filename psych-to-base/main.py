@@ -1,6 +1,7 @@
 import window
 import log
-from convert import character
+from convert import character as chars
+import files
 
 # Main
 
@@ -8,7 +9,9 @@ def convert(psych_mod_folder, result_folder, options):
     log.log_line('main.py', 'Converting started...')
     print(psych_mod_folder, result_folder, options)
 
-    character.character_convert({})
+    if options['characters']:
+        for character in files.findAll('', ''):
+            print(chars.character_convert(character))
 
     done_converting()
 
