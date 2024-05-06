@@ -48,3 +48,19 @@ def note(time:str, data:int, length:float) -> dict:
 		"d": data,
 		"l": length
 	}
+
+def event(time:float, event:str, values:dict) -> dict:
+	"""
+	Function created for faster creation of events.
+	"""
+	return {
+		"t": time,
+		"e": event,
+		"v": values
+	}
+
+def focusCamera(time:float, char:bool):
+	"""
+	Function created for faster creation of camera change events.
+	"""
+	return event(time, "FocusCamera", {"char": "0" if char else "1"})

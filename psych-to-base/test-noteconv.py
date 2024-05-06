@@ -9,7 +9,7 @@ songPath = "lit-up"
 abspath = os.path.dirname(os.path.abspath(__file__))
 os.chdir(abspath)
 
-try: os.makedirs(os.path.join("results", songPath))
+try: os.makedirs(os.path.join("output", songPath))
 except Exception as e: print("YO!", e)
 
 chart = ChartObject(songPath)

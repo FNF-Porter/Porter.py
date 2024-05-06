@@ -13,7 +13,7 @@ CHARACTERS = {
 }
 
 BASE_CHART_METADATA = {
-	"version": "1.0.0",
+	"version": "2.2.0",
 	"songName": "",
 	"artist": "Unknown",
 	"looped": False,
@@ -49,7 +49,7 @@ BASE_CHART_METADATA = {
 }
 
 BASE_CHART = {
-	"version": "1.0.0",
+	"version": "2.0.0",
 	"scrollSpeed": {},
 	"events": [],
 	"notes": {},

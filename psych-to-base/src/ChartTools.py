@@ -80,6 +80,9 @@ class ChartObject:
 		metadata["ratings"] = ratings
 		metadata["timeChanges"].append(Utils.timeChange(0, sampleChart.get("bpm"), 4, 4, 0, [4, 4, 4, 4]))
 
+		self.stepCrochet = 15000 / sampleChart.get("bpm")
+		self.sampleChart = sampleChart
+
 	def convert(self):
 		for diff, chart in self.psychCharts.items():
 			self.chart["scrollSpeed"][diff] = chart.get("speed")
@@ -88,18 +91,36 @@ class ChartObject:
 			notes = self.chart["notes"][diff]
 
 			for section in chart.get("notes"):
+				mustHit = section["mustHitSection"]
+
 				for note in section.get("sectionNotes"):
+					if not mustHit: # gonna improve this tomorrow too lazy to think tonight
+						if note[1] > 3:
+							note[1] -= 4
+						else:
+							note[1] += 4
+
 					notes.append(Utils.note(note[0], note[1], note[2]))
 
+		events = self.chart["events"]
+		prevMustHit = self.sampleChart["notes"][0]["mustHitSection"]
+		events.append(Utils.focusCamera(0, prevMustHit))
+
+		steps = 0
+
+		for section in self.sampleChart.get("notes"):
+			mustHit = section["mustHitSection"]
+			if (prevMustHit != mustHit):
+				events.append(Utils.focusCamera(steps * self.stepCrochet, mustHit))
+				prevMustHit = mustHit
+
+			steps += section["lengthInSteps"]
+
 	def save(self):
-		savePath = os.path.join("results", self.songName)
+		savePath = os.path.join("output", self.songName)
 
 		with open(os.path.join(savePath, f'{self.songName}-metadata.json'), 'w') as f:
 			json.dump(self.metadata, f, indent=2)
 
 		with open(os.path.join(savePath, f'{self.songName}-chart.json'), 'w') as f:
 			json.dump(self.chart, f, indent=2)
-	
-	# def save(self):
-	#     with open(f'{Settings.path("data/ChartConverter/chart_import")}\{self.fileName}', 'w') as f:
-	#         return json.dump({"song": self.json}, f, indent = 4)
