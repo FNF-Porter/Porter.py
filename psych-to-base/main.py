@@ -1,10 +1,12 @@
+import logging
+
 from src import log, files, window
 from src.tools.CharacterTools import CharacterObject
 
 # Main
 
 def convert(psych_mod_folder, result_folder, options):
-    log.trace('main.py', 'Converting started...')
+    logging.info('Converting started...')
     print(psych_mod_folder, result_folder, options)
 
     if options['characters']:
@@ -17,11 +19,10 @@ def convert(psych_mod_folder, result_folder, options):
     done_converting()
 
 def done_converting():
-    log.trace('main.py', 'Conversion done.')
-    log.save()
+    logging.info('Conversion done.')
 
 def main():
-    log.trace('main.py', 'Logging started...')
+    log.setup()
     window.init()
 
 if __name__ == '__main__':

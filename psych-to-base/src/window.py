@@ -1,8 +1,8 @@
 from main import convert
-from src import log
+import logging
 
 def init():
-	log.trace('window.py', 'Initiating window')
+	logging.info('Initiating window')
 
 	# initiate the window
 

@@ -1,5 +1,5 @@
 """
-A class full of tools needed for chart conversion.
+A class full of tools needed for mod conversion.
 """
 
 from src import Constants

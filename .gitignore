@@ -2,6 +2,7 @@
 ## For all pycache
 **/__pycache__/
 **/output/*
+**/logs/*
 mods/*
 
 **/log_*.txt

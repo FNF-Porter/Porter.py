@@ -1,15 +1,30 @@
-import time
+"""Utility tool for configuring the logger"""
 
-session_logs = ['=== CONVERTER LOGS ===']
+import logging
 
-def trace(log_file, log_text):
-	session_logs.append(f'[{log_file}] [{int(time.time())}] {log_text}')
+from time import strftime
+from os import mkdir
 
-def save():
-	log_file = f'log_{int(time.time())}.txt'
-	trace('log.py', f'Saving logs to {log_file}')
+def setup() -> logging.RootLogger:
+	"""instance of Logger module, will be used for logging operations"""
+	
+	# logger config
+	logger = logging.getLogger()
+	logger.setLevel(logging.DEBUG)
 
-	with open(log_file, 'w') as log:
-		log.write('\n'.join(session_logs))
+	# log format
+	log_format = logging.Formatter("%(asctime)s | %(filename)s:%(lineno)d | %(message)s", "%H:%M:%S")
 
-	print(session_logs)
+	try: mkdir("logs")
+	except: pass
+
+	# file handler
+	file_handler = logging.FileHandler(f"""logs/{strftime("%Y-%m-%d_%H'%M'%S")}.log""")
+	file_handler.setFormatter(log_format)
+
+	logger.handlers.clear()
+	logger.addHandler(file_handler)
+
+	logger.info("Logger initialized!")
+
+	return logger

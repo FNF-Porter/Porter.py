@@ -57,23 +57,23 @@ BASE_CHART = {
 }
 
 CHARACTER = {
-    "version": "1.0.0",
-    "name": None,
-    "assetPath": None,
-    "singTime": None,
-    "isPixel": None,
-    "scale": None,
-    "healthIcon": {
-        "id": None,
-        "isPixel": None,
-        "flipX": False,
+	"version": "1.0.0",
+	"name": None,
+	"assetPath": None,
+	"singTime": None,
+	"isPixel": None,
+	"scale": None,
+	"healthIcon": {
+		"id": None,
+		"isPixel": None,
+		"flipX": False,
 		"scale": 1
-    },
-    "animations": []
+	},
+	"animations": []
 }
 
 ANIMATION = {
-    "name": None,
-    "prefix": None,
-    "offsets": [0, 0]
+	"name": None,
+	"prefix": None,
+	"offsets": [0, 0]
 }

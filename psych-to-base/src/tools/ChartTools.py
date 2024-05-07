@@ -1,5 +1,5 @@
 from src import Utils, Constants
-import os, json
+import os, json, logging
 
 class ChartObject:
 	"""
@@ -20,6 +20,8 @@ class ChartObject:
 
 		self.initCharts()
 		self.setMetadata()
+
+		logging.info(f"Chart for {self.metadata.get('songName')} was created!")
 
 	def initCharts(self):
 		charts = self.psychCharts
@@ -84,6 +86,8 @@ class ChartObject:
 		self.sampleChart = sampleChart
 
 	def convert(self):
+		logging.info(f"Chart conversion for {self.metadata.get('songName')} started!")
+
 		for diff, chart in self.psychCharts.items():
 			self.chart["scrollSpeed"][diff] = chart.get("speed")
 			self.chart["notes"][diff] = []
@@ -116,6 +120,8 @@ class ChartObject:
 
 			steps += section["lengthInSteps"]
 
+		logging.info(f"Chart conversion for {self.metadata.get('songName')} was completed!")
+
 	def save(self):
 		savePath = os.path.join("output", self.songName)
 
@@ -124,3 +130,5 @@ class ChartObject:
 
 		with open(os.path.join(savePath, f'{self.songName}-chart.json'), 'w') as f:
 			json.dump(self.chart, f, indent=2)
+
+		logging.info(f"Saving {self.metadata.get('songName')} to {savePath}")
