@@ -5,8 +5,9 @@ from src import window, Constants
 from src import files
 
 class CharacterObject:
-	def __init__(self, path: str) -> None:
+	def __init__(self, path: str, resultPath) -> None:
 		self.charName:str = os.path.basename(path)
+		self.resultPath = resultPath
 		self.pathName:str = path
 		self.psychChar = {}
 		self.character:dict = Constants.CHARACTER.copy()
@@ -48,7 +49,7 @@ class CharacterObject:
 		logging.info(f'Character {character_name[0]} successfully converted')
 
 	def save(self):
-		savePath = os.path.join("output/characters", self.characterJson)
+		savePath = os.path.join(self.resultPath, self.characterJson)
 
 		logging.info(f'Character {self.characterName} saved to {savePath}.json')
 

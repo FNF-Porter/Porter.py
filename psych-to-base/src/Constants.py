@@ -77,3 +77,13 @@ ANIMATION = {
 	"prefix": None,
 	"offsets": [0, 0]
 }
+
+FILE_LOCS = {																							
+    # Class		 		# Original File				# Result				
+    'PACKJSON': 		['/pack.json',				'/_polymod_meta.json'],
+    'PACKPNG': 			['/pack.png', 				'/_polymod_icon.png'],
+    'CREDITSTXT': 		['/data/credits.txt', 		'/mod-credits.txt'],
+    'CHARACTERASSETS': 	['/images/characters/',		'/shared/images/characters/'],
+    'CHARACTERJSONS':	['/characters/',			'/data/characters/'],
+    'CHARTFOLDER':		['/data/',					'/data/songs/']
+}

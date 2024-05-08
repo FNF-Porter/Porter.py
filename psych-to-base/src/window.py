@@ -10,9 +10,10 @@ def init():
 	psych_mod_folder_path = 'path_after_user_selected_it'
 	result_path = 'path_after_user_selected_it'
 	options = {
-		'shaders': True,
-		'songs': False,
-		'characters': True
+		'charts': True,
+		'songs': True,
+		'characters': True,
+		'modpack_meta': True,
 	}
 
 	if psych_mod_folder_path != None and result_path != None:

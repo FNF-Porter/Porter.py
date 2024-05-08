@@ -1,6 +1,10 @@
 from src import Utils, Constants
 import os, json, logging
 
+def folderMake(folder_path): #Sorry Tom but I'm dumb and not patient!
+    if not os.path.exists(folder_path):
+        os.makedirs(folder_path)
+
 class ChartObject:
 	"""
 	A convenient way to store chart metadata.
@@ -8,9 +12,11 @@ class ChartObject:
 	Args:
 		path (str): The path where the song's chart data is stored.
 	"""
-	def __init__(self, path: str) -> None:
+	def __init__(self, path: str, originPath, resultPath) -> None:
 		self.songPath = path
 		self.songName:str = os.path.basename(path)
+		self.converterOriginPath = originPath
+		self.converterOrderPath = resultPath
 
 		self.difficulties:list = []
 		self.metadata:dict = Constants.BASE_CHART_METADATA.copy()
@@ -24,6 +30,8 @@ class ChartObject:
 		logging.info(f"Chart for {self.metadata.get('songName')} was created!")
 
 	def initCharts(self):
+		logging.info(f"Initialising charts for {self.metadata.get('songName')}...")
+
 		charts = self.psychCharts
 		difficulties = self.difficulties
 
@@ -44,7 +52,8 @@ class ChartObject:
 			elif fileLen > 1 and fileName != self.songName:
 				difficulty = splitFile[1]
 
-			with open(os.path.join(self.songName, file), "r") as f:
+			pathStupid = os.path.join(self.converterOriginPath, os.path.join(self.songName, file))
+			with open(pathStupid, "r") as f:
 				fileJson = json.load(f).get("song")
 
 				if fileJson == None:
@@ -62,6 +71,7 @@ class ChartObject:
 		del unorderedDiffs
 
 	def setMetadata(self):
+		logging.info(f"Initialising metadata for {self.metadata.get('songName')}...")
 		# Chart used to get character data (ASSUMING all charts use the same characters and stages)
 		sampleChart = self.psychCharts.get(self.difficulties[0])
 		metadata = self.metadata
@@ -95,7 +105,7 @@ class ChartObject:
 			notes = self.chart["notes"][diff]
 
 			for section in chart.get("notes"):
-				mustHit = section["mustHitSection"]
+				mustHit = section.get("mustHitSection", True)
 
 				for note in section.get("sectionNotes"):
 					if not mustHit: # gonna improve this tomorrow too lazy to think tonight
@@ -118,12 +128,13 @@ class ChartObject:
 				events.append(Utils.focusCamera(steps * self.stepCrochet, mustHit))
 				prevMustHit = mustHit
 
-			steps += section["lengthInSteps"]
+			steps += section.get('lengthInSteps', 16)
 
 		logging.info(f"Chart conversion for {self.metadata.get('songName')} was completed!")
 
 	def save(self):
-		savePath = os.path.join("output", self.songName)
+		savePath = os.path.join(self.converterOrderPath, self.songName)
+		folderMake(savePath)
 
 		with open(os.path.join(savePath, f'{self.songName}-metadata.json'), 'w') as f:
 			json.dump(self.metadata, f, indent=2)
