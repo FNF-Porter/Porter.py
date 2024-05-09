@@ -2,7 +2,12 @@
 A class full of tools needed for mod conversion.
 """
 
+import time
 from src import Constants
+
+runtime = time.time()
+def getRuntime() -> float:
+	return time.time() - runtime
 
 def character(name:str) -> str:
 	"""

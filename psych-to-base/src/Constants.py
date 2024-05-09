@@ -85,5 +85,7 @@ FILE_LOCS = {
     'CREDITSTXT': 		['/data/credits.txt', 		'/mod-credits.txt'],
     'CHARACTERASSETS': 	['/images/characters/',		'/shared/images/characters/'],
     'CHARACTERJSONS':	['/characters/',			'/data/characters/'],
-    'CHARTFOLDER':		['/data/',					'/data/songs/']
+    'CHARACTERICON':	['/images/icons/',			'/images/icons/'],
+    'CHARTFOLDER':		['/data/',					'/data/songs/'],
+    'SONGS':			['/songs/',					'/songs/']
 }

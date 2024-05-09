@@ -11,8 +11,16 @@ def init():
 	result_path = 'path_after_user_selected_it'
 	options = {
 		'charts': True,
-		'songs': True,
-		'characters': True,
+		'songs': {
+			'inst': True,
+			'voices': True,
+			'split': True
+		},
+		'characters': {
+			'icons': True,
+			'json': True,
+			'assets': True
+		},
 		'modpack_meta': True,
 	}
 
