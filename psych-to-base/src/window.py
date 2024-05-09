@@ -21,6 +21,12 @@ def init():
 			'json': True,
 			'assets': True
 		},
+		'weeks': {
+			'props': True,
+			'levels': True,
+			'titles': True
+		},
+		'stages': True,
 		'modpack_meta': True,
 	}
 

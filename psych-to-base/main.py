@@ -8,7 +8,7 @@ from src.tools import ModConvertTools as ModTools
 from src import log, files, window
 from src.tools.CharacterTools import CharacterObject
 from src.tools.ChartTools import ChartObject
-from src.tools import VocalSplit
+from src.tools import VocalSplit, WeekTools, StageTool
 from src import Utils
 
 # Main
@@ -26,7 +26,7 @@ def convert(psych_mod_folder, result_folder, options):
     logging.info('Converting started...')
     logging.info(options)
 
-    modfolder = 'WeekEnd1'
+    modfolder = 'vs-skippa-psychengine' # MOD FOLDER PSYCH ENGINE
     result_folder = 'output'
 
     if options.get('modpack_meta', False):
@@ -235,6 +235,80 @@ def convert(psych_mod_folder, result_folder, options):
                               f'{result_folder}/mod{bgSongs}{os.path.basename(song)}/{os.path.basename(songFile)}')
                         except:
                             logging.error(f'Could not copy asset {songFile}!')
+    weekCOptions = options.get('weeks', {
+			'props': False, # Asset
+			'levels': False,
+			'titles': False # Asset
+		})  
+    if weekCOptions['levels']:
+        logging.info('Converting weeks (levels)...')
+
+        dir = Constants.FILE_LOCS.get('WEEKS')
+        psychWeeks = modfolder + dir[0]
+        baseLevels = dir[1]
+
+        folderMake(f'{result_folder}/mod{baseLevels}')
+
+        for week in files.findAll(f'{psychWeeks}*.json'):
+            logging.info(f'Loading {week} into the converter...')
+
+            weekJSON = json.loads(open(week, 'r').read())
+            open(f'{result_folder}/mod{baseLevels}{os.path.basename(week)}', 'w').write(json.dumps(WeekTools.convert(weekJSON, modfolder), indent=4))
+
+    if weekCOptions['props']:
+        logging.info('Copying prop assets...')
+
+        dir = Constants.FILE_LOCS.get('WEEKCHARACTERASSET')
+        psychWeeks = modfolder + dir[0]
+        baseLevels = dir[1]
+
+        allXml = files.findAll(f'{psychWeeks}*.xml')
+        allPng = files.findAll(f'{psychWeeks}*.png')
+        for asset in allXml + allPng:
+            logging.info(f'Copying {asset}')
+            try:
+                folderMake(f'{result_folder}/mod{baseLevels}')
+                fileCopy(asset,
+                    f'{result_folder}/mod{baseLevels}{os.path.basename(asset)}')
+            except:
+                logging.error(f'Could not copy asset {asset}!')
+
+    if weekCOptions['titles']:
+        logging.info('Copying level titles...')
+
+        dir = Constants.FILE_LOCS.get('WEEKIMAGE')
+        psychWeeks = modfolder + dir[0]
+        baseLevels = dir[1]
+
+        allPng = files.findAll(f'{psychWeeks}*.png')
+        for asset in allPng:
+            logging.info(f'Copying {asset}')
+            try:
+                folderMake(f'{result_folder}/mod{baseLevels}')
+                fileCopy(asset,
+                    f'{result_folder}/mod{baseLevels}{os.path.basename(asset)}')
+            except:
+                logging.error(f'Could not copy asset {asset}!')
+
+    if options.get('stages', False):
+        logging.info('Converting stages...') # Todo make lua parsing and copy props as well
+
+        dir = Constants.FILE_LOCS.get('STAGE')
+        psychStages = modfolder + dir[0]
+        baseStages = dir[1]
+
+        allStageJSON = files.findAll(f'{psychStages}*.json')
+        for asset in allStageJSON:
+            logging.info(f'Converting {asset}')
+            folderMake(f'{result_folder}/mod{baseStages}')
+            stageJSON = json.loads(open(asset, 'r').read())
+            assetPath = f'{result_folder}/mod{baseStages}{os.path.basename(asset)}'
+
+            #logging.info(f'{assetPath} {asset}')
+
+            stageJSONConverted = json.dumps(StageTool.convert(stageJSON, os.path.basename(asset)), indent=4)
+
+            open(assetPath, 'w').write(stageJSONConverted)
 
     runtime = Utils.getRuntime()
     logging.info(f'Conversion done: Took {int(runtime)}s')
