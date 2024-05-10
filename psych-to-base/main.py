@@ -8,8 +8,12 @@ from src.tools import ModConvertTools as ModTools
 from src import log, files, window
 from src.tools.CharacterTools import CharacterObject
 from src.tools.ChartTools import ChartObject
+from src.tools import VocalSplit, WeekTools, StageTool
+from src import Utils
 
 # Main
+
+charts = []
 
 def folderMake(folder_path):
     if not os.path.exists(folder_path):
@@ -22,7 +26,7 @@ def convert(psych_mod_folder, result_folder, options):
     logging.info('Converting started...')
     logging.info(options)
 
-    modfolder = 'WeekEnd1'
+    modfolder = 'vs-skippa-psychengine' # MOD FOLDER PSYCH ENGINE
     result_folder = 'output'
 
     if options.get('modpack_meta', False):
@@ -69,11 +73,13 @@ def convert(psych_mod_folder, result_folder, options):
             logging.warn('Could not find data/credits.txt')
 
     if options.get('charts', False):
-        folderMake(f'{result_folder}/mod/data/songs/')
         
         chartFolder = Constants.FILE_LOCS.get('CHARTFOLDER')
         psychChartFolder = modfolder + chartFolder[0]
         bgChartFolder = result_folder + '/mod' + chartFolder[1]
+
+        folderMake(f'{result_folder}/mod{chartFolder[1]}')
+
         songs = files.findAll(f'{psychChartFolder}*')
 
         for song in songs:
@@ -86,17 +92,28 @@ def convert(psych_mod_folder, result_folder, options):
                 logging.info(f'Converting charts of {song}...')
                 songChart.convert()
 
+                songName = songChart.songName
+                charts.append({
+                    'songKey': songName,
+                    'sections': songChart.sections,
+                    'bpm': songChart.startingBpm,
+                    'player': songChart.metadata['playData']['characters']['player'],
+                    'opponent': songChart.metadata['playData']['characters']['opponent']
+                })
+
                 logging.info(f'{song} charts converted, saving')
                 songChart.save()
 
-    if options.get('characters', False):
+    if options.get('characters', {
+			'assets': False
+		})['assets']:
         logging.info('Copying character assets...')
 
         dir = Constants.FILE_LOCS.get('CHARACTERASSETS')
         psychCharacterAssets = modfolder + dir[0]
         bgCharacterAssets = dir[1]
 
-        folderMake(f'{result_folder}/mod/shared/images/characters/')
+        folderMake(f'{result_folder}/mod{bgCharacterAssets}')
 
         for character in files.findAll(f'{psychCharacterAssets}*'):
             if not os.path.isdir(character):
@@ -108,13 +125,18 @@ def convert(psych_mod_folder, result_folder, options):
             else:
                 logging.warn(f'{character} is a directory, not a file! Skipped')
 
+    if options.get('characters', {
+			'json': False
+		})['json']:
+
         logging.info('Converting character jsons...')
-        folderMake(f'{result_folder}/mod/data/characters/')
 
         dir = Constants.FILE_LOCS.get('CHARACTERJSONS')
 
         psychCharacters = modfolder + dir[0]
         bgCharacters = dir[1]
+
+        folderMake(f'{result_folder}/mod{bgCharacters}')
 
         for character in files.findAll(f'{psychCharacters}*'):
             logging.info(f'Checking if {character} is a file...')
@@ -126,11 +148,170 @@ def convert(psych_mod_folder, result_folder, options):
             else:
                 logging.warn(f'{character} is a directory, or not a json! Skipped')
 
+    if options.get('characters', {
+		'icons': False
+	})['icons']:
+        logging.info('Copying character icons...')
 
-    done_converting()
+        dir = Constants.FILE_LOCS.get('CHARACTERICON')
+        psychCharacterAssets = modfolder + dir[0]
+        bgCharacterAssets = dir[1]
 
-def done_converting():
-    logging.info('Conversion done.')
+        folderMake(f'{result_folder}/mod{bgCharacterAssets}')
+
+        for character in files.findAll(f'{psychCharacterAssets}*'):
+            if not os.path.isdir(character):
+                logging.info(f'Copying asset {character}')
+                try:
+                    fileCopy(character, result_folder + '/mod' + bgCharacterAssets + os.path.basename(character))
+                except:
+                    logging.error(f'Could not copy asset {character}!')
+            else:
+                logging.warn(f'{character} is a directory, not a file! Skipped')
+
+    songOptions = options.get('songs', {
+        'inst': False,
+        'voices': False,
+        'split': False
+    })
+    if songOptions:
+        dir = Constants.FILE_LOCS.get('SONGS')
+        psychSongs = modfolder + dir[0]
+        bgSongs = dir[1]
+
+        folderMake(f'{result_folder}/mod{bgSongs}')
+
+        for song in files.findAll(f'{psychSongs}*'):
+            logging.info(f'Checking if {song} is a valid song directory...')
+            if os.path.isdir(song):
+                logging.info(f'Copying files in {song}')
+                for songFile in files.findAll(f'{song}/*'):
+                    if os.path.basename(songFile) == 'Inst.ogg' and songOptions['inst']:
+                        logging.info(f'Copying asset {songFile}')
+                        try:
+                            folderMake(f'{result_folder}/mod{bgSongs}{os.path.basename(song)}')
+                            fileCopy(songFile,
+                              f'{result_folder}/mod{bgSongs}{os.path.basename(song)}/{os.path.basename(songFile)}')
+                        except:
+                            logging.error(f'Could not copy asset {songFile}!')
+                    elif os.path.basename(songFile) == 'Voices.ogg' and songOptions['split']:
+                        # Vocal Split
+                        songKey = os.path.basename(song)
+
+                        chart = None
+                        for _chart in charts:
+                            if _chart['songKey'] == songKey:
+                                chart = charts[charts.index(_chart)]
+
+                        if chart != None:
+                            sections = chart['sections']
+                            bpm = chart['bpm']
+                            logging.info(f'Vocal Split ({songKey}) BPM is {bpm}')
+                            path = song + '/'
+                            resultPath = result_folder + f'/mod{bgSongs}{songKey}/'
+                            songChars = [chart['player'],
+                                          chart['opponent']]
+                            
+                            #print(songChars)
+
+                            logging.info(f'Vocal Split currently running for: {songKey}')
+                            logging.info(f'Passed the following paths: {path} || {resultPath}')
+                            logging.info(f'Passed characters: {songChars}')
+
+                            VocalSplit.vocalsplit(sections, bpm, path, resultPath, songKey, songChars)
+                        else:
+                            logging.warn(f'No chart was found for {songKey} so the vocal file will be copied instead.')
+                            try:
+                                folderMake(f'{result_folder}/mod{bgSongs}{os.path.basename(song)}')
+                                fileCopy(songFile,
+                                f'{result_folder}/mod{bgSongs}{os.path.basename(song)}/{os.path.basename(songFile)}')
+                            except:
+                                logging.error(f'Could not copy asset {songFile}!')
+                    elif songOptions['voices']:
+                        logging.info(f'Copying asset {songFile}')
+                        try:
+                            folderMake(f'{result_folder}/mod{bgSongs}{os.path.basename(song)}')
+                            fileCopy(songFile,
+                              f'{result_folder}/mod{bgSongs}{os.path.basename(song)}/{os.path.basename(songFile)}')
+                        except:
+                            logging.error(f'Could not copy asset {songFile}!')
+    weekCOptions = options.get('weeks', {
+			'props': False, # Asset
+			'levels': False,
+			'titles': False # Asset
+		})  
+    if weekCOptions['levels']:
+        logging.info('Converting weeks (levels)...')
+
+        dir = Constants.FILE_LOCS.get('WEEKS')
+        psychWeeks = modfolder + dir[0]
+        baseLevels = dir[1]
+
+        folderMake(f'{result_folder}/mod{baseLevels}')
+
+        for week in files.findAll(f'{psychWeeks}*.json'):
+            logging.info(f'Loading {week} into the converter...')
+
+            weekJSON = json.loads(open(week, 'r').read())
+            open(f'{result_folder}/mod{baseLevels}{os.path.basename(week)}', 'w').write(json.dumps(WeekTools.convert(weekJSON, modfolder), indent=4))
+
+    if weekCOptions['props']:
+        logging.info('Copying prop assets...')
+
+        dir = Constants.FILE_LOCS.get('WEEKCHARACTERASSET')
+        psychWeeks = modfolder + dir[0]
+        baseLevels = dir[1]
+
+        allXml = files.findAll(f'{psychWeeks}*.xml')
+        allPng = files.findAll(f'{psychWeeks}*.png')
+        for asset in allXml + allPng:
+            logging.info(f'Copying {asset}')
+            try:
+                folderMake(f'{result_folder}/mod{baseLevels}')
+                fileCopy(asset,
+                    f'{result_folder}/mod{baseLevels}{os.path.basename(asset)}')
+            except:
+                logging.error(f'Could not copy asset {asset}!')
+
+    if weekCOptions['titles']:
+        logging.info('Copying level titles...')
+
+        dir = Constants.FILE_LOCS.get('WEEKIMAGE')
+        psychWeeks = modfolder + dir[0]
+        baseLevels = dir[1]
+
+        allPng = files.findAll(f'{psychWeeks}*.png')
+        for asset in allPng:
+            logging.info(f'Copying {asset}')
+            try:
+                folderMake(f'{result_folder}/mod{baseLevels}')
+                fileCopy(asset,
+                    f'{result_folder}/mod{baseLevels}{os.path.basename(asset)}')
+            except:
+                logging.error(f'Could not copy asset {asset}!')
+
+    if options.get('stages', False):
+        logging.info('Converting stages...') # Todo make lua parsing and copy props as well
+
+        dir = Constants.FILE_LOCS.get('STAGE')
+        psychStages = modfolder + dir[0]
+        baseStages = dir[1]
+
+        allStageJSON = files.findAll(f'{psychStages}*.json')
+        for asset in allStageJSON:
+            logging.info(f'Converting {asset}')
+            folderMake(f'{result_folder}/mod{baseStages}')
+            stageJSON = json.loads(open(asset, 'r').read())
+            assetPath = f'{result_folder}/mod{baseStages}{os.path.basename(asset)}'
+
+            #logging.info(f'{assetPath} {asset}')
+
+            stageJSONConverted = json.dumps(StageTool.convert(stageJSON, os.path.basename(asset)), indent=4)
+
+            open(assetPath, 'w').write(stageJSONConverted)
+
+    runtime = Utils.getRuntime()
+    logging.info(f'Conversion done: Took {int(runtime)}s')
 
 def main():
     log.setup()

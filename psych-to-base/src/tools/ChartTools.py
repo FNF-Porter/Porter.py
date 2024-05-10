@@ -18,6 +18,10 @@ class ChartObject:
 		self.converterOriginPath = originPath
 		self.converterOrderPath = resultPath
 
+		self.startingBpm = 0
+
+		self.sections = []
+
 		self.difficulties:list = []
 		self.metadata:dict = Constants.BASE_CHART_METADATA.copy()
 		self.psychCharts:dict = {}
@@ -92,11 +96,17 @@ class ChartObject:
 		metadata["ratings"] = ratings
 		metadata["timeChanges"].append(Utils.timeChange(0, sampleChart.get("bpm"), 4, 4, 0, [4, 4, 4, 4]))
 
+		self.metadata = metadata
+		
+		self.startingBpm = sampleChart.get('bpm')
+
 		self.stepCrochet = 15000 / sampleChart.get("bpm")
 		self.sampleChart = sampleChart
 
 	def convert(self):
 		logging.info(f"Chart conversion for {self.metadata.get('songName')} started!")
+
+		firstChart = False
 
 		for diff, chart in self.psychCharts.items():
 			self.chart["scrollSpeed"][diff] = chart.get("speed")
@@ -106,15 +116,28 @@ class ChartObject:
 
 			for section in chart.get("notes"):
 				mustHit = section.get("mustHitSection", True)
+				isDuet = False
 
 				for note in section.get("sectionNotes"):
 					if not mustHit: # gonna improve this tomorrow too lazy to think tonight
 						if note[1] > 3:
+							isDuet = True
 							note[1] -= 4
 						else:
 							note[1] += 4
 
 					notes.append(Utils.note(note[0], note[1], note[2]))
+
+				if not firstChart:
+					self.sections.append({
+					'mustHitSection': mustHit, 
+					'isDuet': isDuet,
+					'lengthInSteps': section.get('lengthInSteps', 16),
+					'bpm': section.get('bpm', self.startingBpm),
+					'changeBPM': section.get('changeBPM', False)
+					})
+				
+			firstChart = True
 
 		events = self.chart["events"]
 		prevMustHit = self.sampleChart["notes"][0]["mustHitSection"]

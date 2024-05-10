@@ -4,7 +4,10 @@
 **/output/*
 **/logs/*
 mods/*
+
+## Debug mods
 Weekend1/
+vs-skippa-psychengine/
 
 **/log_*.txt
 
