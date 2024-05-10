@@ -1,25 +1,10 @@
 # Friday Night Funkin Port Tool (fnf porter)
-Ports FNF mods between engines using the command prompt. For now, it's a Windows tool that uses Batch, but maybe we'll add Bash (Mac and Linux) support in the future. The Python and C# code is cross-platform, though.
-## Using arguments to skip dialog/helper
-**Note, this will probably be removed soon when a UI gets made**
-
-All arguments should be directories, seperated by spaces. If you have a space in the directory, it'll break!
-
-First is the input directory, then the output directory, then the mod name, then the direction. 0 is Psych to Codename, 1 is Codename to Psych. Make sure to **erase all quotes**, and that the mod name has **no spaces**.
-
-For example, if I wanted to copy kero from Psych to Codename on my computer, I could type this into the command prompt:
-
-`C:\Users\Gus\Downloads\fnf-porter\psych-2-codename.bat C:\Users\Gus\SavedGames\PsychEngine\mods C:\Users\Gus\SavedGames\CodenameEngine\mods kero 0`
-
-Or, you can find the fnf-porter folder, right click and select Open with Terminal, and just type this:
-
-`psych-2-codename C:\Users\Gus\SavedGames\PsychEngine\mods C:\Users\Gus\SavedGames\CodenameEngine\mods kero 0`
-
+Ports FNF mods between engines using the python. Right now it's a CLI, but a GUI is coming in the future! 
 ## todo
 ### Psych to Base Game
-IDK the directory yet
-- [x] polymod-meta.json
-- [x] polymod-icon.png
+- [] Charts
+- [] Characters
+- [] Stages
 
 ### Psych to Codename
 **On pause, will resume later**
