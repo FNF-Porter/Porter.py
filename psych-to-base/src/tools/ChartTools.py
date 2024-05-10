@@ -151,7 +151,7 @@ class ChartObject:
 				events.append(Utils.focusCamera(steps * self.stepCrochet, mustHit))
 				prevMustHit = mustHit
 
-			steps += section.get('lengthInSteps', 16)
+			steps += section["sectionBeats"] * 4
 
 		logging.info(f"Chart conversion for {self.metadata.get('songName')} was completed!")
 
