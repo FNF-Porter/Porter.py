@@ -1,10 +1,23 @@
-# Friday Night Funkin Port Tool (fnf porter)
-Ports FNF mods between engines using the python. Right now it's a CLI, but a GUI is coming in the future! 
-## todo
+# Friday Night Funkin' Mod Porter (fnf porter)
+Ports FNF mods between engines using python. Right now it's a CLI, but a GUI is coming in the future! 
+
 ### Psych to Base Game
-- [] Charts
-- [] Characters
-- [] Stages
+The following files or folders are ported to Base Game accordingly:
+
+* `pack.json`
+* `pack.png`
+* `data`
+  * (all songs)
+  * `credits.txt`
+* `images`
+  * `characters`
+  * `icons`
+  * `storymenu`
+  * `menucharacters`
+* `characters`
+* `weeks`
+* `stages`
+* `songs`
 
 ### Psych to Codename
 **On pause, will resume later**
@@ -94,4 +107,4 @@ Strikethrough: not in Psych Engine
  ehhhhh maybe some other day
 
 ## Permissions
-You can edit it and give it to other people, or embed it into another engine or application. Please credit Gusborg, BombasticTom, and Cobalt though. Also, this isn't subject to the FNF license.
+You can edit it and give it to other people, or use it for your own purpose. Please credit Gusborg, BombasticTom, Cobalt and tposejank. Also, this isn't subject to the FNF license.
