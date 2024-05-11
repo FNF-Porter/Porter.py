@@ -29,7 +29,8 @@ def init():
 	window = Window()
 	window.show()
 
-	convertCallback()
+	# convertCallback()
+	# uncomment above if youre gonna use the converter
 
 	app.exec()
 
