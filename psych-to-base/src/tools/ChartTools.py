@@ -98,8 +98,8 @@ class ChartObject:
 
 		prevMustHit = self.sampleChart["notes"][0].get("mustHitSection", True)
 		prevTime = 0
+		self.chart["events"] = [Utils.focusCamera(0, prevMustHit)]
 		events = self.chart["events"]
-		events.append(Utils.focusCamera(0, prevMustHit))
 
 		firstChart = True
 
