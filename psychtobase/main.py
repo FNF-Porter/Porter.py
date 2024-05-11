@@ -328,9 +328,6 @@ def convert(psych_mod_folder, result_folder, options):
     runtime = Utils.getRuntime()
     logging.info(f'Conversion done: Took {int(runtime)}s')
 
-def main():
+if __name__ == '__main__':
     log.setup()
     window.init()
-
-if __name__ == '__main__':
-    main()

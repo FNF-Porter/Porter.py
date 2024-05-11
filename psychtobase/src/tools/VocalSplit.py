@@ -18,7 +18,7 @@ def vocalsplit(chart, bpm, origin, path, key, characters):
 
     for section in chart:
         if section.get('changeBPM', False):
-            logging.info(f'{key}: BPM Change ({section.get('bpm')}) at {songSteps} steps')
+            logging.info(f'{key}: BPM Change ({section.get("bpm")}) at {songSteps} steps')
             beatLength = (60 / section.get('bpm', 1)) * 1000
             lastSteps = songSteps
             songSteps = 0
