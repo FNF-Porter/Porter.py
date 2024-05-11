@@ -12,7 +12,7 @@ if __name__ == "__main__":
 	abspath = os.path.dirname(os.path.abspath(__file__))
 	os.chdir(abspath)
 
-	convSongs = ["darnell", "lit-up", "2hot"]
+	convSongs = ["sprout", "darnell", "lit-up", "2hot"]
 
 	for song in convSongs:
 		chart = ChartObject(f"mods\{song}")

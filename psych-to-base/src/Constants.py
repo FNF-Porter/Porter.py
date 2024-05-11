@@ -45,7 +45,7 @@ BASE_CHART_METADATA = {
 
 	"timeFormat": "ms",
 	"timeChanges": [],
-	"generatedBy": "FNF Mod Converter"
+	"generatedBy": "FNF Mod Converter (by Gusborg, tposejank, Cobalt and BombasticTom)"
 }
 
 BASE_CHART = {
