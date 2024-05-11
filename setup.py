@@ -1,6 +1,7 @@
 import os
 import pathlib
 import shutil
+import subprocess
 
 #user inputs
 inputPre=str(input("Input directory (Psych only for now): "))
@@ -28,33 +29,11 @@ for a in os.listdir(pathlib.PurePath(inputPre , "mods")):
     print(a)
 modName=str(input("Mod to port: "))
 
-inputDir=str(pathlib.PurePath(inputPre , "mods" , modName))
-outputDir=str(pathlib.PurePath(outputPre , "mods" , modName))
-logDir=str(pathlib.PurePath(outputDir , "fnf-porter.log"))
+inputDir = str(pathlib.PurePath(inputPre , "mods" , modName))
+outputDir = str(pathlib.PurePath(outputPre , "mods" , modName))
+logDir = str(pathlib.PurePath(outputDir , "fnf-porter.log"))
 print(inputDir)
 print(outputDir)
 print(logDir)
 
-#The keys are nicknames
-folderStructure = {
-    "Music": ("music", "music"),
-    "Videos": ("videos", "videos"),
-    "Songs": ("songs", "songs"),
-    "Sounds": ("sounds", "sounds")
-}
-
-def copyFolder(inputFolder, outputFolder):
-    #i need to think of variable names but i think im running out
-    copytreeInput = pathlib.PurePath(inputDir , inputFolder)
-    copytreeOutput = pathlib.PurePath(outputDir , outputFolder)
-    shutil.copytree(copytreeInput, copytreeOutput)
-    print("Attempted to copy", copytreeInput, "to", copytreeOutput)
-
-for x in folderStructure.values():
-    try:
-        copyFolder(x[0], x[1])
-    except:
-        print(x[0], "had a stroke trying to copy to", x[1])
-        #how do you get full path name
-
-#call the converters in the appropriate folders
+import psychtobase.src.foldermoving
