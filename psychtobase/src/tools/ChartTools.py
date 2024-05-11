@@ -159,7 +159,8 @@ class ChartObject:
 		logging.info(f"Chart conversion for {self.metadata.get('songName')} was completed!")
 
 	def save(self):
-		saveDir = Paths.join("output", self.songName)
+		folder = os.path.join(Constants.FILE_LOCS.get('CHARTFOLDER')[1], self.songName)
+		saveDir = f'output/mod{folder}'
 		files.folderMake(saveDir)
 
 		savePath = Paths.join(saveDir, f'{self.songName}-metadata')

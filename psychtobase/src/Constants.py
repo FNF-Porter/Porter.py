@@ -112,7 +112,108 @@ LEVEL_PROP_DEFAULTS = {
                     ]
                 }
             ]
-		}
+		},
+    "dad": {
+      "assetPath": "storymenu/props/dad",
+      "scale": 1.0,
+      "offsets": [100, 60],
+      "animations": [
+        {
+          "name": "idle",
+          "prefix": "idle0",
+          "frameRate": 24
+        }
+      ]
+    },
+    "spooky": {
+      "assetPath": "storymenu/props/spooky",
+      "scale": 1.0,
+      "offsets": [100, 120],
+      "animations": [
+        {
+          "name": "danceLeft",
+          "prefix": "idle0",
+          "frameIndices": [0, 1, 2, 3, 4, 5, 6, 7]
+        },
+        {
+          "name": "danceRight",
+          "prefix": "idle0",
+          "frameIndices": [8, 9, 10, 11, 12, 13, 14, 15]
+        }
+      ]
+    },
+    "pico": {
+      "assetPath": "storymenu/props/pico",
+      "scale": 1.0,
+      "offsets": [100, 120],
+      "animations": [
+        {
+          "name": "idle",
+          "prefix": "idle0",
+          "frameRate": 24
+        }
+      ]
+    },
+    "mom": {
+      "assetPath": "storymenu/props/mom",
+      "scale": 0.9,
+      "offsets": [120, 50],
+      "animations": [
+        {
+          "name": "idle",
+          "prefix": "idle0",
+          "frameRate": 24
+        }
+      ]
+    },
+    "parents-christmas": {
+      "assetPath": "storymenu/props/parents-xmas",
+      "scale": 0.9,
+      "offsets": [10, 60],
+      "animations": [
+        {
+          "name": "idle",
+          "prefix": "idle0",
+          "frameRate": 24
+        }
+      ]
+    },
+    "senpai": {
+      "assetPath": "storymenu/props/senpai",
+      "scale": 1.0,
+      "offsets": [60, 100],
+      "animations": [
+        {
+          "name": "idle",
+          "prefix": "idle0",
+          "frameRate": 24
+        }
+      ]
+    },
+    "tankman": {
+      "assetPath": "storymenu/props/tankman",
+      "scale": 1.0,
+      "offsets": [100, 100],
+      "animations": [
+        {
+          "name": "idle",
+          "prefix": "idle0",
+          "frameRate": 24
+        }
+      ]
+    },
+    "darnell": {
+      "assetPath": "storymenu/props/darnell",
+      "scale": 1.0,
+      "offsets": [120, 120],
+      "animations": [
+        {
+          "name": "idle",
+          "prefix": "idle0",
+          "frameRate": 24
+        }
+      ]
+    },
 }
 
 LEVEL_PROP = {
@@ -174,6 +275,40 @@ STAGE = {
   "name": None
 }
 
+STAGE_PROP_ANIMATED = {
+    "zIndex": None,
+    "position": [0, 0],
+    "scale": [1, 1],
+    "animType": "sparrow",
+    "name": "", # Psych Engine TAG
+    "isPixel": False,
+    "startingAnimation": "idle",
+    "assetPath": "stage assets/Road",
+    "scroll": [1, 1],
+    "animations": []
+}
+
+STAGE_PROP_ANIMATION = {
+    "offsets": [0, 0],
+    "flipY": False,
+    "frameRate": 24,
+    "prefix": None,
+    "looped": True,
+    "flipX": False,
+    "name": None
+}
+
+STAGE_PROP_IMAGE = {
+    "danceEvery": 0,
+    "zIndex": None,
+    "position": [0, 0],
+    "scale": [1, 1],
+    "name": None, # Psych Engine TAG
+    "isPixel": False,
+    "assetPath": None,
+    "scroll": [1, 1]
+}
+
 FILE_LOCS = {																							
     # Class		 			# Original File						# Result				
     'PACKJSON': 			['/pack.json',						'/_polymod_meta.json'],
@@ -188,5 +323,6 @@ FILE_LOCS = {
     'WEEKCHARACTERASSET':	['/images/menucharacters/',			'/images/storymenu/props/'],
     'WEEKCHARACTERJSON':	['/images/menucharacters/',	''], # Embedded directly to the level.json
     'WEEKIMAGE':			['/images/storymenu/',				'/images/storymenu/titles/'],
-    'STAGE':                ['/stages/',                        '/data/stages/']
+    'STAGE':                ['/stages/',                        '/data/stages/'],
+    'IMAGES':               ['/images/',                        '/shared/images/']
 }

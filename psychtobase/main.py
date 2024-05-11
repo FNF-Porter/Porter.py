@@ -8,12 +8,13 @@ from src.tools import ModConvertTools as ModTools
 from src import log, files, window
 from src.tools.CharacterTools import CharacterObject
 from src.tools.ChartTools import ChartObject
-from src.tools import VocalSplit, WeekTools, StageTool
+from src.tools import VocalSplit, WeekTools, StageTool, StageLuaParse
 from src import Utils
 
 # Main
 
 charts = []
+vocalSplitEnabled = True
 
 def folderMake(folder_path):
     if not os.path.exists(folder_path):
@@ -43,7 +44,9 @@ def convert(psych_mod_folder, result_folder, options):
 
             logging.info('pack.json converted and saved')
         else:
-            logging.warn('pack.json not found. Skipped')
+            folderMake(f'{result_folder}/mod/')
+            open(f'{result_folder}/mod/{polymodMetaDir}', 'w').write(json.dumps(ModTools.defaultPolymodMeta(), indent=4))
+            logging.warn('pack.json not found. Replaced it with default')
 
         logging.info('Copying pack.png')
         dir = Constants.FILE_LOCS.get('PACKPNG')
@@ -57,7 +60,11 @@ def convert(psych_mod_folder, result_folder, options):
             except:
                 logging.error('Could not copy pack.png file')
         else:
-            logging.warn('pack.png not found. Skipped')
+            logging.warn('pack.png not found. Replacing it with default')
+            try:
+                fileCopy(ModTools.defaultPolymodIconPath(), f'{result_folder}/mod/{polymodIcon}')
+            except:
+                logging.error('Could not copy default file')
 
         logging.info('Converting data/credits.txt')
         dir = Constants.FILE_LOCS.get('CREDITSTXT')
@@ -76,7 +83,6 @@ def convert(psych_mod_folder, result_folder, options):
         
         chartFolder = Constants.FILE_LOCS.get('CHARTFOLDER')
         psychChartFolder = modfolder + chartFolder[0]
-        bgChartFolder = result_folder + '/mod' + chartFolder[1]
 
         folderMake(f'{result_folder}/mod{chartFolder[1]}')
 
@@ -87,7 +93,7 @@ def convert(psych_mod_folder, result_folder, options):
             if os.path.isdir(song):
                 logging.info(f'Loading charts in {song}')
 
-                songChart = ChartObject(song, psychChartFolder, bgChartFolder)
+                songChart = ChartObject(song)
                 
                 logging.info(f'Converting charts of {song}...')
                 songChart.convert()
@@ -194,7 +200,7 @@ def convert(psych_mod_folder, result_folder, options):
                               f'{result_folder}/mod{bgSongs}{os.path.basename(song)}/{os.path.basename(songFile)}')
                         except:
                             logging.error(f'Could not copy asset {songFile}!')
-                    elif os.path.basename(songFile) == 'Voices.ogg' and songOptions['split']:
+                    elif os.path.basename(songFile) == 'Voices.ogg' and songOptions['split'] and vocalSplitEnabled:
                         # Vocal Split
                         songKey = os.path.basename(song)
 
@@ -303,11 +309,20 @@ def convert(psych_mod_folder, result_folder, options):
             folderMake(f'{result_folder}/mod{baseStages}')
             stageJSON = json.loads(open(asset, 'r').read())
             assetPath = f'{result_folder}/mod{baseStages}{os.path.basename(asset)}'
+        
+            stageLua = asset.replace('.json', '.lua')
+            logging.info(f'Parsing .lua with matching .json name: {stageLua}')
 
-            #logging.info(f'{assetPath} {asset}')
+            luaProps = []
+            if os.path.exists(stageLua):
+                logging.info(f'Parsing {stageLua} and attempting to extract methods and calls')
+                try:
+                    luaProps = StageLuaParse.parseStage(stageLua)
+                except Exception as e:
+                    logging.error(f'Could not complete parsing of {stageLua}: {e}')
 
-            stageJSONConverted = json.dumps(StageTool.convert(stageJSON, os.path.basename(asset)), indent=4)
-
+            logging.info(f'Converting Stage JSON')
+            stageJSONConverted = json.dumps(StageTool.convert(stageJSON, os.path.basename(asset), luaProps), indent=4)
             open(assetPath, 'w').write(stageJSONConverted)
 
     runtime = Utils.getRuntime()

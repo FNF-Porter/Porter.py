@@ -8,6 +8,19 @@ def convertPack(packJson):
         "license": "CC BY 4.0,MIT"
     }
 
+def defaultPolymodMeta():
+    return {
+        "title": "Unknown mod",
+        "description": "Unknown mod by Unknown creator. Converted by FNF Mod Converter",
+        "author": "Unknown creator",
+        "api_version": "0.1.0",
+        "mod_version": "1.0.0",
+        "license": "CC BY 4.0,MIT"
+    }
+
+def defaultPolymodIconPath():
+    return 'defaults/_polymod_icon.png'
+
 def convertCredits(text):
     lines = text.split('\n')
 

@@ -9,7 +9,7 @@ def convert(weekJSON, modfolder):
     level['name'] = weekJSON['storyName']
     levelSongs = []
     for song in weekJSON['songs']:
-        levelSongs.append(song[0])
+        levelSongs.append(song[0].lower())
 
     level['songs'] = levelSongs
 
