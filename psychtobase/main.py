@@ -2,14 +2,14 @@ import json
 import logging
 import os
 import shutil
-from src import Constants
-from src.tools import ModConvertTools as ModTools
+from psychtobase.src import Constants
+from psychtobase.src.tools import ModConvertTools as ModTools
 
-from src import log, files, window
-from src.tools.CharacterTools import CharacterObject
-from src.tools.ChartTools import ChartObject
-from src.tools import VocalSplit, WeekTools, StageTool, StageLuaParse
-from src import Utils
+from psychtobase.src import log, files, window
+from psychtobase.src.tools.CharacterTools import CharacterObject
+from psychtobase.src.tools.ChartTools import ChartObject
+from psychtobase.src.tools import VocalSplit, WeekTools, StageTool, StageLuaParse
+from psychtobase.src import Utils
 
 # Main
 
@@ -327,7 +327,3 @@ def convert(psych_mod_folder, result_folder, options):
 
     runtime = Utils.getRuntime()
     logging.info(f'Conversion done: Took {int(runtime)}s')
-
-if __name__ == '__main__':
-    log.setup()
-    window.init()

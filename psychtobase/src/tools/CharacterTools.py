@@ -1,8 +1,8 @@
 import json
 import os
 import logging
-from src import window, Constants
-from src import files
+from psychtobase.src import window, Constants
+from psychtobase.src import files
 
 class CharacterObject:
 	def __init__(self, path: str, resultPath) -> None:

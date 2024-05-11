@@ -1,6 +1,7 @@
-from main import convert
+import psychtobase.main as main
 import logging
 import os
+import psychtobase.src.Constants as Constants
 from PyQt6.QtCore import QSize, Qt
 from PyQt6.QtGui import QIcon
 from PyQt6.QtWidgets import QApplication, QMainWindow, QPushButton
@@ -27,6 +28,9 @@ def init():
 	app = QApplication([])
 	window = Window()
 	window.show()
+
+	convertCallback()
+
 	app.exec()
 
 def report_progress(text):
@@ -57,26 +61,7 @@ def convertCallback():
 	# the code below should go on the callback when the person presses the convert button
 	psych_mod_folder_path = 'path_after_user_selected_it'
 	result_path = 'path_after_user_selected_it'
-	options = {
-		'charts': True,
-		'songs': {
-			'inst': True,
-			'voices': True,
-			'split': True
-		},
-		'characters': {
-			'icons': True,
-			'json': True,
-			'assets': True
-		},
-		'weeks': {
-			'props': True,
-			'levels': True,
-			'titles': True
-		},
-		'stages': True,
-		'modpack_meta': True,
-	}
+	options = Constants.DEFAULT_OPTIONS
 
 	if psych_mod_folder_path != None and result_path != None:
-		convert(psych_mod_folder=psych_mod_folder_path, result_folder=result_path, options=options)
+		main.convert(psych_mod_folder=psych_mod_folder_path, result_folder=result_path, options=options)

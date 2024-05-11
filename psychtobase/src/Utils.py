@@ -3,7 +3,7 @@ A class full of tools needed for mod conversion.
 """
 
 import time
-from src import Constants
+from psychtobase.src import Constants
 
 runtime = time.time()
 def getRuntime() -> float:

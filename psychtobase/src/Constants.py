@@ -1,6 +1,27 @@
 """
-A class full of constants needed for chart conversion.
+A module full of templates needed for mod conversion.
 """
+
+DEFAULT_OPTIONS = {
+  'charts': True,
+  'songs': {
+    'inst': True,
+    'voices': True,
+    'split': True
+  },
+  'characters': {
+    'icons': True,
+    'json': True,
+    'assets': True
+  },
+  'weeks': {
+    'props': True,
+    'levels': True,
+    'titles': True
+  },
+  'stages': True,
+  'modpack_meta': True,
+}
 
 DIFFICULTIES:list = ["easy", "normal", "hard"]
 

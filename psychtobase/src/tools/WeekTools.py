@@ -1,7 +1,7 @@
 import copy
 import json
 import logging
-import src.Constants as Constants
+import psychtobase.src.Constants as Constants
 
 def convert(weekJSON, modfolder):
     level = copy.deepcopy(Constants.LEVEL)

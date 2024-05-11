@@ -1,6 +1,6 @@
 import copy
-import src.Constants as Constants
-import src.window as window
+import psychtobase.src.Constants as Constants
+import psychtobase.src.window as window
 
 def convert(stageJSON, assetName, luaProps):
     stageTemplate = copy.deepcopy(Constants.STAGE)
