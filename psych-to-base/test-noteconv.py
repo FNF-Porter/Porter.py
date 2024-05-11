@@ -12,6 +12,9 @@ if __name__ == "__main__":
 	abspath = os.path.dirname(os.path.abspath(__file__))
 	os.chdir(abspath)
 
-	chart = ChartObject(f"mods\{input('YO! Which chart should I convert: ')}")
-	chart.convert()
-	chart.save()
+	convSongs = ["darnell", "lit-up", "2hot"]
+
+	for song in convSongs:
+		chart = ChartObject(f"mods\{song}")
+		chart.convert()
+		chart.save()

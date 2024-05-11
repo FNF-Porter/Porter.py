@@ -91,7 +91,7 @@ class ChartObject:
 		playData["stage"] = Utils.stage(sampleChart.get("stage", "mainStage"))
 
 		metadata["ratings"] = {diff: 0 for diff in self.difficulties} # Ratings don't do much now so :P
-		metadata["timeChanges"].append(Utils.timeChange(0, self.startingBpm, 4, 4, 0, [4]*4))
+		metadata["timeChanges"] = [Utils.timeChange(0, self.startingBpm, 4, 4, 0, [4]*4)]
 
 	def convert(self):
 		logging.info(f"Chart conversion for {self.metadata.get('songName')} started!")

@@ -53,7 +53,7 @@ BASE_CHART = {
 	"scrollSpeed": {},
 	"events": [],
 	"notes": {},
-	"generatedBy": "FNF Mod Converter"
+	"generatedBy": "FNF Mod Converter (by Gusborg, tposejank, Cobalt and BombasticTom)"
 }
 
 CHARACTER = {
