@@ -1,8 +1,7 @@
 #You have to run setup.py first, this can't be run on its own
-import sys
-import os
 import shutil
 from __main__ import *
+import pathlib
 
 #will redo this later the way tom was suggesting
 folderStructure = {
