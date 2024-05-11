@@ -1,9 +1,6 @@
-from src import Utils, Constants
-import os, json, logging
-
-def folderMake(folder_path): #Sorry Tom but I'm dumb and not patient!
-    if not os.path.exists(folder_path):
-        os.makedirs(folder_path)
+from src import Utils, Constants, files
+import os, logging
+from src.Paths import Paths
 
 class ChartObject:
 	"""
@@ -12,11 +9,9 @@ class ChartObject:
 	Args:
 		path (str): The path where the song's chart data is stored.
 	"""
-	def __init__(self, path: str, originPath, resultPath) -> None:
+	def __init__(self, path: str) -> None:
 		self.songPath = path
 		self.songName:str = os.path.basename(path)
-		self.converterOriginPath = originPath
-		self.converterOrderPath = resultPath
 
 		self.startingBpm = 0
 
@@ -24,7 +19,7 @@ class ChartObject:
 
 		self.difficulties:list = []
 		self.metadata:dict = Constants.BASE_CHART_METADATA.copy()
-		self.psychCharts:dict = {}
+		self.charts:dict = {}
 
 		self.chart:dict = Constants.BASE_CHART.copy()
 
@@ -34,11 +29,11 @@ class ChartObject:
 		logging.info(f"Chart for {self.metadata.get('songName')} was created!")
 
 	def initCharts(self):
-		logging.info(f"Initialising charts for {self.metadata.get('songName')}...")
+		logging.info(f"Initialising charts for {self.songName}...")
 
-		charts = self.psychCharts
+		charts = self.charts
+
 		difficulties = self.difficulties
-
 		unorderedDiffs = set()
 
 		for file in os.listdir(self.songPath):
@@ -46,23 +41,20 @@ class ChartObject:
 				continue
 			
 			fileName = file[:-5]
-			splitFile = fileName.split("-")
-			fileLen = len(splitFile)
+			nameSplit = fileName.split("-")
+			nameLength = len(nameSplit)
 
 			difficulty = "normal"
 
-			if fileLen > 2:
-				difficulty = splitFile[-1]
-			elif fileLen > 1 and fileName != self.songName:
-				difficulty = splitFile[1]
+			if nameLength > 2:
+				difficulty = nameSplit[-1]
+			elif nameLength > 1 and fileName != self.songName:
+				difficulty = nameSplit[1]
 
-			pathStupid = os.path.join(self.converterOriginPath, os.path.join(self.songName, file))
-			with open(pathStupid, "r") as f:
-				fileJson = json.load(f).get("song")
+			filePath = Paths.join(self.songPath, fileName)
+			fileJson = Paths.parseJson(filePath).get("song")
 
-				if fileJson == None:
-					continue
-
+			if fileJson != None:
 				unorderedDiffs.add(difficulty)
 				charts[difficulty] = fileJson
 
@@ -74,95 +66,106 @@ class ChartObject:
 		difficulties.extend(unorderedDiffs)
 		del unorderedDiffs
 
+		self.sampleChart = charts.get(difficulties[0])
+
 	def setMetadata(self):
-		logging.info(f"Initialising metadata for {self.metadata.get('songName')}...")
 		# Chart used to get character data (ASSUMING all charts use the same characters and stages)
-		sampleChart = self.psychCharts.get(self.difficulties[0])
+		sampleChart = self.sampleChart
+
+		self.startingBpm = sampleChart.get('bpm')
+		self.stepCrochet = 15000 / self.startingBpm
+		
 		metadata = self.metadata
-
-		ratings:dict = {}
-
-		for diff in self.difficulties:
-			ratings[diff] = 0
+		playData = metadata["playData"]
+		characters = playData["characters"]
 
 		metadata["songName"] = sampleChart.get("song").replace("-", " ").title()
 
-		metadata["playData"]["difficulties"] = self.difficulties
-		metadata["playData"]["characters"]["player"] = Utils.character(sampleChart.get("player1"))
-		metadata["playData"]["characters"]["girlfriend"] = Utils.character(sampleChart.get("gfVersion", sampleChart.get("player3")))
-		metadata["playData"]["characters"]["opponent"] = Utils.character(sampleChart.get("player2"))
-		metadata["playData"]["stage"] = Utils.stage(sampleChart.get("stage"))
+		logging.info(f"Initialising metadata for {self.metadata.get('songName')}...")
 
-		metadata["ratings"] = ratings
-		metadata["timeChanges"].append(Utils.timeChange(0, sampleChart.get("bpm"), 4, 4, 0, [4, 4, 4, 4]))
+		characters["player"] = Utils.character(sampleChart.get("player1", "bf"))
+		characters["girlfriend"] = Utils.character(sampleChart.get("gfVersion", sampleChart.get("player3", "gf")))
+		characters["opponent"] = Utils.character(sampleChart.get("player2", "dad"))
 
-		self.metadata = metadata
-		
-		self.startingBpm = sampleChart.get('bpm')
+		playData["difficulties"] = self.difficulties
+		playData["stage"] = Utils.stage(sampleChart.get("stage", "mainStage"))
 
-		self.stepCrochet = 15000 / sampleChart.get("bpm")
-		self.sampleChart = sampleChart
+		metadata["ratings"] = {diff: 0 for diff in self.difficulties} # Ratings don't do much now so :P
+		metadata["timeChanges"].append(Utils.timeChange(0, self.startingBpm, 4, 4, 0, [4]*4))
 
 	def convert(self):
 		logging.info(f"Chart conversion for {self.metadata.get('songName')} started!")
 
-		firstChart = False
+		prevMustHit = self.sampleChart["notes"][0].get("mustHitSection", True)
+		prevTime = 0
+		events = self.chart["events"]
+		events.append(Utils.focusCamera(0, prevMustHit))
 
-		for diff, chart in self.psychCharts.items():
-			self.chart["scrollSpeed"][diff] = chart.get("speed")
+		firstChart = True
+
+		for diff, cChart in self.charts.items():
+			# cChart - convert Chart
+			self.chart["scrollSpeed"][diff] = cChart.get("speed")
 			self.chart["notes"][diff] = []
 
 			notes = self.chart["notes"][diff]
+			steps = 0
 
-			for section in chart.get("notes"):
+			for section in cChart.get("notes"):
 				mustHit = section.get("mustHitSection", True)
 				isDuet = False
 
 				for note in section.get("sectionNotes"):
-					if not mustHit: # gonna improve this tomorrow too lazy to think tonight
-						if note[1] > 3:
+					strumTime = note[0]
+					noteData = note[1]
+					length = note[2]
+
+					if not mustHit:
+						noteData = (noteData + 4) % 8 # We're shifting the notes! Basic arithmetic operations 🤓
+
+						if not isDuet and noteData < 4:
 							isDuet = True
-							note[1] -= 4
-						else:
-							note[1] += 4
 
-					notes.append(Utils.note(note[0], note[1], note[2]))
+					notes.append(Utils.note(strumTime, noteData, length))
 
-				if not firstChart:
+				if firstChart:
+					lengthInSteps = section.get("lengthInSteps", section.get("sectionBeats", 4) * 4)
+					sectionBeats = section.get("sectionBeats", lengthInSteps / 4)
+					bpm = section.get('bpm', self.startingBpm)
+					changeBPM = section.get('changeBPM', False)
+
 					self.sections.append({
-					'mustHitSection': mustHit, 
-					'isDuet': isDuet,
-					'lengthInSteps': section.get('lengthInSteps', 16),
-					'bpm': section.get('bpm', self.startingBpm),
-					'changeBPM': section.get('changeBPM', False)
+						'mustHitSection': mustHit,
+						'isDuet': isDuet,
+						'lengthInSteps': lengthInSteps,
+						'bpm': bpm,
+						'changeBPM': changeBPM
 					})
+
+					if (prevMustHit != mustHit):
+						events.append(Utils.focusCamera(prevTime + steps * self.stepCrochet, mustHit))
+						prevMustHit = mustHit
+
+					steps += lengthInSteps
+
+					if changeBPM:
+						prevTime += steps * self.stepCrochet
+						self.metadata["timeChanges"].append(Utils.timeChange(prevTime, bpm, sectionBeats, sectionBeats, 0, [sectionBeats]*4))
+						self.stepCrochet = 15000 / bpm
+						steps = 0
 				
-			firstChart = True
-
-		events = self.chart["events"]
-		prevMustHit = self.sampleChart["notes"][0]["mustHitSection"]
-		events.append(Utils.focusCamera(0, prevMustHit))
-
-		steps = 0
-
-		for section in self.sampleChart.get("notes"):
-			mustHit = section["mustHitSection"]
-			if (prevMustHit != mustHit):
-				events.append(Utils.focusCamera(steps * self.stepCrochet, mustHit))
-				prevMustHit = mustHit
-
-			steps += section.get("lengthInSteps", section.get("sectionBeats", 4) * 4)
+			firstChart = False
 
 		logging.info(f"Chart conversion for {self.metadata.get('songName')} was completed!")
 
 	def save(self):
-		savePath = os.path.join(self.converterOrderPath, self.songName)
-		folderMake(savePath)
+		saveDir = Paths.join("output", self.songName)
+		files.folderMake(saveDir)
 
-		with open(os.path.join(savePath, f'{self.songName}-metadata.json'), 'w') as f:
-			json.dump(self.metadata, f, indent=2)
+		savePath = Paths.join(saveDir, f'{self.songName}-metadata')
+		Paths.writeJson(savePath, self.metadata, 2)
 
-		with open(os.path.join(savePath, f'{self.songName}-chart.json'), 'w') as f:
-			json.dump(self.chart, f, indent=2)
+		savePath = Paths.join(saveDir, f'{self.songName}-chart')
+		Paths.writeJson(savePath, self.chart, 2)
 
-		logging.info(f"Saving {self.metadata.get('songName')} to {savePath}")
+		logging.info(f"Saving {self.metadata.get('songName')} to {saveDir}")
