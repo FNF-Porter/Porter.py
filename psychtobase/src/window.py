@@ -6,6 +6,10 @@ from PyQt6.QtCore import QSize, Qt
 from PyQt6.QtGui import QIcon
 from PyQt6.QtWidgets import QApplication, QMainWindow, QPushButton
 
+from PyQt6.QtCore import QSize, Qt
+from PyQt6.QtGui import QIcon
+from PyQt6.QtWidgets import QApplication, QMainWindow, QPushButton, QSizePolicy
+
 class Window(QMainWindow):
 	def __init__(self):
 		super().__init__()
@@ -16,10 +20,11 @@ class Window(QMainWindow):
 		self.setMaximumSize(QSize(800, 600))
 
 		self.setWindowIcon(QIcon(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', 'defaults', 'tempicon.ico'))))
-		button = QPushButton("Convert")
-		button.clicked.connect(lambda: print('hi'))
 		
-
+		self.button = QPushButton("Convert", self)
+		self.button.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
+		self.button.move(self.width() - self.button.width(), self.height() - self.button.height())
+		self.button.clicked.connect(convertCallback)
 
 def init():
 	logging.info('Initiating window')
@@ -28,9 +33,6 @@ def init():
 	app = QApplication([])
 	window = Window()
 	window.show()
-
-	convertCallback()
-	# uncomment above if youre gonna use the converter
 
 	app.exec()
 

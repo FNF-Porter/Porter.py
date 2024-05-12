@@ -27,7 +27,7 @@ def convert(psych_mod_folder, result_folder, options):
     logging.info('Converting started...')
     logging.info(options)
 
-    modName = input("Select the mod to port:    ") # MOD FOLDER PSYCH ENGINE
+    modName = input("Type the mod folder to convert: ") # MOD FOLDER PSYCH ENGINE
     result_folder = 'output'
 
     if options.get('modpack_meta', False):
