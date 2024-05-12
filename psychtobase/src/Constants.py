@@ -21,6 +21,7 @@ DEFAULT_OPTIONS = {
   },
   'stages': True,
   'modpack_meta': True,
+  'images': True
 }
 
 DIFFICULTIES:list = ["easy", "normal", "hard"]
