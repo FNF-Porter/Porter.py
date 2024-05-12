@@ -24,7 +24,7 @@ def setup() -> logging.RootLogger:
 	except: pass
      
 	# file handler
-	file_handler = logging.FileHandler(f"""logs/{strftime("%Y-%m-%d_%H'%M'%S")}.log""")
+	file_handler = logging.FileHandler(f"""logs/fnf-porter{strftime("%Y-%m-%d_%H-%M-%S")}.log""")
 	file_handler.setFormatter(log_format)
 
     # console handler
@@ -34,7 +34,9 @@ def setup() -> logging.RootLogger:
 	logger.handlers.clear()
 	logger.addHandler(file_handler)
 	logger.addHandler(console_handler)
-
+	logging.info(f"""Thanks for using FNF Porter!
+	Created by Gusborg, BombasticTom, Tposejank, and Cobalt
+	Download on Gamebanana: https://gamebanana.com/tools/""")
 	logger.info("Logger initialized!")
 
 	return logger

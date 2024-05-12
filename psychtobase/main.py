@@ -27,7 +27,7 @@ def convert(psych_mod_folder, result_folder, options):
     logging.info('Converting started...')
     logging.info(options)
 
-    modfolder = 'vs-skippa-psychengine' # MOD FOLDER PSYCH ENGINE
+    modName = input("Select the mod to port:    ") # MOD FOLDER PSYCH ENGINE
     result_folder = 'output'
 
     if options.get('modpack_meta', False):
@@ -37,8 +37,8 @@ def convert(psych_mod_folder, result_folder, options):
         psychPackJson = dir[0]
         polymodMetaDir = dir[1]
         
-        if os.path.exists(f'{modfolder}{psychPackJson}'):
-            polymod_meta = ModTools.convertPack(json.loads(open(f'{modfolder}{psychPackJson}', 'r').read()))
+        if os.path.exists(f'{modName}{psychPackJson}'):
+            polymod_meta = ModTools.convertPack(json.loads(open(f'{modName}{psychPackJson}', 'r').read()))
             folderMake(f'{result_folder}/mod/')
             open(f'{result_folder}/mod/{polymodMetaDir}', 'w').write(json.dumps(polymod_meta, indent=4))
 
@@ -53,10 +53,10 @@ def convert(psych_mod_folder, result_folder, options):
         psychPackPng = dir[0]
         polymodIcon = dir[1]
         
-        if os.path.exists(f'{modfolder}{psychPackPng}'):
+        if os.path.exists(f'{modName}{psychPackPng}'):
             folderMake(f'{result_folder}/mod/')
             try:
-                fileCopy(f'{modfolder}{psychPackPng}', f'{result_folder}/mod/{polymodIcon}')
+                fileCopy(f'{modName}{psychPackPng}', f'{result_folder}/mod/{polymodIcon}')
             except Exception as e:
                 logging.error(f'Could not copy pack.png file: {e}')
         else:
@@ -72,9 +72,9 @@ def convert(psych_mod_folder, result_folder, options):
         psychCredits = dir[0]
         modCredits = dir[1]
 
-        if os.path.exists(f'{modfolder}{psychCredits}'):
+        if os.path.exists(f'{modName}{psychCredits}'):
             folderMake(f'{result_folder}/mod/')
-            resultCredits = ModTools.convertCredits(open(f'{modfolder}{psychCredits}', 'r').read())
+            resultCredits = ModTools.convertCredits(open(f'{modName}{psychCredits}', 'r').read())
             open(f'{result_folder}/mod/{modCredits}', 'w').write(resultCredits)
         else:
             logging.warn('Could not find data/credits.txt')
@@ -82,7 +82,7 @@ def convert(psych_mod_folder, result_folder, options):
     if options.get('charts', False):
         
         chartFolder = Constants.FILE_LOCS.get('CHARTFOLDER')
-        psychChartFolder = modfolder + chartFolder[0]
+        psychChartFolder = modName + chartFolder[0]
 
         folderMake(f'{result_folder}/mod{chartFolder[1]}')
 
@@ -116,7 +116,7 @@ def convert(psych_mod_folder, result_folder, options):
         logging.info('Copying character assets...')
 
         dir = Constants.FILE_LOCS.get('CHARACTERASSETS')
-        psychCharacterAssets = modfolder + dir[0]
+        psychCharacterAssets = modName + dir[0]
         bgCharacterAssets = dir[1]
 
         folderMake(f'{result_folder}/mod{bgCharacterAssets}')
@@ -139,7 +139,7 @@ def convert(psych_mod_folder, result_folder, options):
 
         dir = Constants.FILE_LOCS.get('CHARACTERJSONS')
 
-        psychCharacters = modfolder + dir[0]
+        psychCharacters = modName + dir[0]
         bgCharacters = dir[1]
 
         folderMake(f'{result_folder}/mod{bgCharacters}')
@@ -160,7 +160,7 @@ def convert(psych_mod_folder, result_folder, options):
         logging.info('Copying character icons...')
 
         dir = Constants.FILE_LOCS.get('CHARACTERICON')
-        psychCharacterAssets = modfolder + dir[0]
+        psychCharacterAssets = modName + dir[0]
         bgCharacterAssets = dir[1]
 
         folderMake(f'{result_folder}/mod{bgCharacterAssets}')
@@ -182,7 +182,7 @@ def convert(psych_mod_folder, result_folder, options):
     })
     if songOptions:
         dir = Constants.FILE_LOCS.get('SONGS')
-        psychSongs = modfolder + dir[0]
+        psychSongs = modName + dir[0]
         bgSongs = dir[1]
 
         folderMake(f'{result_folder}/mod{bgSongs}')
@@ -250,7 +250,7 @@ def convert(psych_mod_folder, result_folder, options):
         logging.info('Converting weeks (levels)...')
 
         dir = Constants.FILE_LOCS.get('WEEKS')
-        psychWeeks = modfolder + dir[0]
+        psychWeeks = modName + dir[0]
         baseLevels = dir[1]
 
         folderMake(f'{result_folder}/mod{baseLevels}')
@@ -259,13 +259,13 @@ def convert(psych_mod_folder, result_folder, options):
             logging.info(f'Loading {week} into the converter...')
 
             weekJSON = json.loads(open(week, 'r').read())
-            open(f'{result_folder}/mod{baseLevels}{os.path.basename(week)}', 'w').write(json.dumps(WeekTools.convert(weekJSON, modfolder), indent=4))
+            open(f'{result_folder}/mod{baseLevels}{os.path.basename(week)}', 'w').write(json.dumps(WeekTools.convert(weekJSON, modName), indent=4))
 
     if weekCOptions['props']:
         logging.info('Copying prop assets...')
 
         dir = Constants.FILE_LOCS.get('WEEKCHARACTERASSET')
-        psychWeeks = modfolder + dir[0]
+        psychWeeks = modName + dir[0]
         baseLevels = dir[1]
 
         allXml = files.findAll(f'{psychWeeks}*.xml')
@@ -283,7 +283,7 @@ def convert(psych_mod_folder, result_folder, options):
         logging.info('Copying level titles...')
 
         dir = Constants.FILE_LOCS.get('WEEKIMAGE')
-        psychWeeks = modfolder + dir[0]
+        psychWeeks = modName + dir[0]
         baseLevels = dir[1]
 
         allPng = files.findAll(f'{psychWeeks}*.png')
@@ -300,7 +300,7 @@ def convert(psych_mod_folder, result_folder, options):
         logging.info('Converting stages...')
 
         dir = Constants.FILE_LOCS.get('STAGE')
-        psychStages = modfolder + dir[0]
+        psychStages = modName + dir[0]
         baseStages = dir[1]
 
         allStageJSON = files.findAll(f'{psychStages}*.json')
@@ -329,7 +329,7 @@ def convert(psych_mod_folder, result_folder, options):
         logging.info('Copying .png and .xml files...')
 
         dir = Constants.FILE_LOCS.get('IMAGES')
-        psychImages = modfolder + dir[0]
+        psychImages = modName + dir[0]
         baseImages = dir[1]
 
         allimages = files.findAll(f'{psychImages}*.png') + files.findAll(f'{psychImages}*.xml')
