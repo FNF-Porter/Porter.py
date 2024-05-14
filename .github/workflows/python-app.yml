@@ -26,6 +26,7 @@ jobs:
         pip install numpy
         pip install pydub
         pip install luaparser
+        pip install pyqt6
     - name: Build with PyInstaller
       run: |
         pyinstaller --onefile setup.py --icon=icon.ico -n "FNF Porter"
