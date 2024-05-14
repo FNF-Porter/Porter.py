@@ -8,7 +8,7 @@ from psychtobase.src import Constants
 from psychtobase.src.tools import ModConvertTools as ModTools
 import threading
 
-from psychtobase.src import log, files, window
+from psychtobase.src import files
 from psychtobase.src.tools.CharacterTools import CharacterObject
 from psychtobase.src.tools.ChartTools import ChartObject
 from psychtobase.src.tools import VocalSplit, WeekTools, StageTool, StageLuaParse

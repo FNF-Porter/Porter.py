@@ -32,13 +32,15 @@ def setup() -> logging.RootLogger:
     # console handler
 	console_handler = CustomHandler()
 	console_handler.setFormatter(log_format)
+     
+	_GB_ToolID = ''
 
 	logger.handlers.clear()
 	logger.addHandler(file_handler)
 	logger.addHandler(console_handler)
 	logging.info(f"""Thanks for using FNF Porter!
 	Created by Gusborg, BombasticTom, tposejank, and Cobalt
-	Download on Gamebanana: https://gamebanana.com/tools/""")
+	Download on Gamebanana: https://gamebanana.com/tools/{_GB_ToolID}""")
 	logger.info("Logger initialized!")
 
 	return logger

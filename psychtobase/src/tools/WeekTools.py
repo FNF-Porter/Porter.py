@@ -1,10 +1,10 @@
-import copy
+from copy import deepcopy
 import json
 import logging
 import psychtobase.src.Constants as Constants
 
 def convert(weekJSON, modfolder):
-    level = copy.deepcopy(Constants.LEVEL)
+    level = deepcopy(Constants.LEVEL)
 
     level['name'] = weekJSON['storyName']
     levelSongs = []
@@ -26,19 +26,19 @@ def convert(weekJSON, modfolder):
                 continue
             weekCharacterJSON = json.loads(weekCharJSONStr)
 
-            propTemplate = copy.deepcopy(Constants.LEVEL_PROP)
+            propTemplate = deepcopy(Constants.LEVEL_PROP)
             propTemplate['assetPath'] = Constants.FILE_LOCS.get('WEEKCHARACTERASSET')[1] + weekCharacterJSON['image']
             propTemplate['scale'] = weekCharacterJSON['scale']
             propTemplate['offsets'] = weekCharacterJSON['position']
             propTemplate['animations'] = []
 
-            idleTemplate = copy.deepcopy(Constants.LEVEL_PROP_ANIMATION)
+            idleTemplate = deepcopy(Constants.LEVEL_PROP_ANIMATION)
             idleTemplate['name'] = 'idle'
             idleTemplate['prefix'] = weekCharacterJSON['idle_anim']
             propTemplate['animations'].append(idleTemplate)
 
             if len(weekCharacterJSON.get('confirm_anim', 0)) > 0 or weekCharacterJSON['confirm_anim']:
-                confirmTemplate = copy.deepcopy(Constants.LEVEL_PROP_ANIMATION)
+                confirmTemplate = deepcopy(Constants.LEVEL_PROP_ANIMATION)
                 confirmTemplate['name'] = 'confirm'
                 confirmTemplate['prefix'] = weekCharacterJSON['confirm_anim']
                 propTemplate['animations'].append(confirmTemplate)
