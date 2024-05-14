@@ -1,7 +1,7 @@
 from base64 import b64decode
 import json
 import logging
-import os
+from os import path, makedirs
 from shutil import copyfile
 from time import time
 from psychtobase.src import Constants
