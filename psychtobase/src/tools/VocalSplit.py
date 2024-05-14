@@ -1,8 +1,6 @@
-import json
 import logging
-import sys
-from pydub import AudioSegment
 import numpy as np
+from pydub import AudioSegment
 
 def vocalsplit(chart, bpm, origin, path, key, characters):
     beatLength = (60 / bpm) * 1000

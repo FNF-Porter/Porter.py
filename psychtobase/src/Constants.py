@@ -3,25 +3,25 @@ A module full of templates needed for mod conversion.
 """
 
 DEFAULT_OPTIONS = {
-  'charts': True,
+  'charts': False,
   'songs': {
-    'inst': True,
-    'voices': True,
-    'split': True
+    'inst': False,
+    'voices': False,
+    'split': False
   },
   'characters': {
-    'icons': True,
-    'json': True,
-    'assets': True
+    'icons': False,
+    'json': False,
+    'assets': False
   },
   'weeks': {
-    'props': True,
-    'levels': True,
-    'titles': True
+    'props': False,
+    'levels': False,
+    'titles': False
   },
-  'stages': True,
-  'modpack_meta': True,
-  'images': True
+  'stages': False,
+  'modpack_meta': False,
+  'images': False
 }
 
 DIFFICULTIES:list = ["easy", "normal", "hard"]
@@ -37,7 +37,7 @@ CHARACTERS = {
 BASE_CHART_METADATA = {
 	"version": "2.2.0",
 	"songName": "",
-	"artist": "Unknown",
+	"artist": "",
 	"looped": False,
 
 	"offsets": {
@@ -331,20 +331,20 @@ STAGE_PROP_IMAGE = {
     "scroll": [1, 1]
 }
 
-FILE_LOCS = {																							
+FILE_LOCS = {	# If the indent fucks up again its GitHub's fault
     # Class		 			# Original File						# Result				
-    'PACKJSON': 			['/pack.json',						'/_polymod_meta.json'],
-    'PACKPNG': 				['/pack.png', 						'/_polymod_icon.png'],
-    'CREDITSTXT': 			['/data/credits.txt', 				'/mod-credits.txt'],
-    'CHARACTERASSETS': 		['/images/characters/',				'/shared/images/characters/'],
-    'CHARACTERJSONS':		['/characters/',					'/data/characters/'],
-    'CHARACTERICON':		['/images/icons/',					'/images/icons/'],
-    'CHARTFOLDER':			['/data/',							'/data/songs/'],
-    'SONGS':				['/songs/',							'/songs/'],
-    'WEEKS':				['/weeks/',							'/data/levels/'],
-    'WEEKCHARACTERASSET':	['/images/menucharacters/',			'/images/storymenu/props/'],
-    'WEEKCHARACTERJSON':	['/images/menucharacters/',	''], # Embedded directly to the level.json
-    'WEEKIMAGE':			['/images/storymenu/',				'/images/storymenu/titles/'],
-    'STAGE':                ['/stages/',                        '/data/stages/'],
-    'IMAGES':               ['/images/',                        '/shared/images/']
+    'PACKJSON': 			      ['/pack.json',						    '/_polymod_meta.json'],
+    'PACKPNG': 				      ['/pack.png', 						    '/_polymod_icon.png'],
+    'CREDITSTXT': 			    ['/data/credits.txt', 				'/mod-credits.txt'],
+    'CHARACTERASSETS': 		  ['/images/characters/',				'/shared/images/characters/'],
+    'CHARACTERJSONS':		    ['/characters/',					    '/data/characters/'],
+    'CHARACTERICON':		    ['/images/icons/',					  '/images/icons/'],
+    'CHARTFOLDER':			    ['/data/',							      '/data/songs/'],
+    'SONGS':				        ['/songs/',							      '/songs/'],
+    'WEEKS':				        ['/weeks/',							      '/data/levels/'],
+    'WEEKCHARACTERASSET': 	['/images/menucharacters/',		'/images/storymenu/props/'],
+    'WEEKCHARACTERJSON':	  ['/images/menucharacters/',	  ''], # Embedded directly to the level.json
+    'WEEKIMAGE':			      ['/images/storymenu/',				'/images/storymenu/titles/'],
+    'STAGE':                ['/stages/',                  '/data/stages/'],
+    'IMAGES':               ['/images/',                  '/shared/images/']
 }

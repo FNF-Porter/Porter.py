@@ -1,8 +1,5 @@
-import os
 import pathlib
-import shutil
 import logging
-import datetime
 from psychtobase import main
 from psychtobase.src import log, window
 

@@ -1,6 +1,7 @@
 """Utility tool for configuring the logger"""
 
 import logging
+import psychtobase.src.window as window
 
 from time import strftime
 from os import mkdir
@@ -9,6 +10,7 @@ class CustomHandler(logging.StreamHandler):
     def emit(self, record):
         log_entry = self.format(record)
         print(f'{log_entry}')
+        window.window.setReportLabel(log_entry)
 
 def setup() -> logging.RootLogger:
 	"""instance of Logger module, will be used for logging operations"""
@@ -35,7 +37,7 @@ def setup() -> logging.RootLogger:
 	logger.addHandler(file_handler)
 	logger.addHandler(console_handler)
 	logging.info(f"""Thanks for using FNF Porter!
-	Created by Gusborg, BombasticTom, Tposejank, and Cobalt
+	Created by Gusborg, BombasticTom, tposejank, and Cobalt
 	Download on Gamebanana: https://gamebanana.com/tools/""")
 	logger.info("Logger initialized!")
 

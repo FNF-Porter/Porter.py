@@ -4,6 +4,7 @@ import os
 import shutil
 from psychtobase.src import Constants
 from psychtobase.src.tools import ModConvertTools as ModTools
+import threading
 
 from psychtobase.src import log, files, window
 from psychtobase.src.tools.CharacterTools import CharacterObject
@@ -27,8 +28,10 @@ def convert(psych_mod_folder, result_folder, options):
     logging.info('Converting started...')
     logging.info(options)
 
-    modName = input("Type the mod folder to convert: ") # MOD FOLDER PSYCH ENGINE
-    result_folder = 'output'
+    modName = psych_mod_folder # MOD FOLDER PSYCH ENGINE
+    modFoldername = os.path.basename(psych_mod_folder)
+
+    print(psych_mod_folder, result_folder)
 
     if options.get('modpack_meta', False):
         logging.info('Converting pack.json')
@@ -39,13 +42,13 @@ def convert(psych_mod_folder, result_folder, options):
         
         if os.path.exists(f'{modName}{psychPackJson}'):
             polymod_meta = ModTools.convertPack(json.loads(open(f'{modName}{psychPackJson}', 'r').read()))
-            folderMake(f'{result_folder}/mod/')
-            open(f'{result_folder}/mod/{polymodMetaDir}', 'w').write(json.dumps(polymod_meta, indent=4))
+            folderMake(f'{result_folder}/{modFoldername}/')
+            open(f'{result_folder}/{modFoldername}/{polymodMetaDir}', 'w').write(json.dumps(polymod_meta, indent=4))
 
             logging.info('pack.json converted and saved')
         else:
-            folderMake(f'{result_folder}/mod/')
-            open(f'{result_folder}/mod/{polymodMetaDir}', 'w').write(json.dumps(ModTools.defaultPolymodMeta(), indent=4))
+            folderMake(f'{result_folder}/{modFoldername}/')
+            open(f'{result_folder}/{modFoldername}/{polymodMetaDir}', 'w').write(json.dumps(ModTools.defaultPolymodMeta(), indent=4))
             logging.warn('pack.json not found. Replaced it with default')
 
         logging.info('Copying pack.png')
@@ -54,15 +57,15 @@ def convert(psych_mod_folder, result_folder, options):
         polymodIcon = dir[1]
         
         if os.path.exists(f'{modName}{psychPackPng}'):
-            folderMake(f'{result_folder}/mod/')
+            folderMake(f'{result_folder}/{modFoldername}/')
             try:
-                fileCopy(f'{modName}{psychPackPng}', f'{result_folder}/mod/{polymodIcon}')
+                fileCopy(f'{modName}{psychPackPng}', f'{result_folder}/{modFoldername}/{polymodIcon}')
             except Exception as e:
                 logging.error(f'Could not copy pack.png file: {e}')
         else:
             logging.warn('pack.png not found. Replacing it with default')
             try:
-                fileCopy(ModTools.defaultPolymodIconPath(), f'{result_folder}/mod/{polymodIcon}')
+                fileCopy(ModTools.defaultPolymodIconPath(), f'{result_folder}/{modFoldername}/{polymodIcon}')
             except Exception as e:
                 logging.error(f'Could not write default file: {e}')
 
@@ -73,9 +76,9 @@ def convert(psych_mod_folder, result_folder, options):
         modCredits = dir[1]
 
         if os.path.exists(f'{modName}{psychCredits}'):
-            folderMake(f'{result_folder}/mod/')
+            folderMake(f'{result_folder}/{modFoldername}/')
             resultCredits = ModTools.convertCredits(open(f'{modName}{psychCredits}', 'r').read())
-            open(f'{result_folder}/mod/{modCredits}', 'w').write(resultCredits)
+            open(f'{result_folder}/{modFoldername}/{modCredits}', 'w').write(resultCredits)
         else:
             logging.warn('Could not find data/credits.txt')
 
@@ -84,7 +87,7 @@ def convert(psych_mod_folder, result_folder, options):
         chartFolder = Constants.FILE_LOCS.get('CHARTFOLDER')
         psychChartFolder = modName + chartFolder[0]
 
-        folderMake(f'{result_folder}/mod{chartFolder[1]}')
+        folderMake(f'{result_folder}/{modFoldername}{chartFolder[1]}')
 
         songs = files.findAll(f'{psychChartFolder}*')
 
@@ -93,7 +96,8 @@ def convert(psych_mod_folder, result_folder, options):
             if os.path.isdir(song):
                 logging.info(f'Loading charts in {song}')
 
-                songChart = ChartObject(song)
+                outputpath = f'{result_folder}/{modFoldername}'
+                songChart = ChartObject(song, outputpath)
                 
                 logging.info(f'Converting charts of {song}...')
                 songChart.convert()
@@ -119,13 +123,13 @@ def convert(psych_mod_folder, result_folder, options):
         psychCharacterAssets = modName + dir[0]
         bgCharacterAssets = dir[1]
 
-        folderMake(f'{result_folder}/mod{bgCharacterAssets}')
+        folderMake(f'{result_folder}/{modFoldername}{bgCharacterAssets}')
 
         for character in files.findAll(f'{psychCharacterAssets}*'):
             if not os.path.isdir(character):
                 logging.info(f'Copying asset {character}')
                 try:
-                    fileCopy(character, result_folder + '/mod' + bgCharacterAssets + os.path.basename(character))
+                    fileCopy(character, result_folder + f'/{modFoldername}' + bgCharacterAssets + os.path.basename(character))
                 except Exception as e:
                     logging.error(f'Could not copy asset {character}: {e}')
             else:
@@ -142,12 +146,12 @@ def convert(psych_mod_folder, result_folder, options):
         psychCharacters = modName + dir[0]
         bgCharacters = dir[1]
 
-        folderMake(f'{result_folder}/mod{bgCharacters}')
+        folderMake(f'{result_folder}/{modFoldername}{bgCharacters}')
 
         for character in files.findAll(f'{psychCharacters}*'):
             logging.info(f'Checking if {character} is a file...')
             if not os.path.isdir(character) and character.endswith('.json'):
-                converted_char = CharacterObject(character, result_folder + '/mod' + bgCharacters)
+                converted_char = CharacterObject(character, result_folder + f'/{modFoldername}' + bgCharacters)
 
                 converted_char.convert()
                 converted_char.save()
@@ -163,13 +167,13 @@ def convert(psych_mod_folder, result_folder, options):
         psychCharacterAssets = modName + dir[0]
         bgCharacterAssets = dir[1]
 
-        folderMake(f'{result_folder}/mod{bgCharacterAssets}')
+        folderMake(f'{result_folder}/{modFoldername}{bgCharacterAssets}')
 
         for character in files.findAll(f'{psychCharacterAssets}*'):
             if not os.path.isdir(character):
                 logging.info(f'Copying asset {character}')
                 try:
-                    fileCopy(character, result_folder + '/mod' + bgCharacterAssets + os.path.basename(character))
+                    fileCopy(character, result_folder + f'/{modFoldername}' + bgCharacterAssets + os.path.basename(character))
                 except Exception as e:
                     logging.error(f'Could not copy asset {character}: {e}')
             else:
@@ -185,7 +189,7 @@ def convert(psych_mod_folder, result_folder, options):
         psychSongs = modName + dir[0]
         bgSongs = dir[1]
 
-        folderMake(f'{result_folder}/mod{bgSongs}')
+        folderMake(f'{result_folder}/{modFoldername}{bgSongs}')
 
         for song in files.findAll(f'{psychSongs}*'):
             logging.info(f'Checking if {song} is a valid song directory...')
@@ -195,9 +199,9 @@ def convert(psych_mod_folder, result_folder, options):
                     if os.path.basename(songFile) == 'Inst.ogg' and songOptions['inst']:
                         logging.info(f'Copying asset {songFile}')
                         try:
-                            folderMake(f'{result_folder}/mod{bgSongs}{os.path.basename(song)}')
+                            folderMake(f'{result_folder}/{modFoldername}{bgSongs}{os.path.basename(song)}')
                             fileCopy(songFile,
-                              f'{result_folder}/mod{bgSongs}{os.path.basename(song)}/{os.path.basename(songFile)}')
+                              f'{result_folder}/{modFoldername}{bgSongs}{os.path.basename(song)}/{os.path.basename(songFile)}')
                         except Exception as e:
                             logging.error(f'Could not copy asset {songFile}: {e}')
                     elif os.path.basename(songFile) == 'Voices.ogg' and songOptions['split'] and vocalSplitEnabled:
@@ -214,7 +218,7 @@ def convert(psych_mod_folder, result_folder, options):
                             bpm = chart['bpm']
                             logging.info(f'Vocal Split ({songKey}) BPM is {bpm}')
                             path = song + '/'
-                            resultPath = result_folder + f'/mod{bgSongs}{songKey}/'
+                            resultPath = result_folder + f'/{modFoldername}{bgSongs}{songKey}/'
                             songChars = [chart['player'],
                                           chart['opponent']]
                             
@@ -224,21 +228,23 @@ def convert(psych_mod_folder, result_folder, options):
                             logging.info(f'Passed the following paths: {path} || {resultPath}')
                             logging.info(f'Passed characters: {songChars}')
 
-                            VocalSplit.vocalsplit(sections, bpm, path, resultPath, songKey, songChars)
+                            vocal_split_thread = threading.Thread(target=VocalSplit.vocalsplit, args=(sections, bpm, path, resultPath, songKey, songChars))
+                            vocal_split_thread.start()
+                            vocal_split_thread.join()
                         else:
                             logging.warn(f'No chart was found for {songKey} so the vocal file will be copied instead.')
                             try:
-                                folderMake(f'{result_folder}/mod{bgSongs}{os.path.basename(song)}')
+                                folderMake(f'{result_folder}/{modFoldername}{bgSongs}{os.path.basename(song)}')
                                 fileCopy(songFile,
-                                f'{result_folder}/mod{bgSongs}{os.path.basename(song)}/{os.path.basename(songFile)}')
+                                f'{result_folder}/{modFoldername}{bgSongs}{os.path.basename(song)}/{os.path.basename(songFile)}')
                             except Exception as e:
                                 logging.error(f'Could not copy asset {songFile}: {e}')
                     elif songOptions['voices']:
                         logging.info(f'Copying asset {songFile}')
                         try:
-                            folderMake(f'{result_folder}/mod{bgSongs}{os.path.basename(song)}')
+                            folderMake(f'{result_folder}/{modFoldername}{bgSongs}{os.path.basename(song)}')
                             fileCopy(songFile,
-                              f'{result_folder}/mod{bgSongs}{os.path.basename(song)}/{os.path.basename(songFile)}')
+                              f'{result_folder}/{modFoldername}{bgSongs}{os.path.basename(song)}/{os.path.basename(songFile)}')
                         except Exception as e:
                             logging.error(f'Could not copy asset {songFile}: {e}')
     weekCOptions = options.get('weeks', {
@@ -253,13 +259,13 @@ def convert(psych_mod_folder, result_folder, options):
         psychWeeks = modName + dir[0]
         baseLevels = dir[1]
 
-        folderMake(f'{result_folder}/mod{baseLevels}')
+        folderMake(f'{result_folder}/{modFoldername}{baseLevels}')
 
         for week in files.findAll(f'{psychWeeks}*.json'):
             logging.info(f'Loading {week} into the converter...')
 
             weekJSON = json.loads(open(week, 'r').read())
-            open(f'{result_folder}/mod{baseLevels}{os.path.basename(week)}', 'w').write(json.dumps(WeekTools.convert(weekJSON, modName), indent=4))
+            open(f'{result_folder}/{modFoldername}{baseLevels}{os.path.basename(week)}', 'w').write(json.dumps(WeekTools.convert(weekJSON, modName), indent=4))
 
     if weekCOptions['props']:
         logging.info('Copying prop assets...')
@@ -273,9 +279,9 @@ def convert(psych_mod_folder, result_folder, options):
         for asset in allXml + allPng:
             logging.info(f'Copying {asset}')
             try:
-                folderMake(f'{result_folder}/mod{baseLevels}')
+                folderMake(f'{result_folder}/{modFoldername}{baseLevels}')
                 fileCopy(asset,
-                    f'{result_folder}/mod{baseLevels}{os.path.basename(asset)}')
+                    f'{result_folder}/{modFoldername}{baseLevels}{os.path.basename(asset)}')
             except Exception as e:
                 logging.error(f'Could not copy asset {asset}: {e}')
 
@@ -290,9 +296,9 @@ def convert(psych_mod_folder, result_folder, options):
         for asset in allPng:
             logging.info(f'Copying {asset}')
             try:
-                folderMake(f'{result_folder}/mod{baseLevels}')
+                folderMake(f'{result_folder}/{modFoldername}{baseLevels}')
                 fileCopy(asset,
-                    f'{result_folder}/mod{baseLevels}{os.path.basename(asset)}')
+                    f'{result_folder}/{modFoldername}{baseLevels}{os.path.basename(asset)}')
             except Exception as e:
                 logging.error(f'Could not copy asset {asset}: {e}')
 
@@ -306,9 +312,9 @@ def convert(psych_mod_folder, result_folder, options):
         allStageJSON = files.findAll(f'{psychStages}*.json')
         for asset in allStageJSON:
             logging.info(f'Converting {asset}')
-            folderMake(f'{result_folder}/mod{baseStages}')
+            folderMake(f'{result_folder}/{modFoldername}{baseStages}')
             stageJSON = json.loads(open(asset, 'r').read())
-            assetPath = f'{result_folder}/mod{baseStages}{os.path.basename(asset)}'
+            assetPath = f'{result_folder}/{modFoldername}{baseStages}{os.path.basename(asset)}'
         
             stageLua = asset.replace('.json', '.lua')
             logging.info(f'Parsing .lua with matching .json name: {stageLua}')
@@ -337,8 +343,8 @@ def convert(psych_mod_folder, result_folder, options):
             logging.info(f'Copying {asset}')
 
             try:
-                folderMake(f'{result_folder}/mod{baseImages}')
-                fileCopy(asset, f'{result_folder}/mod{baseImages}{os.path.basename(asset)}')
+                folderMake(f'{result_folder}/{modFoldername}{baseImages}')
+                fileCopy(asset, f'{result_folder}/{modFoldername}{baseImages}{os.path.basename(asset)}')
             except Exception as e:
                 logging.error(f'Failed to copy {asset}: {e}')
 

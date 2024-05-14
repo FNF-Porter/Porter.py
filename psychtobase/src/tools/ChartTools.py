@@ -1,4 +1,4 @@
-from psychtobase.src import Utils, Constants, files
+from psychtobase.src import Utils, Constants, files, window 
 import os, logging
 from psychtobase.src.Paths import Paths
 
@@ -9,9 +9,10 @@ class ChartObject:
 	Args:
 		path (str): The path where the song's chart data is stored.
 	"""
-	def __init__(self, path: str) -> None:
+	def __init__(self, path: str, output:str) -> None:
 		self.songPath = path
 		self.songName:str = os.path.basename(path)
+		self.outputpath = output
 
 		self.startingBpm = 0
 
@@ -80,6 +81,7 @@ class ChartObject:
 		characters = playData["characters"]
 
 		metadata["songName"] = sampleChart.get("song").replace("-", " ").title()
+		metadata["artist"] = window.prompt("input", f"{metadata['songName']} needs an artist.", [['Song Artist', 'iFlicky']], 'ChartTools.py')[0]
 
 		logging.info(f"Initialising metadata for {self.metadata.get('songName')}...")
 
@@ -160,7 +162,7 @@ class ChartObject:
 
 	def save(self):
 		folder = os.path.join(Constants.FILE_LOCS.get('CHARTFOLDER')[1], self.songName)
-		saveDir = f'output/mod{folder}'
+		saveDir = f'{self.outputpath}{folder}'
 		files.folderMake(saveDir)
 
 		savePath = Paths.join(saveDir, f'{self.songName}-metadata')

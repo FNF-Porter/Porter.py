@@ -9,7 +9,7 @@ def findAll(folder):
     # return all files inside of a directory
     # currently only used by the main
     # update this!
-    logging.info(f'Finding all files with said argument: {folder}')
+    logging.info(f'Finding all files or directories with glob: {folder}')
     return glob.glob(folder)
 
 def folderMake(folder_path): #Sorry Tom but I'm dumb and not patient!
