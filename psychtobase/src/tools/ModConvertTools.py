@@ -1,5 +1,3 @@
-import os
-
 def convertPack(packJson):
     return {
         "title": packJson['name'],
@@ -19,9 +17,6 @@ def defaultPolymodMeta():
         "mod_version": "1.0.0",
         "license": "CC BY 4.0,MIT"
     }
-
-def defaultPolymodIconPath():
-    return os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', 'defaults', '_polymod_icon.png'))
 
 def convertCredits(text):
     lines = text.split('\n')
