@@ -332,19 +332,20 @@ STAGE_PROP_IMAGE = {
 }
 
 FILE_LOCS = {	# If the indent fucks up again its GitHub's fault
-    # Class		 			# Original File						# Result				
-    'PACKJSON': 			      ['/pack.json',						    '/_polymod_meta.json'],
-    'PACKPNG': 				      ['/pack.png', 						    '/_polymod_icon.png'],
-    'CREDITSTXT': 			    ['/data/credits.txt', 				'/mod-credits.txt'],
-    'CHARACTERASSETS': 		  ['/images/characters/',				'/shared/images/characters/'],
-    'CHARACTERJSONS':		    ['/characters/',					    '/data/characters/'],
-    'CHARACTERICON':		    ['/images/icons/',					  '/images/icons/'],
-    'CHARTFOLDER':			    ['/data/',							      '/data/songs/'],
-    'SONGS':				        ['/songs/',							      '/songs/'],
-    'WEEKS':				        ['/weeks/',							      '/data/levels/'],
-    'WEEKCHARACTERASSET': 	['/images/menucharacters/',		'/images/storymenu/props/'],
-    'WEEKCHARACTERJSON':	  ['/images/menucharacters/',	  ''], # Embedded directly to the level.json
-    'WEEKIMAGE':			      ['/images/storymenu/',				'/images/storymenu/titles/'],
-    'STAGE':                ['/stages/',                  '/data/stages/'],
-    'IMAGES':               ['/images/',                  '/shared/images/']
+    # Class, psych directory, base game directory, codename directory (coming soon)			
+    'PACKJSON':['/pack.json',	'/_polymod_meta.json'],
+    'PACKPNG': ['/pack.png','/_polymod_icon.png'],
+    'CREDITSTXT':['/data/cedits.txt','/mod-credits.txt'],
+    'CHARACTERASSETS':['/images/characters/',	'/shared/images/characters/'],
+    'CHARACTERJSONS':['/characters/', '/data/characters/'],
+    'CHARACTERICON':['/images/icons/','/images/icons/'],
+    'CHARTFOLDER':['/data/','/data/songs/'],
+    'SONGS':['/songs/','/songs/'],
+    'WEEKS':['/weeks/','/data/levels/'],
+    'WEEKCHARACTERASSET':['/images/menucharacters/',		'/images/storymenu/props/'],
+    'WEEKCHARACTERJSON': ['/images/menucharacters/',	  ''], # Embedded directly to the level.json
+    'WEEKIMAGE':['/images/storymenu/','/images/storymenu/titles/'],
+    'STAGE': ['/stages/','/data/stages/'],
+    'IMAGES':['/images/','/shared/images/'],
+    'FREEPLAYICON':['/images/icons/','/images/freeplay/icons'],
 }

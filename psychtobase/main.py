@@ -1,9 +1,9 @@
-import base64
+from base64 import b64decode
 import json
 import logging
 import os
-import shutil
-import time
+from shutil import copyfile
+from time import time
 from psychtobase.src import Constants
 from psychtobase.src.tools import ModConvertTools as ModTools
 import threading
@@ -72,6 +72,7 @@ def convert(psych_mod_folder, result_folder, options):
                 _polyEncode = b'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'
                 polymodIconpath = f'{result_folder}/{modFoldername}/{polymodIcon}'
                 with open(polymodIconpath, 'wb') as output_file:
+                    #cause the image wasnt working in the executable
                     output_file.write(base64.b64decode(_polyEncode))
             except Exception as e:
                 logging.error(f'Could not write default file: {e}')
@@ -355,5 +356,4 @@ def convert(psych_mod_folder, result_folder, options):
             except Exception as e:
                 logging.error(f'Failed to copy {asset}: {e}')
 
-    convlen = Utils.getRuntime(runtime)
     logging.info(f'Conversion done: Took {int(convlen)}s')

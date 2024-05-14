@@ -47,6 +47,8 @@ def convert(weekJSON, modfolder):
     
     level['background'] = '#FFFFFF' # Change!!
 
+    level['titleAsset'] = weekJSON['']
+
     return level
 
 def defaultProp(propName):
