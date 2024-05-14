@@ -18,3 +18,8 @@ Thumbs.db
 fnf-porter.bat
 pppppppp.txt
 fnf-porter.log
+
+## PyInstaller
+build/
+dist/
+FNF Porter.spec
