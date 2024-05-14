@@ -1,4 +1,4 @@
-import pathlib
+from pathlib import PurePath
 import logging
 from psychtobase import main
 from psychtobase.src import log, window
@@ -27,20 +27,6 @@ def askMode():
     else: logging.critical("Unknown Conversion Mode!")
 
 if __name__ == '__main__':
-    #Programmer writes worst code ever, asked to kill himself 🗣️⁉️
-    #This is actually easier than a match case for some reason
-
-    # _inputFolder = str(input("PsychEngine.exe mod directory (temporal): "))
-    # _outputFolder = str(input("Funkin.exe mod directory (temporal): "))
-    # _modFolder = '' # 'mods' when applicable
-
-    # print("Your Mods:")
-    # for mod in os.listdir(makePath(_inputFolder , _modFolder)):
-    #     print(mod)
-
-    # modName = input("Please specify the mod to convert (temporal): ")
-
-    # askMode() # make use of this when doing other engine conversions
 
     log.setup()
     window.init()
