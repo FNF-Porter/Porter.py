@@ -158,7 +158,7 @@ def convert(psych_mod_folder, result_folder):
             converted_char.convert()
             converted_char.save()
         else:
-            logging.warn(f'{character} is a directory, or not a json! Skipped')
+            logging.warn(f'{character} is a directory or another file, or not a json! Skipped')
 
     logging.info('Copying character icons...')
 
