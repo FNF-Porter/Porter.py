@@ -2,7 +2,11 @@
 A class full of tools needed for mod conversion.
 """
 
+import time
 from psychtobase.src import Constants
+
+def getRuntime(start:float) -> float:
+	return start - time.time()
 
 def character(name:str) -> str:
 	"""

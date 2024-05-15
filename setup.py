@@ -1,11 +1,13 @@
-import pathlib
+from pathlib import PurePath
 import logging
 from psychtobase import main
 from psychtobase.src import log, window
 
 def makePath(path, path2):
-    return str(pathlib.PurePath(path, path2))
+    return str(PurePath(path, path2))
 
+#def advanced was breaking it
+#user inputs
 def askMode():
     # lets rethink this for a moment
     modes = [

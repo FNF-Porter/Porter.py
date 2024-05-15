@@ -10,6 +10,7 @@ class CustomHandler(logging.StreamHandler):
     def emit(self, record):
         log_entry = self.format(record)
         print(f'{log_entry}')
+        window.window.setReportLabel(log_entry)
 
 def setup() -> logging.RootLogger:
 	"""instance of Logger module, will be used for logging operations"""
@@ -25,7 +26,7 @@ def setup() -> logging.RootLogger:
 	except: pass
      
 	# file handler
-	file_handler = logging.FileHandler(f"""logs/fnf-porter{strftime("%Y-%m-%d_%H-%M-%S")}.log""")
+	file_handler = logging.FileHandler(f"""logs/fnf-porter-{strftime("%Y-%m-%d_%H-%M-%S")}.log""")
 	file_handler.setFormatter(log_format)
 
     # console handler

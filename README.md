@@ -1,7 +1,6 @@
-![Mod window icon](icon.ico)
 # Friday Night Funkin' Mod Porter (fnf porter)
 
-Ports FNF mods between engines using Python. Right now, there's only support for Psych Engine to the Base Game, but new modes are coming soon! It has a GUI, cross-platform support, and logs (check the logs folder).
+Ports FNF mods between engines using Python. It has a GUI, cross-platform support, and logs (check the logs folder).
 
 
 ## Issues?
