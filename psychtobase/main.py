@@ -71,7 +71,7 @@ def convert(psych_mod_folder, result_folder):
             polymodIconpath = f'{result_folder}/{modFoldername}/{polymodIcon}'
             with open(polymodIconpath, 'wb') as output_file:
                 #cause the image wasnt working in the executable
-                output_file.write(base64.b64decode(_polyEncode))
+                output_file.write(b64decode(_polyEncode))
         except Exception as e:
             logging.error(f'Could not write default file: {e}')
 
@@ -102,26 +102,26 @@ def convert(psych_mod_folder, result_folder):
         if os.path.isdir(song):
             logging.info(f'Loading charts in {song}')
 
-                outputpath = f'{result_folder}/{modFoldername}'
-                songChart = ChartObject(song, outputpath)
-                
-                logging.info(f'Converting charts of {song}...')
-                try:
-                    songChart.convert()
+            outputpath = f'{result_folder}/{modFoldername}'
+            songChart = ChartObject(song, outputpath)
+            
+            logging.info(f'Converting charts of {song}...')
+            try:
+                songChart.convert()
 
-                    songName = songChart.songName
-                    charts.append({
-                        'songKey': songName,
-                        'sections': songChart.sections,
-                        'bpm': songChart.startingBpm,
-                        'player': songChart.metadata['playData']['characters']['player'],
-                        'opponent': songChart.metadata['playData']['characters']['opponent']
-                    })
+                songName = songChart.songName
+                charts.append({
+                    'songKey': songName,
+                    'sections': songChart.sections,
+                    'bpm': songChart.startingBpm,
+                    'player': songChart.metadata['playData']['characters']['player'],
+                    'opponent': songChart.metadata['playData']['characters']['opponent']
+                })
 
-                    logging.info(f'{song} charts converted, saving')
-                    songChart.save()
-                except Exception as e:
-                    logging.error(f'[{song}] Unable to convert charts: {e}')
+                logging.info(f'{song} charts converted, saving')
+                songChart.save()
+            except Exception as e:
+                logging.error(f'[{song}] Unable to convert charts: {e}')
 
     logging.info('Copying character assets...')
 
