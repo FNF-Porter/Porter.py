@@ -3,6 +3,8 @@ import psychtobase.main as main
 import logging
 import psychtobase.src.Constants as Constants
 
+import webbrowser
+
 from PyQt6.QtCore import QSize
 from PyQt6.QtGui import QIcon, QPixmap
 from PyQt6.QtWidgets import QApplication, QMainWindow, QPushButton, QCheckBox, QLabel, QLineEdit, QPushButton, QFileDialog, QDialog, QVBoxLayout, QRadioButton
@@ -112,6 +114,7 @@ class Window(QMainWindow):
 
 		self.onlyChars = QRadioButton('Only Characters', self) # not to be confused with onlyCharts
 		self.onlyChars.move(rX, 200)
+		self.onlyChars.resize(400, 30)
 		self.onlyChars.setToolTip("A default option. Quick for fast and only character converting.")
 
 		self.onlyStages = QRadioButton('Only Stages', self)
@@ -134,7 +137,23 @@ class Window(QMainWindow):
 		self.fullMod.toggled.connect(self.radioCheck)
 		self.iChoose.toggled.connect(self.radioCheck)
 
-		## Section 2, Options
+		## Section 2, Help
+
+		sY = (hei - 30) - (30 + 40 + 30)
+
+		self.helpButton = QPushButton("Need Help?", self)
+		self.helpButton.setToolTip('Go to issues page')
+		self.helpButton.move(rX, sY)
+		self.helpButton.resize(150, 30)
+		self.helpButton.clicked.connect(self.goToIssues)
+
+		self.gbButton = QPushButton("Gamebanana", self)
+		self.gbButton.setToolTip('Open Gamebanana')
+		self.gbButton.move(rX, sY + 40)
+		self.gbButton.resize(150, 30)
+		self.gbButton.clicked.connect(self.goToGB)
+
+		## Section 3, Options
 		sX = int(wid / 2)
 		sSX = sX + 10
 
@@ -360,6 +379,13 @@ class Window(QMainWindow):
 
 		if psych_mod_folder_path != None and result_path != None:
 			main.convert(psych_mod_folder_path, result_path, options)
+
+	def goToIssues(self):
+		webbrowser.open('https://github.com/gusborg88/fnf-porter/issues')
+
+	def goToGB(self):
+		_GB_ToolID = ''
+		webbrowser.open(f'https://gamebanana.com/tools/{_GB_ToolID}')
 
 	def open_dialog(self, title, inputs, button, body):
 		self.dialog = SimpleDialog(title, inputs, button, body)
