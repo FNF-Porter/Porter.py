@@ -2,28 +2,6 @@
 A module full of templates needed for mod conversion.
 """
 
-DEFAULT_OPTIONS = {
-  'charts': False,
-  'songs': {
-    'inst': False,
-    'voices': False,
-    'split': False
-  },
-  'characters': {
-    'icons': False,
-    'json': False,
-    'assets': False
-  },
-  'weeks': {
-    'props': False,
-    'levels': False,
-    'titles': False
-  },
-  'stages': False,
-  'modpack_meta': False,
-  'images': False
-}
-
 DIFFICULTIES:list = ["easy", "normal", "hard"]
 
 STAGES = {

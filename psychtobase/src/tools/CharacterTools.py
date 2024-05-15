@@ -29,7 +29,6 @@ class CharacterObject:
 
 		logging.info(f'Converting character {self.charName}')
 
-		self.character['name'] = character_name[0]
 		self.character['assetPath'] = char['image']
 		self.character['singTime'] = char['sing_duration']
 		self.character['scale'] = char['scale']

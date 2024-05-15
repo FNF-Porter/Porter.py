@@ -10,7 +10,6 @@ class CustomHandler(logging.StreamHandler):
     def emit(self, record):
         log_entry = self.format(record)
         print(f'{log_entry}')
-        window.window.setReportLabel(log_entry)
 
 def setup() -> logging.RootLogger:
 	"""instance of Logger module, will be used for logging operations"""
