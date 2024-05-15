@@ -56,13 +56,12 @@ class SimpleDialog(QDialog):
 		self.close()
 		
 class Window(QMainWindow):
-	def on_worker_finished(self):
-		print("Long task finished.")
-
 	def __init__(self):
+		windowTitleSuffix = "v0.1 [BETA]"
+
 		super().__init__()
 
-		self.setWindowTitle("FNF Porter")
+		self.setWindowTitle(f"FNF Porter {windowTitleSuffix}")
 		wid = 750
 		hei = 650
 		
