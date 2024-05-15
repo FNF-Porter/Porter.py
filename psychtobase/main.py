@@ -102,23 +102,26 @@ def convert(psych_mod_folder, result_folder):
         if os.path.isdir(song):
             logging.info(f'Loading charts in {song}')
 
-            outputpath = f'{result_folder}/{modFoldername}'
-            songChart = ChartObject(song, outputpath)
-            
-            logging.info(f'Converting charts of {song}...')
-            songChart.convert()
+                outputpath = f'{result_folder}/{modFoldername}'
+                songChart = ChartObject(song, outputpath)
+                
+                logging.info(f'Converting charts of {song}...')
+                try:
+                    songChart.convert()
 
-            songName = songChart.songName
-            charts.append({
-                'songKey': songName,
-                'sections': songChart.sections,
-                'bpm': songChart.startingBpm,
-                'player': songChart.metadata['playData']['characters']['player'],
-                'opponent': songChart.metadata['playData']['characters']['opponent']
-            })
+                    songName = songChart.songName
+                    charts.append({
+                        'songKey': songName,
+                        'sections': songChart.sections,
+                        'bpm': songChart.startingBpm,
+                        'player': songChart.metadata['playData']['characters']['player'],
+                        'opponent': songChart.metadata['playData']['characters']['opponent']
+                    })
 
-            logging.info(f'{song} charts converted, saving')
-            songChart.save()
+                    logging.info(f'{song} charts converted, saving')
+                    songChart.save()
+                except Exception as e:
+                    logging.error(f'[{song}] Unable to convert charts: {e}')
 
     logging.info('Copying character assets...')
 

@@ -25,7 +25,10 @@ class ChartObject:
 		self.chart:dict = Constants.BASE_CHART.copy()
 
 		self.initCharts()
-		self.setMetadata()
+		try:
+			self.setMetadata()
+		except:
+			logging.error('Failed to set metadata')
 
 		logging.info(f"Chart for {self.metadata.get('songName')} was created!")
 
@@ -37,10 +40,18 @@ class ChartObject:
 		difficulties = self.difficulties
 		unorderedDiffs = set()
 
-		for file in os.listdir(self.songPath):
-			if not file.endswith(".json"):
+		dirFiles = os.listdir(self.songPath)
+		chartFiles = []
+		for _f in dirFiles:
+			if not _f.endswith(".json"):
 				continue
-			
+			if _f.endswith("events.json"):
+				logging.warn(f'[{self.songName}] events.json not supported yet! Sorry!')
+				continue
+
+			chartFiles.append(_f)
+
+		for file in chartFiles:
 			fileName = file[:-5]
 			nameSplit = fileName.split("-")
 			nameLength = len(nameSplit)
@@ -67,7 +78,8 @@ class ChartObject:
 		difficulties.extend(unorderedDiffs)
 		del unorderedDiffs
 
-		self.sampleChart = charts.get(difficulties[0])
+		if len(difficulties) > 0:
+			self.sampleChart = charts.get(difficulties[0])
 
 	def setMetadata(self):
 		# Chart used to get character data (ASSUMING all charts use the same characters and stages)
@@ -97,7 +109,6 @@ class ChartObject:
 
 	def convert(self):
 		logging.info(f"Chart conversion for {self.metadata.get('songName')} started!")
-
 		prevMustHit = self.sampleChart["notes"][0].get("mustHitSection", True)
 		prevTime = 0
 		self.chart["events"] = [Utils.focusCamera(0, prevMustHit)]
