@@ -1,3 +1,4 @@
+![Window icon](icon.ico)
 # Friday Night Funkin' Mod Porter (fnf porter)
 
 Ports FNF mods between engines using Python. It has a GUI, cross-platform support, and logs (check the logs folder).
