@@ -22,12 +22,10 @@ class CharacterObject:
 	def convert(self):
 		char = self.psychChar
 
-		logging.info(f'Requesting information for {self.charName}')
-
 		logging.info(f'Converting character {self.charName}')
 
-							#i feel like this isnt gonna work
-		self.character['name'] = character
+		englishCharacterName = ' '.join([string.capitalize() for string in self.characterJson.split('-')])
+		self.character['name'] = englishCharacterName
 		self.character['assetPath'] = char['image']
 		self.character['singTime'] = char['sing_duration']
 		self.character['scale'] = char['scale']
@@ -44,7 +42,7 @@ class CharacterObject:
 
 			self.character['animations'].append(animTemplate)
 
-		logging.info(f'Character {character_name[0]} successfully converted')
+		logging.info(f'Character {englishCharacterName} successfully converted')
 
 	def save(self):
 		savePath = os.path.join(self.resultPath, self.characterJson)

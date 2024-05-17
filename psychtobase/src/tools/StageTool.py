@@ -11,7 +11,7 @@ def convert(stageJSON, assetName, luaProps):
     stageTemplate['characters']['dad']['position'] = stageJSON['opponent']
     stageTemplate['props'] = luaProps
 
-    stageTemplate['name'] = window.prompt('input', f'Enter the name of {assetName}', [['Stage Name', 'Your Stage Name']], 'StageTool.py')[0]
+    stageTemplate['name'] = ' '.join([string.capitalize() for string in assetName.replace('.json', '').split('-')])
 
     return stageTemplate
 

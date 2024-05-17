@@ -14,25 +14,15 @@ Check if it **already exists** before reporting though!
 Also, logs are saved to your logs folder, so make sure to read them.
 
 ## Contributing
-Thanks for contributing! You'll need to install [Python](https://www.python.org/downloads/) ofc, and the other  dependencies listed in the next section. You can build after this by running [build.bat](build.bat). If you have questions about the code, ask Gusborg, tposejank, or BombasticTom.
+Thanks for contributing! You'll need to install [Python](https://www.python.org/downloads/) ofc, and the other dependencies listed in the next section. You can build after this by running [build.bat](build.bat). If you have questions about the code, ask Gusborg, tposejank, or BombasticTom.
 
 ## Dependencies
 You can simply run dependencies.bat to install all of these at once. You have to go to [python.org](https://www.python.org/downloads/) and get Python first, though.
-- altgraph
-- antlr4-python3-runtime
 - luaparser
 - numpy
-- packaging
-- path
-- pefile
 - pydub
 - pyinstaller
-- pyinstaller-hooks-contrib
 - PyQt6
-- PyQt6-Qt6
-- PyQt6-sip
-- pywin32-ctypes
-- setuptools
 
 ## License
 FNF Porter is licensed under CC-BY-NC 4.0. That means you can modify it, but you have to credit the authors (Gusborg, tposejank, and BombasticTom), and you can't make ANY money from it.

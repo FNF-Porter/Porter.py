@@ -96,10 +96,10 @@ class Window(QMainWindow):
 		self.modLineEdit.resize(400, 30)  # Adjust the size as needed
 		self.baseGameLineEdit.resize(400, 30)  # Adjust the size as needed
 
-		## Section 1, Defaults
+		## Section 1, PRESETS
 		rX = 20
 
-		self.defaultsLabel = QLabel("Defaults", self)
+		self.defaultsLabel = QLabel("Presets", self)
 		self.defaultsLabel.move(rX, 100)
 		self.defaultsLabel.resize(220, 30)
 
@@ -140,7 +140,7 @@ class Window(QMainWindow):
 
 		sY = (hei - 30) - (30 + 40 + 30)
 
-		self.helpButton = QPushButton("Need Help?", self)
+		self.helpButton = QPushButton("Help", self)
 		self.helpButton.setToolTip('Go to issues page')
 		self.helpButton.move(rX, sY)
 		self.helpButton.resize(150, 30)
@@ -419,3 +419,7 @@ def prompt(prompt, body, inputs, file):
 		logging.info(title)
 
 		return window.prompt(inputs, title, body) # 3 return calls, boy its just python
+	
+	# How to use this damn function:
+
+	### window.prompt('input', 'Some text about the request', [['Some text about the purpose of this input', 'Placeholder (Gray text) on this input']], 'file.py')
