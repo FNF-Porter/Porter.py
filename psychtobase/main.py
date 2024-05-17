@@ -40,7 +40,7 @@ def fileCopy(source, destination):
         logging.info(f'Ported {source} to {destination}')
 
 def convert(psych_mod_folder, result_folder, options):
-    runtime = time()
+    runtime = time.time()
 
     logging.info('Converting started...')
     logging.info(options)
