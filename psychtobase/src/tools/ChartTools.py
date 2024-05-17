@@ -93,7 +93,7 @@ class ChartObject:
 		characters = playData["characters"]
 
 		metadata["songName"] = sampleChart.get("song").replace("-", " ").title()
-		metadata["artist"] = window.prompt("input", f"{metadata['songName']} needs an artist.", [['Song Artist', 'iFlicky']], 'ChartTools.py')[0]
+		metadata["artist"] = 'Unknown Artist'
 
 		logging.info(f"Initialising metadata for {self.metadata.get('songName')}...")
 

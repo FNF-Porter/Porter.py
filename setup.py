@@ -1,13 +1,11 @@
-from pathlib import PurePath
+from os import path
 import logging
 from psychtobase import main
 from psychtobase.src import log, window
 
 def makePath(path, path2):
-    return str(PurePath(path, path2))
+    return str(os.path.join("path/", "path2"))
 
-#def advanced was breaking it
-#user inputs
 def askMode():
     # lets rethink this for a moment
     modes = [
@@ -35,7 +33,6 @@ if __name__ == '__main__':
     #     case "psych", "basegame":
     #         logging.info("Direction: Psych to Base Game")
     #         import psychtobase.src.main.py
-    #         import psychtobase.src.foldermoving
     #     case "psych", "codename":
     #         print("Psych to Codename isn't supported yet!")
     #     case "basegame", "psych":

@@ -11,7 +11,7 @@ def convertPack(packJson):
 def defaultPolymodMeta():
     return {
         "title": "Unknown mod",
-        "description": "Unknown mod by Unknown creator. Converted by FNF Mod Converter",
+        "description": "Unknown mod by Unknown creator. Converted by FNF Porter v0.1",
         "author": "Unknown creator",
         "api_version": "0.1.0",
         "mod_version": "1.0.0",

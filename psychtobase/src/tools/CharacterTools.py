@@ -24,12 +24,10 @@ class CharacterObject:
 
 		logging.info(f'Requesting information for {self.charName}')
 
-		character_name = window.prompt('input', f'Enter {self.characterJson}\'s name', [['Character Name', 'Your Character Name']], 'character.py')
-		self.characterName = character_name[0]
-
 		logging.info(f'Converting character {self.charName}')
 
-		self.character['name'] = character_name[0]
+							#i feel like this isnt gonna work
+		self.character['name'] = character
 		self.character['assetPath'] = char['image']
 		self.character['singTime'] = char['sing_duration']
 		self.character['scale'] = char['scale']

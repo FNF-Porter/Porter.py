@@ -67,7 +67,7 @@ BASE_CHART_METADATA = {
 
 	"timeFormat": "ms",
 	"timeChanges": [],
-	"generatedBy": "FNF Mod Converter (by Gusborg, tposejank, Cobalt and BombasticTom)"
+	"generatedBy": "FNF Porter (by Gusborg, tposejank, and BombasticTom)"
 }
 
 BASE_CHART = {
@@ -75,7 +75,7 @@ BASE_CHART = {
 	"scrollSpeed": {},
 	"events": [],
 	"notes": {},
-	"generatedBy": "FNF Mod Converter (by Gusborg, tposejank, Cobalt and BombasticTom)"
+	"generatedBy": "FNF Porter (by Gusborg, tposejank, and BombasticTom)"
 }
 
 CHARACTER = {
