@@ -40,7 +40,7 @@ def fileCopy(source, destination):
         logging.info(f'Ported {source} to {destination}')
 
 def convert(psych_mod_folder, result_folder, options):
-    runtime = time.time()
+    runtime = time.process_time()
 
     logging.info('Converting started...')
     logging.info(options)
@@ -369,6 +369,6 @@ def convert(psych_mod_folder, result_folder, options):
             except Exception as e:
                 logging.error(f'Failed to copy {asset}: {e}')
 
-    convlen = Utils.getRuntime(runtime)
-    logging.info(f'Conversion done: Took {int(convlen)}s')
+    #convlen = Utils.getRuntime(runtime)
+    logging.info(f'Conversion done: Took {runtime}s')
     logging.info(f'Thanks for using FNF Porter!')
