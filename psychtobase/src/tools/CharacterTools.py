@@ -32,6 +32,7 @@ class CharacterObject:
 		self.character['isPixel'] = char['scale'] >= 6
 		self.character['healthIcon']['id'] = char['healthicon']
 		self.character['healthIcon']['isPixel'] = char['scale'] >= 6
+		self.character['flipX'] = char.get('flip_x', False)
 
 		for animation in char['animations']:
 			animTemplate = Constants.ANIMATION.copy()
