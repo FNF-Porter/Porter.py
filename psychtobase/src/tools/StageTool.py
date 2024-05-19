@@ -1,4 +1,5 @@
 import copy
+import logging
 import psychtobase.src.Constants as Constants
 import psychtobase.src.window as window
 
@@ -27,8 +28,16 @@ def getProps(parentFunc, parentFuncName):
     for index, pictureProp in enumerate(propArr):
         tag = pictureProp[1]
         sprite = pictureProp[2]
-        x = pictureProp[3]
-        y = pictureProp[4]
+
+        # Why do I have to add a try except for everything
+        posx = 0
+        posy = 0
+
+        try:
+            posx = pictureProp[3]
+            posy = pictureProp[4]
+        except:
+            logging.error('Failed accessing x and y of prop! Did you check if it is defined?')
 
         call = pictureProp[0]
 
@@ -45,8 +54,8 @@ def getProps(parentFunc, parentFuncName):
         _props.append({
             't': tag, # Tag
             's': sprite, # Sprite
-            'x': x, # X
-            'y': y, # Y
+            'x': posx, # X
+            'y': posy, # Y
             'z': z_index, # Z index
             'a': animated, # Animated
             'as': [] # Animations
@@ -113,10 +122,21 @@ def toFNFProps(props):
             _prop_template = copy.deepcopy(Constants.STAGE_PROP_ANIMATED)
 
         if _prop_template:
+            print(name, assetPath, posX, posY)
+
             _prop_template['name'] = name
             _prop_template['assetPath'] = assetPath
-            _prop_template['position'][0] = float(posX)
-            _prop_template['position'][1] = float(posY)
+            _posX = 0
+            _posY = 0
+
+            try:
+                _posX = float(posX)
+                _posY = float(posY)
+            except Exception as e:
+                logging.error(f'I dont know what\'s wrong with your thing! Theres an error trying to convert nonfloat to float: {e}')
+
+            _prop_template['position'][0] = _posX
+            _prop_template['position'][1] = _posY
             _prop_template['zIndex'] = posZ
 
             if animated:

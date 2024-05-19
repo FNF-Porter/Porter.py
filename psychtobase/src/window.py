@@ -14,6 +14,8 @@ from PyQt6.QtWidgets import QApplication, QMainWindow, QPushButton, QCheckBox, Q
 icon = b64decode("iVBORw0KGgoAAAANSUhEUgAAAEAAAABABAMAAABYR2ztAAAAFVBMVEX/////3fv/fdtsPpT/LDdYtf8AKUvOkdnQAAAACXBIWXMAAC4jAAAuIwF4pT92AAABRUlEQVRIx73UQbLCIAwAUJzWvf03EC/gNBdgEfcuLDco9z/CB0JLgQDq/PlZ1clrkoZWIf4mTpcemLpg6oKpCy490BZTT5wm2QWyOWgf/Eh5bTUBC1oCQLqoN4HZA1sC7lx+oHwd3GQIC4ArIPe4fgnmKHgA8iC+AAPA3AOxxA24Pb8B5j1/bwJ75QAiqgzAlrdgREzFDoAAYiYGHmABgMCIRQlaFeUhjIDLsjzfB1ufDTwWime5D/eUW9oGcyqiCXzwYORBHCJuRZxDUtfAljcpULGA8cDUgLCp1RVY0yExTqrdzXpdPgVWjCo8hBUmA8KfLgagjS6AL+EQPaLhAPoyfk8mzKCSHvQWVUF4UcIqCLyUKAQtW9O6UYlcqHgYLDiepu2QA/p9jvlPAXXYwev4cSVBIv36sgj314Eo/wJ4If4nfgHb6rE0etNCVQAAAABJRU5ErkJggg==")
 _windowTitleSuffix = "v0.1 [BETA]"
 _defaultsFile = '.defaults'
+_vocalSplitEnabledByDefault = False
+
 class SimpleDialog(QDialog):
 	def __init__(self, title, inputs, button, body):
 		super().__init__()
@@ -261,7 +263,7 @@ class Window(QMainWindow):
 		self.songs.setChecked(checked)
 		self.insts.setChecked(checked)
 		self.voices.setChecked(checked)
-		self.vocalsplit.setChecked(checked)
+		self.vocalsplit.setChecked(checked == _vocalSplitEnabledByDefault and checked != False)
 		self.chars.setChecked(checked)
 		self.icons.setChecked(checked)
 		self.jsons.setChecked(checked)
@@ -309,7 +311,7 @@ class Window(QMainWindow):
 
 				self.insts.setChecked(True)
 				self.voices.setChecked(True)
-				self.vocalsplit.setChecked(True)
+				self.vocalsplit.setChecked(_vocalSplitEnabledByDefault)
 			if self.sender() == self.onlyChars:
 				self.allToDefaults(False)
 
@@ -331,7 +333,7 @@ class Window(QMainWindow):
 		if state == 2:  # Checked
 			self.insts.setEnabled(True)
 			self.voices.setEnabled(True)
-			self.vocalsplit.setEnabled(True)
+			self.vocalsplit.setEnabled(_vocalSplitEnabledByDefault)
 		elif state == 0:  # Unchecked
 			self.insts.setEnabled(False)
 			self.voices.setEnabled(False)

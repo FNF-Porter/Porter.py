@@ -15,15 +15,26 @@ def parseStage(lua_script_path):
     allowedMethods = ['makeLuaSprite', 'makeAnimatedLuaSprite', 'addAnimationByPrefix', 'addLuaSprite']
     allowedFuncs = ['onCreate', 'onCreatePost']
 
+    # Note: addLuaSprite only checks for if a character is after the characters!
+
     for node in ast.walk(tree):
         if isinstance(node, Function):
-            curFunc = node.name.id if isinstance(node.name, Name) else None
+            curFunc = None
+
+            if isinstance(node.name, Name):
+                try:
+                    curFunc = node.name.id
+                except:
+                    logging.error('Fail setting curFunc!')
+            else:
+                curFunc = None
             if calls.get(curFunc, None) == None:
                 calls[curFunc] = {}
 
         if isinstance(node, Call):
-            if node.func.id in allowedMethods and curFunc in allowedFuncs:
-                arguments = [node.func.id]
+            try:
+                if node.func.id in allowedMethods and curFunc in allowedFuncs:
+                    arguments = [node.func.id]
                 for arg in node.args:
                     #idk what this used to do but i know how to make switch cases so
                     #hopefully it does the same thing
@@ -40,6 +51,8 @@ def parseStage(lua_script_path):
                     calls[curFunc][node.func.id] = []
                 
                 calls[curFunc][node.func.id].append(arguments)
+            except:
+                logging.error('Fail in isintance(node, Call)!')
 
     #print(f'{calls}')
 
