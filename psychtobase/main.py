@@ -17,7 +17,7 @@ from psychtobase.src import Utils
 # Main
 
 charts = []
-vocalSplitEnabled = True
+vocalSplitMasterToggle = True
 
 def folderMake(folder_path):
     if not os.path.exists(folder_path):
@@ -25,9 +25,6 @@ def folderMake(folder_path):
             os.makedirs(folder_path)
         except Exception as e:
             logging.error(f'Something went wrong: {e}')
-    else:
-                                                    #i hate escape charcaters
-        logging.warn(f'{folder_path} already exists! Didn\'t make the folder.')
 
 def fileCopy(source, destination):
     if os.path.exists(source):
@@ -225,7 +222,7 @@ def convert(psych_mod_folder, result_folder, options):
                               f'{result_folder}/{modFoldername}{bgSongs}{os.path.basename(song)}/{os.path.basename(songFile)}')
                         except Exception as e:
                             logging.error(f'Could not copy asset {songFile}: {e}')
-                    elif os.path.basename(songFile) == 'Voices.ogg' and songOptions['split'] and vocalSplitEnabled:
+                    elif os.path.basename(songFile) == 'Voices.ogg' and songOptions['split'] and vocalSplitMasterToggle:
                         # Vocal Split
                         songKey = os.path.basename(song)
 

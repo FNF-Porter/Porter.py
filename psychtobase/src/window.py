@@ -15,6 +15,8 @@ base64_str="iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAC4jAAAuIwF4
 image_bytes = b64decode(base64_str)
 _windowTitleSuffix = "v0.1 [BETA]"
 _defaultsFile = '.defaults'
+_vocalSplitEnabledByDefault = False
+
 class SimpleDialog(QDialog):
 	def __init__(self, title, inputs, button, body):
 		super().__init__()
@@ -262,7 +264,7 @@ class Window(QMainWindow):
 		self.songs.setChecked(checked)
 		self.insts.setChecked(checked)
 		self.voices.setChecked(checked)
-		self.vocalsplit.setChecked(checked)
+		self.vocalsplit.setChecked(checked == _vocalSplitEnabledByDefault and checked != False)
 		self.chars.setChecked(checked)
 		self.icons.setChecked(checked)
 		self.jsons.setChecked(checked)
@@ -310,7 +312,7 @@ class Window(QMainWindow):
 
 				self.insts.setChecked(True)
 				self.voices.setChecked(True)
-				self.vocalsplit.setChecked(True)
+				self.vocalsplit.setChecked(_vocalSplitEnabledByDefault)
 			if self.sender() == self.onlyChars:
 				self.allToDefaults(False)
 
@@ -332,7 +334,7 @@ class Window(QMainWindow):
 		if state == 2:  # Checked
 			self.insts.setEnabled(True)
 			self.voices.setEnabled(True)
-			self.vocalsplit.setEnabled(True)
+			self.vocalsplit.setEnabled(_vocalSplitEnabledByDefault)
 		elif state == 0:  # Unchecked
 			self.insts.setEnabled(False)
 			self.voices.setEnabled(False)
