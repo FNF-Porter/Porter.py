@@ -1,4 +1,5 @@
 from base64 import b64decode
+import os.path as ospath
 import psychtobase.main as main
 import logging
 import psychtobase.src.Constants as Constants
@@ -12,6 +13,8 @@ from PyQt6.QtWidgets import QApplication, QMainWindow, QPushButton, QCheckBox, Q
 #the icon, in base64 (because its easier to compile)
 base64_str="iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAC4jAAAuIwF4pT92AAADS0lEQVR42u1a0Y3bMAyVDI/RLRSgQ9wCnUBGh+hXhyisCW6BDlEgRhcqwEYX6SqrkkVR0llxTMCHw+WchI+P5CNlxk7LN7gC6OsIvgylQDw1AC4bYL4+JwDvJgQ8NwCRlNDM6JkdQ+03jBXIXkHgzQvgsqw+g0+XYzCAX/gaPLU8ZBHk1XLeBUAKHGiHqQF+9CNs6FE3kCIixfzmj/4xz3Kb/gE29MSEgeA8WOdRuR94vScmjCU3z0LgU8RjggHyrqHYvVNMi+obAPul0Y5n2B7OZ6UAyGuZ8xupsrD9ZPTwoZHXIESAmIU8hhQ+7DA0LRWVXkcs4Dkp0KIAWmDVMvEuGeA6X50JjyqFa4HQA5hDTvSfugjWjJ6+171/r/wvlsKtQYONPSP3Fi3Vu8CPz9/Y7z+fkimA6Qopx30GQMaCtRSIsaeI5zrv/D83YNStAXZKewADA0YfDKAWSCg7WwBGWPAkAdD5aTZAbLUIcZy1dYDiuM1/SvSm/1ftoMW0ytg4jbEC6H1JuwbjkYg30wsT4TxBmo0TBogxI1JWHGG6CeRE3xYwy4Kp0iGKBiIFwkCgLLa9+tdm62tleo/z5ef9KmLAelRdHPqrLWasQEGC16cS9Hd2hq7AhOQ+KBgQ3feDBjtGbHcYC9+43mLiVgPM2jG/k0wXJol1IwjA11/fGYUZ1I2OLnqSCKgqPGwtFkJavFg9HlptI0EB3yFMRFWFk+bm06B0akNMq+tWJb3TohQQrvMJsOq2wX+DguBICYvTBDcQ3oDwnElFWRZqhmoMcFMhUN1ha2z1o2+dss77bFAVH7IoOxdwWBBigqa8dZwy6ISiqyo/YUICAKSMLiS2HA29JjNOilWDx2tIAHClkukQAyLwd45lgf7dXmgFO13g9YUzfVWtAS4ImgUhhzG0vxU+sgD6UCmMUHLoXPcLZmxik4UPUsyIlGkykb3PCQjAsJ0hV+66zm99VhMhZGZ7HtMBOS2xVr/fTQmWRL0l9ZsDYFgArdON6nhTAAI1gPOGB6FbjqdY17IIBlmRVH/3lgi1Ir4LADnAxEBJAYGlezcAuPIZqyixcprqfPkwVFIkFe25QOMUJnCPcqx32mmnnXbaaaedto/9BWaMwpiIwnWtAAAAAElFTkSuQmCC"
 image_bytes = b64decode(base64_str)
+_windowTitleSuffix = "v0.1 [BETA]"
+_defaultsFile = '.defaults'
 class SimpleDialog(QDialog):
 	def __init__(self, title, inputs, button, body):
 		super().__init__()
@@ -57,11 +60,9 @@ class SimpleDialog(QDialog):
 		
 class Window(QMainWindow):
 	def __init__(self):
-		windowTitleSuffix = "v0.1 [BETA]"
-
 		super().__init__()
 
-		self.setWindowTitle(f"FNF Porter {windowTitleSuffix}")
+		self.setWindowTitle(f"FNF Porter {_windowTitleSuffix}")
 		wid = 750
 		hei = 650
 		
@@ -89,8 +90,22 @@ class Window(QMainWindow):
 		self.findModButton.clicked.connect(self.findMod)
 		self.findBaseGameButton.clicked.connect(self.findBaseGame)
 
-		self.modLineEdit = QLineEdit(self)
-		self.baseGameLineEdit = QLineEdit(self)
+		# thingDefaultPath
+		modDP = ''
+		bGDP = ''
+		if ospath.exists(_defaultsFile):
+			try:
+				parse = open(_defaultsFile, 'r').read()
+				for index, line in enumerate(parse.split('\n')):
+					if index == 0:
+						modDP = line
+					if index == 1:
+						bGDP = line
+			except Exception as e:
+				logging.error(f'Problems loading your save: {e}')
+
+		self.modLineEdit = QLineEdit(modDP, self)
+		self.baseGameLineEdit = QLineEdit(bGDP, self)
 		self.modLineEdit.move((self.findModButton.x() - 20) - 400, 20)
 		self.baseGameLineEdit.move((self.findBaseGameButton.x() - 20) - 400, 60)
 		self.modLineEdit.resize(400, 30)  # Adjust the size as needed
@@ -375,6 +390,11 @@ class Window(QMainWindow):
 		options['stages'] = self.stages.isChecked()
 		options['modpack_meta'] = self.meta.isChecked()
 		options['images'] = self.images.isChecked()
+
+		try:
+			open(_defaultsFile, 'w').write(f'{psych_mod_folder_path}\n{result_path}')
+		except Exception as e:
+			logging.error(f'Problems with your save file: {e}')
 
 		if psych_mod_folder_path != None and result_path != None:
 			main.convert(psych_mod_folder_path, result_path, options)

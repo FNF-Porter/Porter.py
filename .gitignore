@@ -1,15 +1,15 @@
 ## Folders
 ## For all pycache
 **/__pycache__/
+
+# Testing, logs etc
 **/output/*
-**/logs/*
+**/log_*.txt
 **/mods/*
 
 ## Debug mods
 Weekend1/
 vs-skippa-psychengine/
-
-**/log_*.txt
 
 ## Files
 CodeTest.py
@@ -22,4 +22,8 @@ fnf-porter.log
 ## PyInstaller
 build/
 dist/
-FNF Porter.spec
+*.spec
+
+## FNF Porter files
+**/logs/*
+.defaults

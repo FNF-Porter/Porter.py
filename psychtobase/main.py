@@ -370,5 +370,5 @@ def convert(psych_mod_folder, result_folder, options):
                 logging.error(f'Failed to copy {asset}: {e}')
 
     convlen = Utils.getRuntime(runtime)
-    logging.info(f'Conversion done: Took {round(convlen, 2)}s')
+    logging.info(f'Conversion done: Took {int(convlen)}s')
     logging.info(f'Thanks for using FNF Porter!')
