@@ -25,15 +25,17 @@ def parseStage(lua_script_path):
             if node.func.id in allowedMethods and curFunc in allowedFuncs:
                 arguments = [node.func.id]
                 for arg in node.args:
-                    if isinstance(arg, String):
-                        arguments.append(arg.s)
-                    elif isinstance(arg, Number):
-                        arguments.append(arg.n)
-                    elif isinstance(arg, Name):
-                        arguments.append(arg.id)
-                    elif isinstance(arg, UMinusOp):
-                        arguments.append('-' + str(arg.operand.n))
-
+                    #idk what this used to do but i know how to make switch cases so
+                    #hopefully it does the same thing
+                    match isinstance:
+                        case (arg, String):
+                            arguments.append(arg.s)
+                        case (arg, Number):
+                            arguments.append(arg.n)
+                        case (arg, Name):
+                            arguments.append(arg.id)
+                        case (arg, UMinusOp):
+                            arguments.append('-' + str(arg.operand.n))
                 if calls[curFunc].get(node.func.id, None) == None:
                     calls[curFunc][node.func.id] = []
                 

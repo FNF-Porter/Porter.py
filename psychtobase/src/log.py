@@ -33,11 +33,16 @@ def setup() -> logging.RootLogger:
 	console_handler = CustomHandler()
 	console_handler.setFormatter(log_format)
      
+	#popup handler
+	popup_handler = window.Window.errorMessage("error", "Haha you got an error NERD")
+	popup_handler.setFormatter(log_format)
+
 	_GB_ToolID = ''
 
 	logger.handlers.clear()
 	logger.addHandler(file_handler)
 	logger.addHandler(console_handler)
+	logger.addHandler(popup_handler)
 	logging.info(f"""Thanks for using FNF Porter!
 	Created by Gusborg, BombasticTom, tposejank, and Cobalt
 	Download on Gamebanana: https://gamebanana.com/tools/{_GB_ToolID}""")

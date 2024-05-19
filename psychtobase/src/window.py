@@ -11,8 +11,7 @@ from PyQt6.QtGui import QIcon, QPixmap
 from PyQt6.QtWidgets import QApplication, QMainWindow, QPushButton, QCheckBox, QLabel, QLineEdit, QPushButton, QFileDialog, QDialog, QVBoxLayout, QRadioButton
 
 #the icon, in base64 (because its easier to compile)
-base64_str="iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAC4jAAAuIwF4pT92AAADS0lEQVR42u1a0Y3bMAyVDI/RLRSgQ9wCnUBGh+hXhyisCW6BDlEgRhcqwEYX6SqrkkVR0llxTMCHw+WchI+P5CNlxk7LN7gC6OsIvgylQDw1AC4bYL4+JwDvJgQ8NwCRlNDM6JkdQ+03jBXIXkHgzQvgsqw+g0+XYzCAX/gaPLU8ZBHk1XLeBUAKHGiHqQF+9CNs6FE3kCIixfzmj/4xz3Kb/gE29MSEgeA8WOdRuR94vScmjCU3z0LgU8RjggHyrqHYvVNMi+obAPul0Y5n2B7OZ6UAyGuZ8xupsrD9ZPTwoZHXIESAmIU8hhQ+7DA0LRWVXkcs4Dkp0KIAWmDVMvEuGeA6X50JjyqFa4HQA5hDTvSfugjWjJ6+171/r/wvlsKtQYONPSP3Fi3Vu8CPz9/Y7z+fkimA6Qopx30GQMaCtRSIsaeI5zrv/D83YNStAXZKewADA0YfDKAWSCg7WwBGWPAkAdD5aTZAbLUIcZy1dYDiuM1/SvSm/1ftoMW0ytg4jbEC6H1JuwbjkYg30wsT4TxBmo0TBogxI1JWHGG6CeRE3xYwy4Kp0iGKBiIFwkCgLLa9+tdm62tleo/z5ef9KmLAelRdHPqrLWasQEGC16cS9Hd2hq7AhOQ+KBgQ3feDBjtGbHcYC9+43mLiVgPM2jG/k0wXJol1IwjA11/fGYUZ1I2OLnqSCKgqPGwtFkJavFg9HlptI0EB3yFMRFWFk+bm06B0akNMq+tWJb3TohQQrvMJsOq2wX+DguBICYvTBDcQ3oDwnElFWRZqhmoMcFMhUN1ha2z1o2+dss77bFAVH7IoOxdwWBBigqa8dZwy6ISiqyo/YUICAKSMLiS2HA29JjNOilWDx2tIAHClkukQAyLwd45lgf7dXmgFO13g9YUzfVWtAS4ImgUhhzG0vxU+sgD6UCmMUHLoXPcLZmxik4UPUsyIlGkykb3PCQjAsJ0hV+66zm99VhMhZGZ7HtMBOS2xVr/fTQmWRL0l9ZsDYFgArdON6nhTAAI1gPOGB6FbjqdY17IIBlmRVH/3lgi1Ir4LADnAxEBJAYGlezcAuPIZqyixcprqfPkwVFIkFe25QOMUJnCPcqx32mmnnXbaaaedto/9BWaMwpiIwnWtAAAAAElFTkSuQmCC"
-image_bytes = b64decode(base64_str)
+icon = b64decode("iVBORw0KGgoAAAANSUhEUgAAAEAAAABABAMAAABYR2ztAAAAFVBMVEX/////3fv/fdtsPpT/LDdYtf8AKUvOkdnQAAAACXBIWXMAAC4jAAAuIwF4pT92AAABRUlEQVRIx73UQbLCIAwAUJzWvf03EC/gNBdgEfcuLDco9z/CB0JLgQDq/PlZ1clrkoZWIf4mTpcemLpg6oKpCy490BZTT5wm2QWyOWgf/Eh5bTUBC1oCQLqoN4HZA1sC7lx+oHwd3GQIC4ArIPe4fgnmKHgA8iC+AAPA3AOxxA24Pb8B5j1/bwJ75QAiqgzAlrdgREzFDoAAYiYGHmABgMCIRQlaFeUhjIDLsjzfB1ufDTwWime5D/eUW9oGcyqiCXzwYORBHCJuRZxDUtfAljcpULGA8cDUgLCp1RVY0yExTqrdzXpdPgVWjCo8hBUmA8KfLgagjS6AL+EQPaLhAPoyfk8mzKCSHvQWVUF4UcIqCLyUKAQtW9O6UYlcqHgYLDiepu2QA/p9jvlPAXXYwev4cSVBIv36sgj314Eo/wJ4If4nfgHb6rE0etNCVQAAAABJRU5ErkJggg==")
 _windowTitleSuffix = "v0.1 [BETA]"
 _defaultsFile = '.defaults'
 class SimpleDialog(QDialog):
@@ -47,7 +46,7 @@ class SimpleDialog(QDialog):
 		self.setWindowTitle(title)
 
 		pixmap = QPixmap()
-		pixmap.loadFromData(image_bytes)
+		pixmap.loadFromData(icon)
 		self.setWindowIcon(QIcon(pixmap))
 
 		self.exec()
@@ -71,7 +70,7 @@ class Window(QMainWindow):
 		self.setMaximumSize(QSize(wid, hei))
 		
 		pixmap = QPixmap()
-		pixmap.loadFromData(image_bytes)
+		pixmap.loadFromData(icon)
 		self.setWindowIcon(QIcon(pixmap))
 
 		self.modLabel = 		QLabel("Path to your Psych Engine mod:", self)
@@ -368,6 +367,16 @@ class Window(QMainWindow):
 
 	def setReportLabel(self, text):
 		self.logsLabel.setText(text)
+
+	def errorMessage(type, text):
+		# the type is either warn or error (changes what image is displayed)
+		warnIcon = b64decode("iVBORw0KGgoAAACAAAAAgAgMAAAAOFJJnAAAACVBMVEX/////zAAAAAC2cAdLAAAACXBIWXMAAC4jAAAuIwF4pT92AAAAX0lEQVQY023OsRFAIQgDUCgYwX0YwcI0juA+7vtBUc/7puE1yUFEJEozyPMySqD2QAtI67qQb6Qf0Hq5wAa8IQ6fTm/4IgIM1A34swYMyAA21Noj2WH1g2J7N0CIrBY+DLM6M/qcLscAAAAASUVORK5CYII")
+		errorIcon = b64decode("iVBORw0KGgoAAACAAAAAgAQMAAABJtOi3AAAABlBMVEX/////ADNUioaFAAAACXBIWXMAAC4jAAAuIwF4pT92AAAAeklEQVQI1zWOsQ3DMAwEX1AhF0bUJkBgruEqWkywvVk0ikZQ6ULQm3SQ5vAAn+QB0gGQBxxZEMiGSJ54GZ7kG6v0BVm6IMeWsHnFcGUHUQhdUlT/R7tTsIGlwymc9oavO7ZQE3KoduqM+Eh/YEljhnwV+nf6GdwuZnUBR3pJi8fgcMIAAAAASUVORK5CYII=")
+		match type:
+			case "error":
+				print("error whooops", errorIcon)
+			case "warn":
+				print("warning lol", warnIcon)
 
 	def convertCallback(self, what):
 		# the code below should go on the callback when the person presses the convert button
