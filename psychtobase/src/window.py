@@ -1,7 +1,11 @@
 from base64 import b64decode
+import os
 import os.path as ospath
+import platform
+import subprocess
 import psychtobase.main as main
 import logging
+import psychtobase.src.log as log
 import psychtobase.src.Constants as Constants
 
 import webbrowser
@@ -157,6 +161,7 @@ class Window(QMainWindow):
 		self.ohioSkibidi = QPushButton("Open log file", self)
 		self.ohioSkibidi.move(20, 320)
 		self.ohioSkibidi.resize(100, 30)
+		self.ohioSkibidi.clicked.connect(self.openLogFile)
 
 		self.logsLabel = QTextBrowser(self)
 		self.logsLabel.move(20, 360)
@@ -406,6 +411,20 @@ class Window(QMainWindow):
 	def goToGB(self):
 		_GB_ToolID = ''
 		webbrowser.open(f'https://gamebanana.com/tools/{_GB_ToolID}')
+
+	def openLogFile(self):
+		file = log.logRetain.log
+		print(f'Log reports log path as: {file}')
+		realLogPath = os.path.abspath(file)
+		print(f'Attempting to open file: {realLogPath}')
+		if platform.system() == 'Darwin':  # macOS
+			subprocess.call(('open', realLogPath))
+		elif platform.system() == 'Windows':
+			os.startfile(realLogPath)
+		elif platform.system() == 'Linux':
+			subprocess.call(['xdg-open', realLogPath])
+		else:
+			print(f'Couldn\'t open the log because you\'re using this platform: {platform.system()}')
 
 	def open_dialog(self, title, inputs, button, body):
 		self.dialog = SimpleDialog(title, inputs, button, body)

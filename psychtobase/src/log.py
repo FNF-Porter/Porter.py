@@ -11,6 +11,12 @@ class CustomHandler(logging.StreamHandler):
         log_entry = self.format(record)
         print(log_entry)
         window.window.logsLabel.append(log_entry)
+        
+class RetainLog():
+    def __init__(self, log):
+        self.log = log
+        
+logRetain = RetainLog('Dunno')
 
 def setup() -> logging.RootLogger:
 	"""instance of Logger module, will be used for logging operations"""
@@ -29,6 +35,8 @@ def setup() -> logging.RootLogger:
 	log_file = f"""logs/fnf-porter-{strftime("%Y-%m-%d_%H-%M-%S")}.log"""
 	file_handler = logging.FileHandler(log_file)
 	file_handler.setFormatter(log_format)
+     
+	logRetain.log = log_file
 
     # console handler
 	console_handler = CustomHandler()
