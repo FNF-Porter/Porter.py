@@ -8,7 +8,7 @@ import webbrowser
 
 from PyQt6.QtCore import QSize
 from PyQt6.QtGui import QIcon, QPixmap
-from PyQt6.QtWidgets import QApplication, QMainWindow, QPushButton, QCheckBox, QLabel, QLineEdit, QPushButton, QFileDialog, QDialog, QVBoxLayout, QRadioButton
+from PyQt6.QtWidgets import QApplication, QMainWindow, QPushButton, QCheckBox, QLabel, QLineEdit, QPushButton, QFileDialog, QDialog, QVBoxLayout, QRadioButton, QTextBrowser
 
 #the icon, in base64 (because its easier to compile)
 icon = b64decode("iVBORw0KGgoAAAANSUhEUgAAAEAAAABABAMAAABYR2ztAAAAFVBMVEX/////3fv/fdtsPpT/LDdYtf8AKUvOkdnQAAAACXBIWXMAAC4jAAAuIwF4pT92AAABRUlEQVRIx73UQbLCIAwAUJzWvf03EC/gNBdgEfcuLDco9z/CB0JLgQDq/PlZ1clrkoZWIf4mTpcemLpg6oKpCy490BZTT5wm2QWyOWgf/Eh5bTUBC1oCQLqoN4HZA1sC7lx+oHwd3GQIC4ArIPe4fgnmKHgA8iC+AAPA3AOxxA24Pb8B5j1/bwJ75QAiqgzAlrdgREzFDoAAYiYGHmABgMCIRQlaFeUhjIDLsjzfB1ufDTwWime5D/eUW9oGcyqiCXzwYORBHCJuRZxDUtfAljcpULGA8cDUgLCp1RVY0yExTqrdzXpdPgVWjCo8hBUmA8KfLgagjS6AL+EQPaLhAPoyfk8mzKCSHvQWVUF4UcIqCLyUKAQtW9O6UYlcqHgYLDiepu2QA/p9jvlPAXXYwev4cSVBIv36sgj314Eo/wJ4If4nfgHb6rE0etNCVQAAAABJRU5ErkJggg==")
@@ -154,18 +154,16 @@ class Window(QMainWindow):
 
 		## Section 2, Help
 
-		sY = (hei - 30) - (30 + 40 + 30)
-
 		self.helpButton = QPushButton("Help", self)
 		self.helpButton.setToolTip('Go to issues page')
-		self.helpButton.move(rX, sY)
-		self.helpButton.resize(150, 30)
+		self.helpButton.move(60, 500)
+		self.helpButton.resize(100, 30)
 		self.helpButton.clicked.connect(self.goToIssues)
 
 		self.gbButton = QPushButton("Gamebanana", self)
 		self.gbButton.setToolTip('Open Gamebanana')
-		self.gbButton.move(rX, sY + 40)
-		self.gbButton.resize(150, 30)
+		self.gbButton.move(100, 500)
+		self.gbButton.resize(100, 30)
 		self.gbButton.clicked.connect(self.goToGB)
 
 		## Section 3, Options
@@ -194,7 +192,7 @@ class Window(QMainWindow):
 		self.voices.move(sSX, 210)
 		self.voices.setToolTip("Copy over \"Voices.ogg\" files.")
 
-		self.vocalsplit = QCheckBox("Vocal Split", self)
+		self.vocalsplit = QCheckBox("Vocal Split (unavailable)", self)
 		self.vocalsplit.move(sSX, 230)
 		self.vocalsplit.setToolTip("Splits \"Voices.ogg\" files into two files (\"Voices-opponent.ogg\" and \"Voices-player.ogg\") using their charts. This requires ffmpeg in PATH, and Charts enabled.")
 
@@ -248,9 +246,13 @@ class Window(QMainWindow):
 		self.images.move(sX, 530)
 		self.images.setToolTip("Copies over your .png and .xml files from the \"/images/\" directory of your mod.")
 
-		self.logsLabel = QLabel("SDFSDSDF", self)
-		self.logsLabel.move(20, (self.height() - 20) - self.logsLabel.height())
-		self.logsLabel.resize(800, 30)
+		self.ohioSkibidi = QPushButton("Open log file", self)
+		self.ohioSkibidi.move(20, 330)
+		self.ohioSkibidi.resize(100, 24)
+
+		self.logsLabel = QTextBrowser(self)
+		self.logsLabel.move(20, 360)
+		self.logsLabel.resize(320, 280)
 
 		self.convert = QPushButton("Convert", self)
 		self.convert.move((self.width() - 20) - self.convert.width(), (self.height() - 20) - self.convert.height())
@@ -367,19 +369,6 @@ class Window(QMainWindow):
 		baseGameFolder = QFileDialog.getExistingDirectory(self, "Select Base Game Folder")
 		self.baseGameLineEdit.setText(baseGameFolder)
 
-	def setReportLabel(self, text):
-		self.logsLabel.setText(text)
-
-	def errorMessage(type, text):
-		# the type is either warn or error (changes what image is displayed)
-		warnIcon = b64decode("iVBORw0KGgoAAACAAAAAgAgMAAAAOFJJnAAAACVBMVEX/////zAAAAAC2cAdLAAAACXBIWXMAAC4jAAAuIwF4pT92AAAAX0lEQVQY023OsRFAIQgDUCgYwX0YwcI0juA+7vtBUc/7puE1yUFEJEozyPMySqD2QAtI67qQb6Qf0Hq5wAa8IQ6fTm/4IgIM1A34swYMyAA21Noj2WH1g2J7N0CIrBY+DLM6M/qcLscAAAAASUVORK5CYII")
-		errorIcon = b64decode("iVBORw0KGgoAAACAAAAAgAQMAAABJtOi3AAAABlBMVEX/////ADNUioaFAAAACXBIWXMAAC4jAAAuIwF4pT92AAAAeklEQVQI1zWOsQ3DMAwEX1AhF0bUJkBgruEqWkywvVk0ikZQ6ULQm3SQ5vAAn+QB0gGQBxxZEMiGSJ54GZ7kG6v0BVm6IMeWsHnFcGUHUQhdUlT/R7tTsIGlwymc9oavO7ZQE3KoduqM+Eh/YEljhnwV+nf6GdwuZnUBR3pJi8fgcMIAAAAASUVORK5CYII=")
-		match type:
-			case "error":
-				print("error whooops", errorIcon)
-			case "warn":
-				print("warning lol", warnIcon)
-
 	def convertCallback(self, what):
 		# the code below should go on the callback when the person presses the convert button
 		psych_mod_folder_path = self.modLineEdit.text()
@@ -414,7 +403,6 @@ class Window(QMainWindow):
 		webbrowser.open('https://github.com/gusborg88/fnf-porter/issues')
 
 	def goToGB(self):
-		_GB_ToolID = ''
 		webbrowser.open(f'https://gamebanana.com/tools/{_GB_ToolID}')
 
 	def open_dialog(self, title, inputs, button, body):
