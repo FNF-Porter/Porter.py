@@ -3,6 +3,7 @@ import os
 import os.path as ospath
 import platform
 import subprocess
+import time
 import psychtobase.main as main
 import logging
 import psychtobase.src.log as log
@@ -64,6 +65,11 @@ class SimpleDialog(QDialog):
 		self.close()
 		
 class Window(QMainWindow):
+	def closeEvent(self, event):
+		logging.info('Thanks for using FNF Porter!')
+		#time.sleep(0.1)
+		event.accept()
+
 	def __init__(self):
 		super().__init__()
 
