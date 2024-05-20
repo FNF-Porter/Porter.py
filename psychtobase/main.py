@@ -368,3 +368,4 @@ def convert(psych_mod_folder, result_folder, options):
 
     #convlen = Utils.getRuntime(runtime)
     logging.info(f'Conversion done: Took {runtime}s')
+    logging.info(f'Thanks for using FNF Porter!')
