@@ -26,7 +26,7 @@ def setup() -> logging.RootLogger:
 	logger.setLevel(logging.DEBUG)
 
 	# log format
-	log_format = logging.Formatter("%(asctime)s: [%(filename)s] [%(levelname)s] %(message)s", "%H:%M:%S")
+	log_format = logging.Formatter("%(asctime)s: [%(filename)s:%(lineno)d] [%(levelname)s] %(message)s", "%H:%M:%S")
 
 	try: mkdir("logs")
 	except: pass
