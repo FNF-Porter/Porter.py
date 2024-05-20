@@ -1,6 +1,6 @@
 import json
 from luaparser import ast
-from luaparser.astnodes import Function, Call, String, Number, Name, UMinusOp
+from luaparser.astnodes import Function, Call, String, Number, Name, UMinusOp, FalseExpr, TrueExpr
 import logging
 import psychtobase.src.tools.StageTool as StageTool
 
@@ -24,8 +24,8 @@ def parseStage(lua_script_path):
             if isinstance(node.name, Name):
                 try:
                     curFunc = node.name.id
-                except:
-                    logging.error('Fail setting curFunc!')
+                except Exception as e:
+                    logging.error(f'Couldn\'t get the current Function name: {e}')
             else:
                 curFunc = None
             if calls.get(curFunc, None) == None:
@@ -38,28 +38,42 @@ def parseStage(lua_script_path):
                 for arg in node.args:
                     #idk what this used to do but i know how to make switch cases so
                     #hopefully it does the same thing
-                    match isinstance:
-                        case (arg, String):
+                    try:
+                        if isinstance(arg, String):
                             arguments.append(arg.s)
-                        case (arg, Number):
+                        elif isinstance(arg, Number):
                             arguments.append(arg.n)
-                        case (arg, Name):
+                        elif isinstance(arg, Name):
                             arguments.append(arg.id)
-                        case (arg, UMinusOp):
+                        elif isinstance(arg, UMinusOp):
                             arguments.append('-' + str(arg.operand.n))
+                        elif isinstance(arg, FalseExpr):
+                            arguments.append(False)
+                        elif isinstance(arg, TrueExpr):
+                            arguments.append(True)
+                        else:
+                            logging.warn(f'Unsupported type of lua node: {type(arg)}')
+                    except Exception as e:
+                        logging.error(f'Could not append arguments of this call: {e}')
                 if calls[curFunc].get(node.func.id, None) == None:
                     calls[curFunc][node.func.id] = []
                 
                 calls[curFunc][node.func.id].append(arguments)
-            except:
-                logging.error('Fail in isintance(node, Call)!')
+            except Exception as e:
+                logging.error(f'Failed to asign arguments of this call: {e}')
 
     #print(f'{calls}')
 
     _props = []
+    _newProps = []
 
     for key in calls.keys():
         logging.info(f'Getting props of {key}')
         _props.extend(StageTool.getProps(calls[key], key))
 
-    return StageTool.toFNFProps(_props)
+    try:
+        _newProps = StageTool.toFNFProps(_props)
+    except Exception as e:
+        logging.error(f'Could not convert objects to FNF props: {e}')
+
+    return _newProps

@@ -154,15 +154,23 @@ class Window(QMainWindow):
 
 		## Section 2, Help
 
+		self.ohioSkibidi = QPushButton("Open log file", self)
+		self.ohioSkibidi.move(20, 320)
+		self.ohioSkibidi.resize(100, 30)
+
+		self.logsLabel = QTextBrowser(self)
+		self.logsLabel.move(20, 360)
+		self.logsLabel.resize(320, 270)
+
 		self.helpButton = QPushButton("Help", self)
 		self.helpButton.setToolTip('Go to issues page')
-		self.helpButton.move(60, 500)
+		self.helpButton.move(130, 320)
 		self.helpButton.resize(100, 30)
 		self.helpButton.clicked.connect(self.goToIssues)
 
 		self.gbButton = QPushButton("Gamebanana", self)
 		self.gbButton.setToolTip('Open Gamebanana')
-		self.gbButton.move(100, 500)
+		self.gbButton.move(240, 320)
 		self.gbButton.resize(100, 30)
 		self.gbButton.clicked.connect(self.goToGB)
 
@@ -192,7 +200,8 @@ class Window(QMainWindow):
 		self.voices.move(sSX, 210)
 		self.voices.setToolTip("Copy over \"Voices.ogg\" files.")
 
-		self.vocalsplit = QCheckBox("Vocal Split (unavailable)", self)
+		# Is available just not for avoiding error :D
+		self.vocalsplit = QCheckBox("Vocal Split", self)
 		self.vocalsplit.move(sSX, 230)
 		self.vocalsplit.setToolTip("Splits \"Voices.ogg\" files into two files (\"Voices-opponent.ogg\" and \"Voices-player.ogg\") using their charts. This requires ffmpeg in PATH, and Charts enabled.")
 
@@ -245,14 +254,6 @@ class Window(QMainWindow):
 		self.images = QCheckBox("Images", self)
 		self.images.move(sX, 530)
 		self.images.setToolTip("Copies over your .png and .xml files from the \"/images/\" directory of your mod.")
-
-		self.ohioSkibidi = QPushButton("Open log file", self)
-		self.ohioSkibidi.move(20, 330)
-		self.ohioSkibidi.resize(100, 24)
-
-		self.logsLabel = QTextBrowser(self)
-		self.logsLabel.move(20, 360)
-		self.logsLabel.resize(320, 280)
 
 		self.convert = QPushButton("Convert", self)
 		self.convert.move((self.width() - 20) - self.convert.width(), (self.height() - 20) - self.convert.height())
@@ -403,6 +404,7 @@ class Window(QMainWindow):
 		webbrowser.open('https://github.com/gusborg88/fnf-porter/issues')
 
 	def goToGB(self):
+		_GB_ToolID = ''
 		webbrowser.open(f'https://gamebanana.com/tools/{_GB_ToolID}')
 
 	def open_dialog(self, title, inputs, button, body):

@@ -122,7 +122,7 @@ def toFNFProps(props):
             _prop_template = copy.deepcopy(Constants.STAGE_PROP_ANIMATED)
 
         if _prop_template:
-            print(name, assetPath, posX, posY)
+            #print(name, assetPath, posX, posY)
 
             _prop_template['name'] = name
             _prop_template['assetPath'] = assetPath
