@@ -16,7 +16,7 @@ def convert(stageJSON, assetName, luaProps):
 
     return stageTemplate
 
-def getProps(parentFunc, parentFuncName):
+def getProps(parentFunc, parentFuncName, luaFilename):
     # onCreate props have a negative z index
     # onCreatePost props have a positive z index
     # if ANY prop has addLuaSprite(tag, TRUE) then the z index increases until it is over 300
@@ -37,7 +37,7 @@ def getProps(parentFunc, parentFuncName):
             posx = pictureProp[3]
             posy = pictureProp[4]
         except:
-            logging.error('Failed accessing x and y of prop! Did you check if it is defined?')
+            logging.error(f'[{luaFilename}] Failed accessing x and y of prop! Did you check if it is defined?')
 
         call = pictureProp[0]
 
@@ -133,7 +133,7 @@ def toFNFProps(props):
                 _posX = float(posX)
                 _posY = float(posY)
             except Exception as e:
-                logging.error(f'I dont know what\'s wrong with your thing! Theres an error trying to convert nonfloat to float: {e}')
+                logging.error(f'Error converting x and y values: {e}')
 
             _prop_template['position'][0] = _posX
             _prop_template['position'][1] = _posY

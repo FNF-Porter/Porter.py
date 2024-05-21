@@ -69,7 +69,7 @@ def parseStage(lua_script_path):
 
     for key in calls.keys():
         logging.info(f'Getting props of {key}')
-        _props.extend(StageTool.getProps(calls[key], key))
+        _props.extend(StageTool.getProps(calls[key], key, lua_script_path))
 
     try:
         _newProps = StageTool.toFNFProps(_props)
