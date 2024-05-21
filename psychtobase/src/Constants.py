@@ -340,7 +340,7 @@ FILE_LOCS = {	# If the indent fucks up again its GitHub's fault
     ['/pack.png','/_polymod_icon.png'],
 
     'CREDITSTXT':
-    ['/data/cedits.txt','/mod-credits.txt'],
+    ['/data/credits.txt','/mod-credits.txt'],
 
     'CHARACTERASSETS':
     ['/images/characters/',	'/shared/images/characters/'],
