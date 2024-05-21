@@ -11,7 +11,7 @@ def convert(weekJSON, modfolder):
     for song in weekJSON['songs']:
         levelSongs.append(song[0].lower())
 
-    level['songs'] = levelSongs
+    level['songs'] = [song.replace(' ', '-').lower() for song in levelSongs]
 
     for char in weekJSON['weekCharacters']:
         if defaultProp(char):

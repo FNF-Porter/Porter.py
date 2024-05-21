@@ -11,7 +11,8 @@ class ChartObject:
 	"""
 	def __init__(self, path: str, output:str) -> None:
 		self.songPath = path
-		self.songName:str = os.path.basename(path)
+		self.songNameRaw:str = os.path.basename(path)
+		self.songNamePath = self.songNameRaw.replace(' ', '-').lower()
 		self.outputpath = output
 
 		self.startingBpm = 0
@@ -33,7 +34,7 @@ class ChartObject:
 		logging.info(f"Chart for {self.metadata.get('songName')} was created!")
 
 	def initCharts(self):
-		logging.info(f"Initialising charts for {self.songName}...")
+		logging.info(f"Initialising charts for {self.songNameRaw}...")
 
 		charts = self.charts
 
@@ -46,7 +47,7 @@ class ChartObject:
 			if not _f.endswith(".json"):
 				continue
 			if _f.endswith("events.json"):
-				logging.warn(f'[{self.songName}] events.json not supported yet! Sorry!')
+				logging.warn(f'[{self.songNameRaw}] events.json not supported yet! Sorry!')
 				continue
 
 			chartFiles.append(_f)
@@ -60,7 +61,7 @@ class ChartObject:
 
 			if nameLength > 2:
 				difficulty = nameSplit[-1]
-			elif nameLength > 1 and fileName != self.songName:
+			elif nameLength > 1 and fileName != self.songNameRaw:
 				difficulty = nameSplit[1]
 
 			filePath = Paths.join(self.songPath, fileName)
@@ -172,14 +173,14 @@ class ChartObject:
 		logging.info(f"Chart conversion for {self.metadata.get('songName')} was completed!")
 
 	def save(self):
-		folder = os.path.join(Constants.FILE_LOCS.get('CHARTFOLDER')[1], self.songName)
+		folder = os.path.join(Constants.FILE_LOCS.get('CHARTFOLDER')[1], self.songNamePath)
 		saveDir = f'{self.outputpath}{folder}'
 		files.folderMake(saveDir)
 
-		savePath = Paths.join(saveDir, f'{self.songName}-metadata')
+		savePath = Paths.join(saveDir, f'{self.songNamePath}-metadata')
 		Paths.writeJson(savePath, self.metadata, 2)
 
-		savePath = Paths.join(saveDir, f'{self.songName}-chart')
+		savePath = Paths.join(saveDir, f'{self.songNamePath}-chart')
 		Paths.writeJson(savePath, self.chart, 2)
 
-		logging.info(f"Saving {self.metadata.get('songName')} to {saveDir}")
+		logging.info(f"[{self.songNamePath}] Saving {self.metadata.get('songName')} to {saveDir}")

@@ -87,7 +87,7 @@ def convert(psych_mod_folder, result_folder, options):
             except Exception as e:
                 logging.error(f'Could not write default file: {e}')
 
-        logging.info('Converting data/credits.txt')
+        logging.info('Parsing and converting credits.txt')
         dir = Constants.FILE_LOCS.get('CREDITSTXT')
 
         psychCredits = dir[0]
@@ -98,7 +98,7 @@ def convert(psych_mod_folder, result_folder, options):
             resultCredits = ModTools.convertCredits(open(f'{modName}{psychCredits}', 'r').read())
             open(f'{result_folder}/{modFoldername}/{modCredits}', 'w').write(resultCredits)
         else:
-            logging.warn('Could not find data/credits.txt')
+            logging.warn(f'Could not find {modName}{psychCredits}')
 
     if options.get('charts', False):
         
@@ -120,7 +120,7 @@ def convert(psych_mod_folder, result_folder, options):
                 logging.info(f'Converting charts of {song}...')
                 songChart.convert()
 
-                songName = songChart.songName
+                songName = songChart.songNameRaw
                 charts.append({
                     'songKey': songName,
                     'sections': songChart.sections,
@@ -209,7 +209,15 @@ def convert(psych_mod_folder, result_folder, options):
 
         folderMake(f'{result_folder}/{modFoldername}{bgSongs}')
 
-        for song in files.findAll(f'{psychSongs}*'):
+        _allSongFiles = files.findAll(f'{psychSongs}*')
+
+        for song in _allSongFiles:
+            _songKeyUnformatted = os.path.basename(song)
+            songKeyFormatted = _songKeyUnformatted.replace(' ', '-').lower()
+
+            _allSongFilesClear = [os.path.basename(__song) for __song in _allSongFiles]
+            isPsych073Song =  'Voices-Opponent.ogg' in _allSongFilesClear and 'Voices-Player.ogg' in _allSongFilesClear
+
             logging.info(f'Checking if {song} is a valid song directory...')
             if os.path.isdir(song):
                 logging.info(f'Copying files in {song}')
@@ -217,14 +225,14 @@ def convert(psych_mod_folder, result_folder, options):
                     if os.path.basename(songFile) == 'Inst.ogg' and songOptions['inst']:
                         logging.info(f'Copying asset {songFile}')
                         try:
-                            folderMake(f'{result_folder}/{modFoldername}{bgSongs}{os.path.basename(song)}')
+                            folderMake(f'{result_folder}/{modFoldername}{bgSongs}{songKeyFormatted}')
                             fileCopy(songFile,
-                              f'{result_folder}/{modFoldername}{bgSongs}{os.path.basename(song)}/{os.path.basename(songFile)}')
+                              f'{result_folder}/{modFoldername}{bgSongs}{songKeyFormatted}/{os.path.basename(songFile)}')
                         except Exception as e:
                             logging.error(f'Could not copy asset {songFile}: {e}')
-                    elif os.path.basename(songFile) == 'Voices.ogg' and songOptions['split'] and vocalSplitMasterToggle:
+                    elif os.path.basename(songFile) == 'Voices.ogg' and songOptions['split'] and vocalSplitMasterToggle and not isPsych073Song:
                         # Vocal Split
-                        songKey = os.path.basename(song)
+                        songKey = _songKeyUnformatted
 
                         chart = None
                         for _chart in charts:
@@ -236,7 +244,7 @@ def convert(psych_mod_folder, result_folder, options):
                             bpm = chart['bpm']
                             logging.info(f'Vocal Split ({songKey}) BPM is {bpm}')
                             path = song + '/'
-                            resultPath = result_folder + f'/{modFoldername}{bgSongs}{songKey}/'
+                            resultPath = result_folder + f'/{modFoldername}{bgSongs}{songKeyFormatted}/'
                             songChars = [chart['player'],
                                           chart['opponent']]
                             
@@ -252,17 +260,47 @@ def convert(psych_mod_folder, result_folder, options):
                         else:
                             logging.warn(f'No chart was found for {songKey} so the vocal file will be copied instead.')
                             try:
-                                folderMake(f'{result_folder}/{modFoldername}{bgSongs}{os.path.basename(song)}')
+                                folderMake(f'{result_folder}/{modFoldername}{bgSongs}{songKeyFormatted}')
                                 fileCopy(songFile,
-                                f'{result_folder}/{modFoldername}{bgSongs}{os.path.basename(song)}/{os.path.basename(songFile)}')
+                                f'{result_folder}/{modFoldername}{bgSongs}{songKeyFormatted}/{os.path.basename(songFile)}')
                             except Exception as e:
                                 logging.error(f'Could not copy asset {songFile}: {e}')
+                    elif isPsych073Song:
+                        songKey = _songKeyUnformatted
+
+                        folderMake(f'{result_folder}/{modFoldername}{bgSongs}{songKeyFormatted}')
+
+                        chart = None
+                        for _chart in charts:
+                            if _chart['songKey'] == songKey:
+                                chart = charts[charts.index(_chart)]
+
+                        if chart != None:
+                            try:
+                                if os.path.basename(songFile) == 'Voices-Player.ogg':
+                                    fileCopy(songFile,
+                                    f'{result_folder}/{modFoldername}{bgSongs}{songKeyFormatted}/Voices-{chart.metadata['playData']['characters'].get('player')}.ogg')
+                                elif os.path.basename(songFile) == 'Voices-Opponent.ogg':
+                                    fileCopy(songFile,
+                                    f'{result_folder}/{modFoldername}{bgSongs}{songKeyFormatted}/Voices-{chart.metadata['playData']['characters'].get('opponent')}.ogg')
+
+                            except Exception as e:
+                                logging.error(f'Could not copy asset {songFile}: {e}')
+                        else:
+                            logging.warning(f'{songKeyFormatted} is a Psych Engine 0.7.3 song with separated vocals. Copy rename was attempted, however your chart was not found. These files will be copied instead.')
+                            ## Psst! If you were taken here, your chart is needed to set your character to the file!
+                            fileCopy(songFile,
+                              f'{result_folder}/{modFoldername}{bgSongs}{songKeyFormatted}/{os.path.basename(songFile)}')
+
                     elif songOptions['voices']:
                         logging.info(f'Copying asset {songFile}')
+                        if not vocalSplitMasterToggle:
+                            logging.warning('Vocal Split is disabled! This copy is the last.')
+
                         try:
-                            folderMake(f'{result_folder}/{modFoldername}{bgSongs}{os.path.basename(song)}')
+                            folderMake(f'{result_folder}/{modFoldername}{bgSongs}{songKeyFormatted}')
                             fileCopy(songFile,
-                              f'{result_folder}/{modFoldername}{bgSongs}{os.path.basename(song)}/{os.path.basename(songFile)}')
+                              f'{result_folder}/{modFoldername}{bgSongs}{songKeyFormatted}/{os.path.basename(songFile)}')
                         except Exception as e:
                             logging.error(f'Could not copy asset {songFile}: {e}')
     weekCOptions = options.get('weeks', {
