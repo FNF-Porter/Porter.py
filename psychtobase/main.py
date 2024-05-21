@@ -33,8 +33,16 @@ def fileCopy(source, destination):
         except Exception as e:
             logging.error(f'Something went wrong: {e}')
     else:
-        logging.debug(f'File {source} doesn\'t exist')
-        logging.info(f'Ported {source} to {destination}')
+        logging.warn(f'Path {source} doesn\'t exist.')
+
+def treeCopy(source, destination):
+    if not os.path.exists(destination) and os.path.exists(source):
+        try:
+            shutil.copytree(source, destination)
+        except Exception as e:
+            logging.error(f'Something went wrong: {e}')
+    elif not os.path.exists(source):
+        logging.warn(f'Path {source} does not exist.')
 
 def convert(psych_mod_folder, result_folder, options):
     runtime = time.process_time()
@@ -388,21 +396,39 @@ def convert(psych_mod_folder, result_folder, options):
             open(assetPath, 'w').write(stageJSONConverted)
 
     if options.get('images'): # Images include XMLs
-        logging.info('Copying .png and .xml files...')
+        logging.info('Copying images')
 
         dir = Constants.FILE_LOCS.get('IMAGES')
         psychImages = modName + dir[0]
         baseImages = dir[1]
 
-        allimages = files.findAll(f'{psychImages}*.png') + files.findAll(f'{psychImages}*.xml')
-        for asset in allimages:
-            logging.info(f'Copying {asset}')
+        allimagesandfolders = files.findAll(f'{psychImages}*')
+        for asset in allimagesandfolders:
+            logging.info(f'Checking on {asset}')
 
-            try:
-                folderMake(f'{result_folder}/{modFoldername}{baseImages}')
-                fileCopy(asset, f'{result_folder}/{modFoldername}{baseImages}{os.path.basename(asset)}')
-            except Exception as e:
-                logging.error(f'Failed to copy {asset}: {e}')
+            if os.path.isdir(asset):
+                logging.info(f'{asset} is directory, checking if it should be excluded...')
+                folderName = os.path.basename(asset)
+                if not folderName in Constants.EXCLUDE_FOLDERS_IMAGES['PsychEngine']:
+                    logging.info(f'{asset} is not excluded... attempting to copy.')
+                    try:
+                        pathTo = f'{result_folder}/{modFoldername}{baseImages}{folderName}'
+                        #logging.debug(pathTo)
+
+                        #folderMake(f'{result_folder}/{modFoldername}{baseImages}{folderName}')
+                        treeCopy(asset, pathTo)
+                    except Exception as e:
+                        logging.error(f'Failed to copy {asset}: {e}')
+                else:
+                    logging.warn(f'{asset} is excluded. Skipped')
+
+            else:
+                logging.info(f'{asset} is file, copying')
+                try:
+                    folderMake(f'{result_folder}/{modFoldername}{baseImages}')
+                    fileCopy(asset, f'{result_folder}/{modFoldername}{baseImages}{os.path.basename(asset)}')
+                except Exception as e:
+                    logging.error(f'Failed to copy {asset}: {e}')
 
     #convlen = Utils.getRuntime(runtime)
     logging.info(f'Conversion done: Took {runtime}s')

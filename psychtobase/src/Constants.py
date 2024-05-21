@@ -331,6 +331,23 @@ STAGE_PROP_IMAGE = {
     "scroll": [1, 1]
 }
 
+## Folders which are IGNORED while copying images
+## (They are either copied by another part of the code)
+EXCLUDE_FOLDERS_IMAGES = {
+    "PsychEngine": [
+        'menubackgrounds',
+        'icons',
+        'dialogue',
+        'storymenu',
+        'menucharacters',
+        'achievements',
+        'credits',
+        'characters',
+        # 'mainmenu' I dont know how to override that yet
+        # 'menudifficulties' Coming soon?
+    ]
+}
+
 FILE_LOCS = {	# If the indent fucks up again its GitHub's fault
     # Class, psych directory, base game directory, codename directory (coming soon)			
     'PACKJSON':
