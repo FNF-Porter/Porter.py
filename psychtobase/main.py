@@ -47,6 +47,13 @@ def treeCopy(source, destination):
 def convert(psych_mod_folder, result_folder, options):
     runtime = time.process_time()
 
+    logging.info("""
+                 
+=============================
+    NEW CONVERSION STARTED
+=============================
+                """)
+
     logging.info('Converting started...')
     logging.info(options)
 
@@ -431,4 +438,10 @@ def convert(psych_mod_folder, result_folder, options):
                     logging.error(f'Failed to copy {asset}: {e}')
 
     #convlen = Utils.getRuntime(runtime)
+    logging.info("""
+                 
+=============================
+       CONVERSION ENDED
+=============================
+                """)
     logging.info(f'Conversion done: Took {runtime}s')
