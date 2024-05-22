@@ -173,7 +173,7 @@ class Window(QMainWindow):
 		self.logsLabel.move(20, 360)
 		self.logsLabel.resize(320, 270)
 
-		self.helpButton = QPushButton("Help", self)
+		self.helpButton = QPushButton("Open issue", self)
 		self.helpButton.setToolTip('Go to issues page')
 		self.helpButton.move(130, 320)
 		self.helpButton.resize(100, 30)
@@ -412,7 +412,8 @@ class Window(QMainWindow):
 			main.convert(psych_mod_folder_path, result_path, options)
 
 	def goToIssues(self):
-		webbrowser.open('https://github.com/gusborg88/fnf-porter/issues')
+		#note this is a custom link that puts some things into the body, it should be the same as in readme.md
+		webbrowser.open('https://github.com/gusborg88/fnf-porter/issues/new?body=Log+file+output+(check+logs+folder):%0A```%0A%0A```')
 
 	def goToGB(self):
 		_GB_ToolID = ''
@@ -420,18 +421,9 @@ class Window(QMainWindow):
 
 	def openLogFile(self):
 		file = log.logRetain.log
-		print(f'Log reports log path as: {file}')
 		realLogPath = os.path.abspath(file)
-		print(f'Attempting to open file: {realLogPath}')
-		if platform.system() == 'Darwin':  # macOS
-			subprocess.call(('open', realLogPath))
-		elif platform.system() == 'Windows':
-			os.startfile(realLogPath)
-		elif platform.system() == 'Linux':
-			subprocess.call(['xdg-open', realLogPath])
-		else:
-			print(f'Couldn\'t open the log because you\'re using this platform: {platform.system()}')
-
+		logging.info(f'Attempting to open file: {realLogPath}')
+		os.startfile(realLogPath, "open")
 	def open_dialog(self, title, inputs, button, body):
 		self.dialog = SimpleDialog(title, inputs, button, body)
 		self.dialog.show()

@@ -265,10 +265,10 @@ STAGE_PROP = {
     "zIndex": 10,
     "position": [-600, -200],
     "scale": [1, 1],
-    "animType": "sparrow",
+    "animType": "multisparrow",
     "name": "peachscastle",
     "isPixel": False,
-    "assetPath": "stage assets/peachscastle/peachscastle",
+    "assetPath": None,
     "scroll": [0.9, 0.9],
     "animations": []
 }

@@ -34,14 +34,20 @@ class CharacterObject:
 		self.character['healthIcon']['isPixel'] = char['scale'] >= 6
 		self.character['flipX'] = char.get('flip_x', False)
 
-		for animation in char['animations']:
-			animTemplate = Constants.ANIMATION.copy()
+		animTemplate = Constants.ANIMATION.copy()
 
-			animTemplate['name'] = animation['anim']
-			animTemplate['offsets'] = animation['offsets']
-			animTemplate['prefix'] = animation['name']
+		#left are base game values, right are psych engine values
+		animTemplate['name'] = char['anim']
+		animTemplate['prefix'] = char['name']
+		animTemplate['offsets'] =char['offsets']
 
-			self.character['animations'].append(animTemplate)
+		logging.info(f'''Converting some character animations:
+		${char['animation']}
+		${char['offsets']}
+		${char['offsets']}''')
+		#note to remove this later
+
+		self.character['animations'].append(animTemplate)
 
 		logging.info(f'Character {englishCharacterName} successfully converted')
 

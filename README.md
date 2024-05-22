@@ -7,7 +7,7 @@ Ports FNF mods between engines using Python. Right now, there's only support for
 Go to the [releases tab](https://github.com/gusborg88/fnf-porter/releases) for slightly older versions. You can compile it yourself 
 
 ## Issues?
-Report it in the [issues tab](https://github.com/gusborg88/fnf-porter/issues/new?body=Log+file+output+(check+logs+folder):%0A``).
+Report it in the [issues tab](https://github.com/gusborg88/fnf-porter/issues/new?body=Log+file+output+(check+logs+folder):%0A```%0A%0A```).
 
 Check if it **already exists** before reporting though!
 
@@ -25,6 +25,6 @@ You can simply run dependencies.bat to install all of these at once. You have to
 - PyQt6
 
 ## License
-FNF Porter is licensed under CC-BY-NC 4.0. That means you can modify it, but you have to credit the authors (Gusborg, tposejank, and BombasticTom), and you can't make ANY money from it.
+FNF Porter is licensed under CC-BY-NC 4.0. That means you can modify it, but you have to credit the authors (Gusborg, tposejank, and BombasticTom), and you can't make ANY money from it. Because this doens't use any assets from FNF, it's license doesn't apply here.
 
 Read [LICENSE](https://github.com/gusborg88/fnf-porter/blob/main/LICENSE) for fancy legal words
