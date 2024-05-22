@@ -35,10 +35,10 @@ class CharacterObject:
 		self.character['healthIcon']['isPixel'] = char['scale'] >= 6
 		self.character['flipX'] = char.get('flip_x', False)
 
-		animTemplate = copy.deepcopy(Constants.ANIMATION)
-
 		#i love object oriented programming and making a million variables for no reason!
 		for animation in char['animations']:
+			animTemplate = copy.deepcopy(Constants.ANIMATION)
+
 			animTemplate['name'] = animation['anim']
 			animTemplate['prefix'] = animation['name']
 			animTemplate['offsets'] = animation['offsets']
@@ -48,7 +48,7 @@ class CharacterObject:
 
 			self.character['animations'].append(animTemplate)
 
-			logging.info(f'Character {englishCharacterName} successfully converted')
+		logging.info(f'Character {englishCharacterName} successfully converted')
 
 	def save(self):
 		savePath = os.path.join(self.resultPath, self.characterJson)
