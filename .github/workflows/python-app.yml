@@ -27,8 +27,7 @@ jobs:
         pip install pyqt6
     - name: Build with PyInstaller
       run: |
-        pyinstaller --onefile setup.py --icon=icon.ico -n "FNF Porter"
-        pyinstaller --onefile setup.py --icon=icon.ico --noconsole -n "FNF Porter (No Console)"
+        pyinstaller --onefile setup.py --icon=icon.ico --noconsole -n "FNF Porter v0.1"
     - name: Upload build artifact
       uses: actions/upload-artifact@v4
       with:
@@ -54,8 +53,7 @@ jobs:
         pip install pyqt6
     - name: Build with PyInstaller
       run: |
-        pyinstaller --onefile setup.py --icon=icon.icns -n "FNF Porter"
-        pyinstaller --onefile setup.py --icon=icon.icns --noconsole -n "FNF Porter (No Console)"
+        pyinstaller --onefile setup.py --icon=icon.icns --noconsole -n "FNF Porter v0.1"
     - name: Upload build artifact
       uses: actions/upload-artifact@v4
       with:
@@ -81,8 +79,7 @@ jobs:
         pip install pyqt6
     - name: Build with PyInstaller
       run: |
-        pyinstaller --onefile setup.py -n "FNF Porter"
-        pyinstaller --onefile setup.py --noconsole -n "FNF Porter (No Console)"
+        pyinstaller --onefile setup.py --noconsole -n "FNF Porter v0.1"
     - name: Upload build artifact
       uses: actions/upload-artifact@v4
       with:
