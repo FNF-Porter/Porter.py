@@ -39,14 +39,11 @@ class CharacterObject:
 
 		#i love object oriented programming and making a million variables for no reason!
 		for animation in char['animations']:
-			animTemplate['name'] = char['animations']['anim']
-			animTemplate['prefix'] = char['animations']['name']
-			animTemplate['offsets'] = char['animations']['offsets']
+			animTemplate['name'] = animation['anim']
+			animTemplate['prefix'] = animation['name']
+			animTemplate['offsets'] = animation['offsets']
 
-			logging.info(f'''Converting some character animations:
-			${char['animation']}
-			${char['offsets']}
-			${char['offsets']}''')
+			logging.info(f'[{englishCharacterName}] Converting animation {animation}')
 			#note to remove this later
 
 			self.character['animations'].append(animTemplate)
