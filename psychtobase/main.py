@@ -60,7 +60,7 @@ def convert(psych_mod_folder, result_folder, options):
     modName = psych_mod_folder # MOD FOLDER PSYCH ENGINE
     modFoldername = os.path.basename(psych_mod_folder)
 
-    print(psych_mod_folder, result_folder)
+    logging.info(f'Converting from{psych_mod_folder} to {result_folder}')
 
     if options.get('modpack_meta', False):
         logging.info('Converting pack.json')

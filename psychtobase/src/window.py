@@ -173,14 +173,14 @@ class Window(QMainWindow):
 		self.logsLabel.move(20, 360)
 		self.logsLabel.resize(320, 270)
 
-		self.helpButton = QPushButton("Open issue", self)
-		self.helpButton.setToolTip('Go to issues page')
+		self.helpButton = QPushButton("Report an issue", self)
+		self.helpButton.setToolTip('https://github.com/gusborg88/fnf-porter/issues/new')
 		self.helpButton.move(130, 320)
 		self.helpButton.resize(100, 30)
 		self.helpButton.clicked.connect(self.goToIssues)
 
 		self.gbButton = QPushButton("Gamebanana", self)
-		self.gbButton.setToolTip('Open Gamebanana')
+		self.gbButton.setToolTip('https://gamebanana.com/tools/')
 		self.gbButton.move(240, 320)
 		self.gbButton.resize(100, 30)
 		self.gbButton.clicked.connect(self.goToGB)
@@ -385,17 +385,23 @@ class Window(QMainWindow):
 		# the code below should go on the callback when the person presses the convert button
 		psych_mod_folder_path = self.modLineEdit.text()
 		result_path = self.baseGameLineEdit.text()
+		if os.path.exists(result_path):	
+			logging.warn(f'Folder {result_path} already existed before porting, files may have been overwritten.')
+			#i was trying to get this to be a window but it wasnt working
 		options = Constants.DEFAULT_OPTIONS
 		options['charts'] = self.charts.isChecked()
 		if self.songs.isChecked():
+			logging.info('Songs will be converted')
 			options['songs']['inst'] = self.insts.isChecked()
 			options['songs']['voices'] = self.voices.isChecked()
 			options['songs']['split'] = self.vocalsplit.isChecked()
 		if self.chars.isChecked():
+			logging.info('Characters will be converted')
 			options['characters']['json'] = self.jsons.isChecked()
 			options['characters']['icons'] = self.icons.isChecked()
 			options['characters']['assets'] = self.charassets.isChecked()
 		if self.weeks.isChecked():
+			logging.info('Weeks will be converted')
 			options['weeks']['props'] = self.props.isChecked()
 			options['weeks']['levels'] = self.levels.isChecked()
 			options['weeks']['titles'] = self.titles.isChecked()	

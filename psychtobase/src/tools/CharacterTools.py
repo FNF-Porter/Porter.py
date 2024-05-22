@@ -37,20 +37,21 @@ class CharacterObject:
 
 		animTemplate = copy.deepcopy(Constants.ANIMATION)
 
-		#left are base game values, right are psych engine values
-		animTemplate['name'] = char['anim']
-		animTemplate['prefix'] = char['name']
-		animTemplate['offsets'] =char['offsets']
+		#i love object oriented programming and making a million variables for no reason!
+		for animation in char['animations']:
+			animTemplate['name'] = char['animations']['anim']
+			animTemplate['prefix'] = char['animations']['name']
+			animTemplate['offsets'] = char['animations']['offsets']
 
-		logging.info(f'''Converting some character animations:
-		${char['animation']}
-		${char['offsets']}
-		${char['offsets']}''')
-		#note to remove this later
+			logging.info(f'''Converting some character animations:
+			${char['animation']}
+			${char['offsets']}
+			${char['offsets']}''')
+			#note to remove this later
 
-		self.character['animations'].append(animTemplate)
+			self.character['animations'].append(animTemplate)
 
-		logging.info(f'Character {englishCharacterName} successfully converted')
+			logging.info(f'Character {englishCharacterName} successfully converted')
 
 	def save(self):
 		savePath = os.path.join(self.resultPath, self.characterJson)
