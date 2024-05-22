@@ -130,8 +130,9 @@ def toFNFProps(props):
             _posY = 0
 
             try:
-                _posX = float(posX)
-                _posY = float(posY)
+                #Should probably have these as a prompt in the future
+                _posX = float(posX) - 1000
+                _posY = float(posY) - 720
             except Exception as e:
                 logging.error(f'Error converting x and y values: {e}')
 
