@@ -180,7 +180,7 @@ class Window(QMainWindow):
 		self.helpButton.clicked.connect(self.goToIssues)
 
 		self.gbButton = QPushButton("Gamebanana", self)
-		self.gbButton.setToolTip('https://gamebanana.com/tools/')
+		self.gbButton.setToolTip('https://gamebanana.com/tools/16982')
 		self.gbButton.move(240, 320)
 		self.gbButton.resize(100, 30)
 		self.gbButton.clicked.connect(self.goToGB)
