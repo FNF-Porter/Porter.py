@@ -1,6 +1,7 @@
 import json
 import os
 import logging
+import copy
 from psychtobase.src import window, Constants
 from psychtobase.src import files
 
@@ -35,7 +36,7 @@ class CharacterObject:
 		self.character['flipX'] = char.get('flip_x', False)
 
 		for animation in char['animations']:
-			animTemplate = Constants.ANIMATION.copy()
+			animTemplate = copy.deepcopy(Constants.ANIMATION)
 
 			animTemplate['name'] = animation['anim']
 			animTemplate['offsets'] = animation['offsets']
