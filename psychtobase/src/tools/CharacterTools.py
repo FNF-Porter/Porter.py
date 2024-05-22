@@ -1,6 +1,7 @@
 import json
 import os
 import logging
+import copy
 from psychtobase.src import window, Constants
 from psychtobase.src import files
 
@@ -34,7 +35,7 @@ class CharacterObject:
 		self.character['healthIcon']['isPixel'] = char['scale'] >= 6
 		self.character['flipX'] = char.get('flip_x', False)
 
-		animTemplate = Constants.ANIMATION.copy()
+		animTemplate = copy.deepcopy(Constants.ANIMATION)
 
 		#left are base game values, right are psych engine values
 		animTemplate['name'] = char['anim']
