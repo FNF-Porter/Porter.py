@@ -51,7 +51,7 @@ def convert(weekJSON, modfolder, week_filename):
     else:
         level['background'] = '#FFFFFF'
 
-    level['titleAsset'] = Constants.FILE_LOCS.get('WEEKIMAGE_WEEKJSON')[1] + week_filename
+    level['titleAsset'] = Constants.FILE_LOCS.get('WEEKIMAGE_WEEKJSON')[1] + week_filename.replace('.json', '')
 
     return level
 
