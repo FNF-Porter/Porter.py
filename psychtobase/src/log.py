@@ -2,9 +2,10 @@
 
 import logging
 import psychtobase.src.window as window
+import sys
 
 from time import strftime
-from os import mkdir
+from pathlib import Path
 
 class CustomHandler(logging.StreamHandler):
     def emit(self, record):
@@ -28,7 +29,7 @@ def setup() -> logging.RootLogger:
 	# log format
 	log_format = logging.Formatter("%(asctime)s: [%(filename)s:%(lineno)d] [%(levelname)s] %(message)s", "%H:%M:%S")
 
-	try: mkdir("logs")
+	try: Path("logs").mkdir(exist_ok=True)
 	except: pass
      
 	# file handler
@@ -50,3 +51,12 @@ def setup() -> logging.RootLogger:
 	logger.info("Logger initialized!")
 
 	return logger
+
+def log_exception(exc_type, exc_value, exc_traceback):
+    """Log uncaught exceptions."""
+    logger = logging.getLogger()
+    if not issubclass(exc_type, KeyboardInterrupt):
+        logger.error("Uncaught exception", exc_info=(exc_type, exc_value, exc_traceback))
+
+# Configure global exception handler to use the logger
+sys.excepthook = log_exception
