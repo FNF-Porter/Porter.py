@@ -81,6 +81,8 @@ class ChartObject:
 
 		if len(difficulties) > 0:
 			self.sampleChart = charts.get(difficulties[0])
+		else:
+			raise FileNotFoundError("Chart not found!")
 
 	def setMetadata(self):
 		# Chart used to get character data (ASSUMING all charts use the same characters and stages)

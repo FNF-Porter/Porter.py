@@ -68,3 +68,10 @@ def focusCamera(time:float, char:bool):
 	Function created for faster creation of camera change events.
 	"""
 	return event(time, "FocusCamera", {"char": "0" if char else "1"})
+
+def coolText(text:str) -> str:
+	length = max(30, len(text) + 5)
+	length += len(text) % 2
+
+	text = " " * ((length - len(text)) // 2) + text
+	return "\n" + "=" * length + f"\n{text}\n" + "=" * length
