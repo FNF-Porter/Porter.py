@@ -3,7 +3,7 @@ import json
 import logging
 import psychtobase.src.Constants as Constants
 
-def convert(weekJSON, modfolder):
+def convert(weekJSON, modfolder, week_filename):
     level = deepcopy(Constants.LEVEL)
 
     level['name'] = weekJSON['storyName']
@@ -45,9 +45,13 @@ def convert(weekJSON, modfolder):
 
             level['props'].append(propTemplate)
     
-    level['background'] = '#FFFFFF' # Change!!
+    if 'freeplayColor' in weekJSON:
+        r, g, b = weekJSON['freeplayColor']
+        level['background'] = f'#{r:02X}{g:02X}{b:02X}'
+    else:
+        level['background'] = '#FFFFFF'
 
-    level['titleAsset'] = Constants.FILE_LOCS.get('WEEKIMAGE_WEEKJSON')[1] + weekJSON['weekName']
+    level['titleAsset'] = Constants.FILE_LOCS.get('WEEKIMAGE_WEEKJSON')[1] + week_filename
 
     return level
 

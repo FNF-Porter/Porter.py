@@ -336,7 +336,9 @@ def convert(psych_mod_folder, result_folder, options):
             logging.info(f'Loading {week} into the converter...')
 
             weekJSON = json.loads(open(week, 'r').read())
-            open(f'{result_folder}/{modFoldername}{baseLevels}{os.path.basename(week)}', 'w').write(json.dumps(WeekTools.convert(weekJSON, modName), indent=4))
+            week_filename = os.path.basename(week)
+            converted_week = WeekTools.convert(weekJSON, modName, week_filename)
+            open(f'{result_folder}/{modFoldername}{baseLevels}{week_filename}', 'w').write(json.dumps(converted_week, indent=4))
 
     if weekCOptions['props']:
         logging.info('Copying prop assets...')
