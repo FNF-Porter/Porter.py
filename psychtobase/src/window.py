@@ -180,7 +180,7 @@ class Window(QMainWindow):
 		self.helpButton.clicked.connect(self.goToIssues)
 
 		self.gbButton = QPushButton("Gamebanana", self)
-		self.gbButton.setToolTip('https://gamebanana.com/tools/')
+		self.gbButton.setToolTip('https://gamebanana.com/tools/16982')
 		self.gbButton.move(240, 320)
 		self.gbButton.resize(100, 30)
 		self.gbButton.clicked.connect(self.goToGB)
@@ -422,7 +422,7 @@ class Window(QMainWindow):
 		webbrowser.open('https://github.com/gusborg88/fnf-porter/issues/new?body=Log+file+output+(check+logs+folder):%0A```%0A%0A```')
 
 	def goToGB(self):
-		_GB_ToolID = ''
+		_GB_ToolID = '16982'
 		webbrowser.open(f'https://gamebanana.com/tools/{_GB_ToolID}')
 
 	def openLogFile(self):
