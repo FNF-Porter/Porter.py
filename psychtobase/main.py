@@ -47,12 +47,7 @@ def treeCopy(source, destination):
 def convert(psych_mod_folder, result_folder, options):
     runtime = time.process_time()
 
-    logging.info("""
-                 
-=============================
-    NEW CONVERSION STARTED
-=============================
-                """)
+    logging.info(Utils.coolText("NEW CONVERSION STARTED"))
 
     logging.info('Converting started...')
     logging.info(options)
@@ -130,9 +125,18 @@ def convert(psych_mod_folder, result_folder, options):
                 logging.info(f'Loading charts in {song}')
 
                 outputpath = f'{result_folder}/{modFoldername}'
-                songChart = ChartObject(song, outputpath)
-                
-                logging.info(f'Converting charts of {song}...')
+
+                try:
+                    songChart = ChartObject(song, outputpath)
+                except FileNotFoundError:
+                    logging.warning(f"{song} data not found! Skipping...")
+                    continue
+                except Exception as e:
+                    logging.warning("ERROR!" + e)
+                    continue
+                else:
+                    logging.info(f'{song} successfully initialized! Converting')
+
                 songChart.convert()
 
                 songName = songChart.songNameRaw
@@ -148,8 +152,8 @@ def convert(psych_mod_folder, result_folder, options):
                 songChart.save()
 
     if options.get('characters', {
-			'assets': False
-		})['assets']:
+            'assets': False
+        })['assets']:
         logging.info('Copying character assets...')
 
         dir = Constants.FILE_LOCS.get('CHARACTERASSETS')
@@ -169,8 +173,8 @@ def convert(psych_mod_folder, result_folder, options):
                 logging.warn(f'{character} is a directory, not a file! Skipped')
 
     if options.get('characters', {
-			'json': False
-		})['json']:
+            'json': False
+        })['json']:
 
         logging.info('Converting character jsons...')
 
@@ -192,8 +196,8 @@ def convert(psych_mod_folder, result_folder, options):
                 logging.warn(f'{character} is a directory, or not a json! Skipped')
 
     if options.get('characters', {
-		'icons': False
-	})['icons']:
+        'icons': False
+    })['icons']:
         logging.info('Copying character icons...')
 
         dir = Constants.FILE_LOCS.get('CHARACTERICON')
@@ -317,10 +321,10 @@ def convert(psych_mod_folder, result_folder, options):
                         except Exception as e:
                             logging.error(f'Could not copy asset {songFile}: {e}')
     weekCOptions = options.get('weeks', {
-			'props': False, # Asset
-			'levels': False,
-			'titles': False # Asset
-		})  
+            'props': False, # Asset
+            'levels': False,
+            'titles': False # Asset
+        })  
     if weekCOptions['levels']:
         logging.info('Converting weeks (levels)...')
 
@@ -438,10 +442,5 @@ def convert(psych_mod_folder, result_folder, options):
                     logging.error(f'Failed to copy {asset}: {e}')
 
     #convlen = Utils.getRuntime(runtime)
-    logging.info("""
-                 
-=============================
-       CONVERSION ENDED
-=============================
-                """)
+    logging.info(Utils.coolText("CONVERSION COMPLETED"))
     logging.info(f'Conversion done: Took {runtime}s')
