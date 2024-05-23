@@ -1,0 +1,45 @@
+name: Incomplete conversion
+description: You need help about incomplete files while using the converter (Please note that you can only specify incomplete files IF your mod has them and the converter supports them)
+body:
+  - type: checkboxes
+    attributes:
+      label: Issue Checklist
+      options:
+        - label: I have properly named the issue
+        - label: I looked in issues/discussions, if my question was previously anwsered
+
+  - type: dropdown
+    attributes:
+      label: What is the preset selected?
+      options:
+        - Charts only
+        - Songs only
+        - Characters only
+        - Stages only
+        - Full mod
+        - I chose
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: What are the contents of the latest .log file? (if applicable)
+
+  - type: textarea
+    attributes:
+      label: What is missing?
+    validations:
+      required: true
+
+  - type: checkboxes
+    attributes:
+      label: Missing files checklist
+      options:
+        - label: I have checked the converter supports these files
+        - label: I have checked both directories, the original and converted one, and they aren't in the converted one
+
+  - type: textarea
+    attributes:
+      label: Additional Context (if applicable)
+
+# based on https://github.com/LeleDerGrasshalmi/FortniteEndpointsDocumentation/blob/main/.github/ISSUE_TEMPLATE/api_error.yml

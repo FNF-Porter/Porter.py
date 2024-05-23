@@ -1,0 +1,19 @@
+name: Request feature
+description: You are requesting a feature
+body:
+  - type: dropdown
+    attributes:
+      label: What category does this fall into?
+      options:
+        - File conversion
+        - Asset copying
+        - Irregular directories
+        - Documentation
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Additional Context (if applicable)
+
+# based on https://github.com/LeleDerGrasshalmi/FortniteEndpointsDocumentation/blob/main/.github/ISSUE_TEMPLATE/api_error.yml

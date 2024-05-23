@@ -1,0 +1,36 @@
+name: Error
+description: You need help resolving an error/crash in the converter
+body:
+  - type: checkboxes
+    attributes:
+      label: Issue Checklist
+      options:
+        - label: I have properly named the issue
+        - label: I looked in issues/discussions, if my question was previously anwsered
+
+  - type: dropdown
+    attributes:
+      label: What is the preset selected?
+      options:
+        - Charts only
+        - Songs only
+        - Characters only
+        - Stages only
+        - Full mod
+        - I chose
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: What are the contents of the latest .log file? (if applicable)
+
+  - type: textarea
+    attributes:
+      label: What are the contents of your mod folder? (if applicable)
+
+  - type: textarea
+    attributes:
+      label: Additional Context (if applicable)
+
+# based on https://github.com/LeleDerGrasshalmi/FortniteEndpointsDocumentation/blob/main/.github/ISSUE_TEMPLATE/api_error.yml
