@@ -3,86 +3,49 @@ name: FNF Porter Build
 on:
   push:
     branches: [ "main" ]
-    
+
 permissions:
   contents: read
 
 jobs:
-  build-win:
-    runs-on: windows-latest
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [windows-latest, macos-latest, ubuntu-latest]
+        include:
+          - os: windows-latest
+            icon: icon.ico
+            ext: .exe
+          - os: macos-latest
+            icon: icon.icns
+            ext: 
+          - os: ubuntu-latest
+            icon: ""
+            ext: 
 
     steps:
     - uses: actions/checkout@v4
     - name: Set up Python 3.12
-      uses: actions/setup-python@v3
+      uses: actions/setup-python@v5
       with:
         python-version: "3.12"
+    - name: Cache pip
+      uses: actions/cache@v4
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install pyinstaller
-        pip install numpy
-        pip install pydub
-        pip install luaparser
-        pip install pyqt6
+        pip install pyinstaller numpy pydub luaparser pyqt6
     - name: Build with PyInstaller
       run: |
-        pyinstaller --onefile setup.py --icon=icon.ico --noconsole -n "FNF Porter v0.1"
+        pyinstaller --onefile setup.py --icon=${{ matrix.icon }} --noconsole -n "FNF Porter dev-${{ github.run_number }}"
     - name: Upload build artifact
       uses: actions/upload-artifact@v4
       with:
-        name: FNF_Porter_Build_Win
-        path: |
-          dist/*
-  build-mac:
-    runs-on: macos-latest
-
-    steps:
-    - uses: actions/checkout@v4
-    - name: Set up Python 3.12
-      uses: actions/setup-python@v3
-      with:
-        python-version: "3.12"
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install pyinstaller
-        pip install numpy
-        pip install pydub
-        pip install luaparser
-        pip install pyqt6
-    - name: Build with PyInstaller
-      run: |
-        pyinstaller --onefile setup.py --icon=icon.icns --noconsole -n "FNF Porter v0.1"
-    - name: Upload build artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: FNF_Porter_Build_MacOS
-        path: |
-          dist/*
-  build-linux:
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v4
-    - name: Set up Python 3.12
-      uses: actions/setup-python@v3
-      with:
-        python-version: "3.12"
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install pyinstaller
-        pip install numpy
-        pip install pydub
-        pip install luaparser
-        pip install pyqt6
-    - name: Build with PyInstaller
-      run: |
-        pyinstaller --onefile setup.py --noconsole -n "FNF Porter v0.1"
-    - name: Upload build artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: FNF_Porter_Build_Linux
-        path: |
-          dist/*
+        name: FNF_Porter_Build_${{ matrix.os }}
+        path: dist/*${{ matrix.ext }}
