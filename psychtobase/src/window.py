@@ -1,6 +1,5 @@
 from base64 import b64decode
-import os
-import os.path as ospath
+from pathlib import Path
 import platform
 import subprocess
 import time
@@ -104,7 +103,7 @@ class Window(QMainWindow):
 		# thingDefaultPath
 		modDP = ''
 		bGDP = ''
-		if ospath.exists(_defaultsFile):
+		if Path(_defaultsFile).exists():
 			try:
 				parse = open(_defaultsFile, 'r').read()
 				for index, line in enumerate(parse.split('\n')):
@@ -385,7 +384,7 @@ class Window(QMainWindow):
 		# the code below should go on the callback when the person presses the convert button
 		psych_mod_folder_path = self.modLineEdit.text()
 		result_path = self.baseGameLineEdit.text()
-		if os.path.exists(result_path):	
+		if Path(result_path).exists():	
 			logging.warn(f'Folder {result_path} already existed before porting, files may have been overwritten.')
 			#i was trying to get this to be a window but it wasnt working
 		options = Constants.DEFAULT_OPTIONS
@@ -427,9 +426,9 @@ class Window(QMainWindow):
 
 	def openLogFile(self):
 		file = log.logRetain.log
-		realLogPath = os.path.abspath(file)
+		realLogPath = Path(file).resolve()
 		logging.info(f'Attempting to open file: {realLogPath}')
-		os.startfile(realLogPath, "open")
+		subprocess.Popen(['open', str(realLogPath)])
 	def open_dialog(self, title, inputs, button, body):
 		self.dialog = SimpleDialog(title, inputs, button, body)
 		self.dialog.show()

@@ -1,13 +1,13 @@
 import json
-import os
 import logging
 import copy
+from pathlib import Path
 from psychtobase.src import window, Constants
 from psychtobase.src import files
 
 class CharacterObject:
 	def __init__(self, path: str, resultPath) -> None:
-		self.charName:str = os.path.basename(path)
+		self.charName:str = Path(path).name
 		self.resultPath = resultPath
 		self.pathName:str = path
 		self.psychChar = {}
@@ -51,7 +51,7 @@ class CharacterObject:
 		logging.info(f'Character {englishCharacterName} successfully converted')
 
 	def save(self):
-		savePath = os.path.join(self.resultPath, self.characterJson)
+		savePath = Path(self.resultPath) / self.characterJson
 
 		logging.info(f'Character {self.characterName} saved to {savePath}.json')
 

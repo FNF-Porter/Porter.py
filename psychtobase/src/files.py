@@ -1,6 +1,6 @@
 from glob import glob
 import logging
-from os import path, makedirs
+from pathlib import Path
 
 def removeTrail(filename):
     return filename.replace('.json', '')
@@ -12,6 +12,7 @@ def findAll(folder):
     logging.info(f'Finding all files or directories with glob: {folder}')
     return glob(folder)
 
-def folderMake(folder_path): #Sorry Tom but I'm dumb and not patient!
-    if not path.exists(folder_path):
-        makedirs(folder_path)
+def folderMake(folder_path):
+    folder = Path(folder_path)
+    if not folder.exists():
+        folder.mkdir(parents=True)

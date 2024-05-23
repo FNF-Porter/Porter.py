@@ -1,5 +1,6 @@
 from psychtobase.src import Utils, Constants, files, window 
-import os, logging
+import logging
+from pathlib import Path
 from psychtobase.src.Paths import Paths
 
 class ChartObject:
@@ -10,10 +11,10 @@ class ChartObject:
 		path (str): The path where the song's chart data is stored.
 	"""
 	def __init__(self, path: str, output:str) -> None:
-		self.songPath = path
-		self.songNameRaw:str = os.path.basename(path)
+		self.songPath = Path(path)
+		self.songNameRaw:str = self.songPath.name
 		self.songNamePath = self.songNameRaw.replace(' ', '-').lower()
-		self.outputpath = output
+		self.outputpath = Path(output)
 
 		self.startingBpm = 0
 
@@ -41,19 +42,19 @@ class ChartObject:
 		difficulties = self.difficulties
 		unorderedDiffs = set()
 
-		dirFiles = os.listdir(self.songPath)
+		dirFiles = list(self.songPath.iterdir())
 		chartFiles = []
 		for _f in dirFiles:
-			if not _f.endswith(".json"):
+			if not _f.suffix == ".json":
 				continue
-			if _f.endswith("events.json"):
+			if _f.name.endswith("events.json"):
 				logging.warn(f'[{self.songNameRaw}] events.json not supported yet! Sorry!')
 				continue
 
 			chartFiles.append(_f)
 
 		for file in chartFiles:
-			fileName = file[:-5]
+			fileName = file.stem
 			nameSplit = fileName.split("-")
 			nameLength = len(nameSplit)
 
@@ -64,7 +65,7 @@ class ChartObject:
 			elif nameLength > 1 and fileName != self.songNameRaw:
 				difficulty = nameSplit[1]
 
-			filePath = Paths.join(self.songPath, fileName)
+			filePath = self.songPath / fileName
 			fileJson = Paths.parseJson(filePath).get("song")
 
 			if fileJson != None:
@@ -173,7 +174,7 @@ class ChartObject:
 		logging.info(f"Chart conversion for {self.metadata.get('songName')} was completed!")
 
 	def save(self):
-		folder = os.path.join(Constants.FILE_LOCS.get('CHARTFOLDER')[1], self.songNamePath)
+		folder = Path(Constants.FILE_LOCS.get('CHARTFOLDER')[1]) / self.songNamePath
 		saveDir = f'{self.outputpath}{folder}'
 		files.folderMake(saveDir)
 

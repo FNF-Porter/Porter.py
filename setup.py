@@ -1,10 +1,10 @@
-import os
 import logging
+from pathlib import Path
 from psychtobase import main
 from psychtobase.src import log, window
 
 def makePath(path, path2):
-    return str(os.path.join(f"{path}/", f"{path2}"))
+    return str(Path(f"{path}/") / f"{path2}")
 
 def askMode():
     # lets rethink this for a moment
