@@ -293,11 +293,9 @@ def convert(psych_mod_folder, result_folder, options):
                         if chart != None:
                             try:
                                 if os.path.basename(songFile) == 'Voices-Player.ogg':
-                                    fileCopy(songFile,
-                                    f'{result_folder}/{modFoldername}{bgSongs}{songKeyFormatted}/Voices-{chart.metadata['playData']['characters'].get('player')}.ogg')
+                                    fileCopy(songFile, f"{result_folder}/{modFoldername}{bgSongs}{songKeyFormatted}/Voices-{chart.metadata['playData']['characters'].get('player')}.ogg")
                                 elif os.path.basename(songFile) == 'Voices-Opponent.ogg':
-                                    fileCopy(songFile,
-                                    f'{result_folder}/{modFoldername}{bgSongs}{songKeyFormatted}/Voices-{chart.metadata['playData']['characters'].get('opponent')}.ogg')
+                                    fileCopy(songFile, f"{result_folder}/{modFoldername}{bgSongs}{songKeyFormatted}/Voices-{chart.metadata['playData']['characters'].get('opponent')}.ogg")
 
                             except Exception as e:
                                 logging.error(f'Could not copy asset {songFile}: {e}')
