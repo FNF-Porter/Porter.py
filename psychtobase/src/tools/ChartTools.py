@@ -129,6 +129,7 @@ class ChartObject:
 			steps = 0
 
 			prev_notes = set()
+			total_duplicates = 0
 
 			for section in cChart.get("notes"):
 				mustHit = section.get("mustHitSection", True)
@@ -152,6 +153,7 @@ class ChartObject:
 					)
 
 					if is_duplicate:
+						total_duplicates += 1
 						continue
 					prev_notes.add((strumTime, noteData))
 
@@ -184,6 +186,8 @@ class ChartObject:
 						steps = 0
 				
 			firstChart = False
+			if total_duplicates > 0:
+				logging.warn(f"{total_duplicates} duplicate notes detected and removed from '{diff}' chart!")
 
 		logging.info(f"Chart conversion for {self.metadata.get('songName')} was completed!")
 
