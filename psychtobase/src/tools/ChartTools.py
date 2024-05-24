@@ -128,6 +128,8 @@ class ChartObject:
 			notes = self.chart["notes"][diff]
 			steps = 0
 
+			prev_notes = set()
+
 			for section in cChart.get("notes"):
 				mustHit = section.get("mustHitSection", True)
 				isDuet = False
@@ -143,7 +145,17 @@ class ChartObject:
 						if not isDuet and noteData < 4:
 							isDuet = True
 
-					notes.append(Utils.note(strumTime, noteData, length))
+					# Backhands any dupe notes as Psych engine handles this in PlayState, base game doesn't
+					is_duplicate = any(
+						abs(existing_note[0] - strumTime) < 1 and existing_note[1] == noteData
+						for existing_note in prev_notes
+					)
+
+					if is_duplicate:
+						continue
+					prev_notes.add((strumTime, noteData))
+
+					notes.append(Utils.note(noteData, length, strumTime))
 
 				if firstChart:
 					lengthInSteps = section.get("lengthInSteps", section.get("sectionBeats", 4) * 4)
