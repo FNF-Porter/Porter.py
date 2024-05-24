@@ -43,31 +43,25 @@ def timeChange(timeStamp:float, bpm:float, timeSignatureNum:int, timeSignatureDe
 		"bt": beatTuplets
 	}
 
-def note(time:str, data:int, length:float) -> dict:
+def note(data:int, length:float, time:str) -> dict:
 	"""
 	Function created for faster creation of note data.
 	"""
-	return {
-		"t": time,
-		"d": data,
-		"l": length
-	}
+	if length == 0:
+		return {"d": data, "t": time} # This is how the base game charts handle it so...
+	return {"d": data, "l": length, "t": time}
 
-def event(time:float, event:str, values:dict) -> dict:
+def event(event:str, time:float, values:dict) -> dict:
 	"""
 	Function created for faster creation of events.
 	"""
-	return {
-		"t": time,
-		"e": event,
-		"v": values
-	}
+	return {"e": event, "t": time, "v": values}
 
 def focusCamera(time:float, char:bool):
 	"""
 	Function created for faster creation of camera change events.
 	"""
-	return event(time, "FocusCamera", {"char": "0" if char else "1"})
+	return event("FocusCamera", time, {"char": "0" if char else "1"})
 
 def coolText(text:str) -> str:
 	length = max(30, len(text) + 5)
