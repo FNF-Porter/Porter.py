@@ -132,9 +132,9 @@ class Window(QMainWindow):
 		self.onlyCharts.move(rX, 140)
 		self.onlyCharts.setToolTip("A default option. Quick for fast and only chart converting.")
 
-		self.onlySongs = QRadioButton('Only Songs', self)
+		self.onlySongs = QRadioButton('Only Audio', self)
 		self.onlySongs.move(rX, 170)
-		self.onlySongs.setToolTip("A default option. Quick for fast and only song converting.")
+		self.onlySongs.setToolTip("A default option. Quick for fast and only audio converting/copying.")
 
 		self.onlyChars = QRadioButton('Only Characters', self) # not to be confused with onlyCharts
 		self.onlyChars.move(rX, 200)

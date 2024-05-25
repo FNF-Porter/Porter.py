@@ -4,10 +4,12 @@ A module full of templates needed for mod conversion.
 
 DEFAULT_OPTIONS = {
   'charts': False,
-  'songs': {
+  'songs': { # Technically "audios", but whatever
     'inst': False,
     'voices': False,
-    'split': False
+    'split': False,
+    'music': False,
+    'sounds': True
   },
   'characters': {
     'icons': False,
@@ -373,6 +375,12 @@ FILE_LOCS = {	# If the indent fucks up again its GitHub's fault
 
     'SONGS':
     ['/songs/','/songs/'],
+
+    'SOUNDS':
+    ['/sounds/', '/sounds/'],
+
+    'MUSIC':
+    ['/music/', '/music/'],
 
     'WEEKS':
     ['/weeks/','/data/levels/'],
