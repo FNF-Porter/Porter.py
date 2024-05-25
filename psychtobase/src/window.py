@@ -223,7 +223,7 @@ class Window(QMainWindow):
 
 		self.icons = QCheckBox("Health Icons", self)
 		self.icons.move(sSX, 290)
-		self.icons.setToolTip("Copies over all of your character icon .png files from the \"/images/icons/\" directory of your mod. This also includes the Freeplay Icons.")
+		self.icons.setToolTip("Copies over all of your character icon .png files from the \"/images/icons/\" directory of your mod. This also generates Freeplay Icons.")
 
 		self.jsons = QCheckBox(".json files", self)
 		self.jsons.move(sSX, 310)
