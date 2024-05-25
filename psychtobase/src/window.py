@@ -6,6 +6,7 @@ import time
 import logging
 import src.log as log
 import src.Constants as Constants
+import main
 
 import webbrowser
 

@@ -4,6 +4,7 @@ import logging
 import shutil
 import time
 from pathlib import Path
+from PIL import Image
 from src import Constants, log, Paths, Utils, files, window
 from src.tools import ModConvertTools as ModTools
 import threading
@@ -207,14 +208,32 @@ def convert(psych_mod_folder, result_folder, options):
         dir = Constants.FILE_LOCS.get('CHARACTERICON')
         psychCharacterAssets = modName + dir[0]
         bgCharacterAssets = dir[1]
+        freeplayDir = Constants.FILE_LOCS.get('FREEPLAYICON')[1]
 
         folderMake(f'{result_folder}/{modFoldername}{bgCharacterAssets}')
+        folderMake(f'{result_folder}/{modFoldername}{freeplayDir}')
 
         for character in files.findAll(f'{psychCharacterAssets}*'):
             if Path(character).is_file():
                 logging.info(f'Copying asset {character}')
                 try:
-                    fileCopy(character, result_folder + f'/{modFoldername}' + bgCharacterAssets + Path(character).name)
+                    filename = Path(character).name
+                    # Some goofy ah mods don't name icons with icon-, causing them to be invalid in base game.
+                    if not filename.startswith('icon-') and filename != 'readme.txt':
+                        logging.warn(f"Invalid icon name being renamed from '{filename}' to 'icon-{filename}'!")
+                        filename = 'icon-' + filename
+                    
+                    destination = f'{result_folder}/{modFoldername}{bgCharacterAssets}{filename}'
+                    fileCopy(character, destination)
+                    # Woah, freeplay icons
+                    with Image.open(character) as img:
+                        # Get the winning/normal half of icons
+                        normal_half = img.crop((0, 0, 150, 150))
+                        # Scale to 50x50, same size as BF and GF pixel icons
+                        pixel_img = normal_half.resize((50, 50), Image.Resampling.NEAREST)
+                        pixel_name = filename[5:-4] + 'pixel' + filename[-4:]
+                        freeplay_destination = f'{result_folder}/{modFoldername}{freeplayDir}/{pixel_name}'
+                        pixel_img.save(freeplay_destination)
                 except Exception as e:
                     logging.error(f'Could not copy asset {character}: {e}')
             else:
