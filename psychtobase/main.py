@@ -45,7 +45,7 @@ def treeCopy(source, destination):
         logging.warn(f'Path {source} does not exist.')
 
 def convert(psych_mod_folder, result_folder, options):
-    runtime = time.process_time()
+    runtime = time.time()
 
     logging.info(Utils.coolText("NEW CONVERSION STARTED"))
 
@@ -443,4 +443,4 @@ def convert(psych_mod_folder, result_folder, options):
 
     #convlen = Utils.getRuntime(runtime)
     logging.info(Utils.coolText("CONVERSION COMPLETED"))
-    logging.info(f'Conversion done: Took {runtime}s')
+    logging.info(f'Conversion done: Took {int(time.time() - runtime)}s')
