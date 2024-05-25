@@ -17,10 +17,10 @@ body:
   - type: dropdown
     attributes:
       label: What platform?
-        options:
-          - Windows
-          - Mac
-          - Linux (Ubuntu)
+      options:
+        - Windows
+        - Mac
+        - Linux (Ubuntu)
 
   - type: textarea
     attributes:
