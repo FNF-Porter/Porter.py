@@ -223,7 +223,7 @@ class Window(QMainWindow):
 
 		self.icons = QCheckBox("Health Icons", self)
 		self.icons.move(sSX, 290)
-		self.icons.setToolTip("Copies over all of your character icon .png files from the \"/images/icons/\" directory of your mod.")
+		self.icons.setToolTip("Copies over all of your character icon .png files from the \"/images/icons/\" directory of your mod. This also includes the Freeplay Icons.")
 
 		self.jsons = QCheckBox(".json files", self)
 		self.jsons.move(sSX, 310)
@@ -409,7 +409,8 @@ class Window(QMainWindow):
 		options['images'] = self.images.isChecked()
 
 		try:
-			open(_defaultsFile, 'w').write(f'{psych_mod_folder_path}\n{result_path}')
+			# Now writing the last log file, which we can query to the user
+			open(_defaultsFile, 'w').write(f'{psych_mod_folder_path}\n{result_path}\n{log.logMemory.current_log_file}')
 		except Exception as e:
 			logging.error(f'Problems with your save file: {e}')
 
@@ -425,10 +426,18 @@ class Window(QMainWindow):
 		webbrowser.open(f'https://gamebanana.com/tools/{_GB_ToolID}')
 
 	def openLogFile(self):
-		file = log.logRetain.log
+		file = log.logMemory.current_log_file
 		realLogPath = Path(file).resolve()
+		print(realLogPath)
 		logging.info(f'Attempting to open file: {realLogPath}')
-		subprocess.Popen(['open', str(realLogPath)])
+
+		currentPlatform = platform.system()
+
+		if currentPlatform == 'Windows':
+			subprocess.Popen(['notepad.exe', str(realLogPath)])
+		elif currentPlatform == 'Darwin':
+			subprocess.Popen(['open', str(realLogPath)])
+
 	def open_dialog(self, title, inputs, button, body):
 		self.dialog = SimpleDialog(title, inputs, button, body)
 		self.dialog.show()

@@ -23,7 +23,7 @@ body:
 
   - type: textarea
     attributes:
-      label: What are the contents of the latest .log file? (if applicable)
+      label: What are the contents of the latest .log file? (if applicable) (If you don't know what the last log file was, open the ".defaults" file, where you will find the name of the log file in the third line.)
 
   - type: textarea
     attributes:

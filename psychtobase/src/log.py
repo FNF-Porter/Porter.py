@@ -13,11 +13,11 @@ class CustomHandler(logging.StreamHandler):
         print(log_entry)
         window.window.logsLabel.append(log_entry)
         
-class RetainLog():
+class LogMem():
     def __init__(self, log):
-        self.log = log
+        self.current_log_file = log
         
-logRetain = RetainLog('Dunno')
+logMemory = LogMem('No file yet recorded')
 
 def setup() -> logging.RootLogger:
 	"""instance of Logger module, will be used for logging operations"""
@@ -37,7 +37,7 @@ def setup() -> logging.RootLogger:
 	file_handler = logging.FileHandler(log_file)
 	file_handler.setFormatter(log_format)
      
-	logRetain.log = log_file
+	logMemory.current_log_file = log_file
 
     # console handler
 	console_handler = CustomHandler()
