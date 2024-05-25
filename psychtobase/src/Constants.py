@@ -304,7 +304,7 @@ STAGE_PROP_ANIMATED = {
     "animType": "sparrow",
     "name": "", # Psych Engine TAG
     "isPixel": False,
-    "startingAnimation": "idle",
+    "startingAnimation": "Idle",
     "assetPath": "stage assets/Road",
     "scroll": [1, 1],
     "animations": []
