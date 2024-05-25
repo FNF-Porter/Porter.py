@@ -2,7 +2,6 @@ name: Error
 description: You need help resolving an error/crash in the converter
 body:
   - type: textarea
-      attributes:
 
   - type: dropdown
     attributes:
