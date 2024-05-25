@@ -1,7 +1,7 @@
-from psychtobase.src import Utils, Constants, files, window 
+from src import Utils, Constants, files, window 
 import logging
 from pathlib import Path
-from psychtobase.src.Paths import Paths
+from src.Paths import Paths
 
 class ChartObject:
 	"""

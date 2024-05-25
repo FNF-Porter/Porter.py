@@ -4,15 +4,19 @@ import logging
 import shutil
 import time
 from pathlib import Path
-from psychtobase.src import Constants
-from psychtobase.src.tools import ModConvertTools as ModTools
+from src import Constants, log, Paths, Utils, files, window
+from src.tools import ModConvertTools as ModTools
 import threading
 
-from psychtobase.src import files
-from psychtobase.src.tools.CharacterTools import CharacterObject
-from psychtobase.src.tools.ChartTools import ChartObject
-from psychtobase.src.tools import VocalSplit, WeekTools, StageTool, StageLuaParse
-from psychtobase.src import Utils
+from src.tools.CharacterTools import CharacterObject
+from src.tools.ChartTools import ChartObject
+from src.tools import VocalSplit, WeekTools, StageTool, StageLuaParse
+from src import Utils
+
+if __name__ == '__main__':
+
+    log.setup()
+    window.init()
 
 # Main
 

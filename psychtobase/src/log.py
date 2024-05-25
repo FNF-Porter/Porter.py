@@ -1,7 +1,7 @@
 """Utility tool for configuring the logger"""
 
 import logging
-import psychtobase.src.window as window
+import src.window as window
 import sys
 
 from time import strftime

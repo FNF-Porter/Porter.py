@@ -1,12 +1,8 @@
 name: Error
 description: You need help resolving an error/crash in the converter
 body:
-  - type: checkboxes
-    attributes:
-      label: Issue Checklist
-      options:
-        - label: I have properly named the issue
-        - label: I looked in issues/discussions, if my question was previously anwsered
+  - type: textarea
+      attributes:
 
   - type: dropdown
     attributes:
@@ -18,19 +14,32 @@ body:
         - Stages only
         - Full mod
         - I chose
-    validations:
-      required: true
+
+  - type: dropdown
+    attributes:
+      label: What platform?
+        options:
+          - Windows
+          - Mac
+          - Linux (Ubuntu)
 
   - type: textarea
     attributes:
-      label: What are the contents of the latest .log file? (if applicable)
+      label: What are the contents of the latest .log file? You can find them in your logs folder, next to the EXE.
 
   - type: textarea
     attributes:
-      label: What are the contents of your mod folder? (if applicable)
+      label: What are the contents of your mod folder?
 
   - type: textarea
     attributes:
-      label: Additional Context (if applicable)
+      label: Additional Context
+
+  - type: checkboxes
+    attributes:
+      label: Issue Checklist
+      options:
+        - label: I have properly named the issue
+        - label: I looked in issues/discussions, if my question was previously anwsered
 
 # based on https://github.com/LeleDerGrasshalmi/FortniteEndpointsDocumentation/blob/main/.github/ISSUE_TEMPLATE/api_error.yml

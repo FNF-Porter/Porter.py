@@ -2,7 +2,7 @@ import json
 from luaparser import ast
 from luaparser.astnodes import Function, Call, String, Number, Name, UMinusOp, FalseExpr, TrueExpr
 import logging
-import psychtobase.src.tools.StageTool as StageTool
+import src.tools.StageTool as StageTool
 
 def parseStage(lua_script_path):
     lua_script = open(lua_script_path, 'r').read()

@@ -3,10 +3,9 @@ from pathlib import Path
 import platform
 import subprocess
 import time
-import psychtobase.main as main
 import logging
-import psychtobase.src.log as log
-import psychtobase.src.Constants as Constants
+import src.log as log
+import src.Constants as Constants
 
 import webbrowser
 

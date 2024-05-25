@@ -2,8 +2,8 @@ import json
 import logging
 import copy
 from pathlib import Path
-from psychtobase.src import window, Constants
-from psychtobase.src import files
+from src import window, Constants
+from src import files
 
 class CharacterObject:
 	def __init__(self, path: str, resultPath) -> None:
