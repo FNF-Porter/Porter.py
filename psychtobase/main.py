@@ -226,6 +226,7 @@ def convert(psych_mod_folder, result_folder, options):
                     destination = f'{result_folder}/{modFoldername}{bgCharacterAssets}{filename}'
                     fileCopy(character, destination)
                     # Woah, freeplay icons
+                    logging.getLogger('PIL').setLevel(logging.INFO)
                     with Image.open(character) as img:
                         # Get the winning/normal half of icons
                         normal_half = img.crop((0, 0, 150, 150))
@@ -234,6 +235,7 @@ def convert(psych_mod_folder, result_folder, options):
                         pixel_name = filename[5:-4] + 'pixel' + filename[-4:]
                         freeplay_destination = f'{result_folder}/{modFoldername}{freeplayDir}/{pixel_name}'
                         pixel_img.save(freeplay_destination)
+                        logging.info(f'Saving converted freeplay icon to {freeplay_destination}')
                 except Exception as e:
                     logging.error(f'Could not copy asset {character}: {e}')
             else:
