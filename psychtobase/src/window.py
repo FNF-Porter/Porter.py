@@ -1,13 +1,12 @@
 from base64 import b64decode
-import os
-import os.path as ospath
+from pathlib import Path
 import platform
 import subprocess
 import time
-import psychtobase.main as main
 import logging
-import psychtobase.src.log as log
-import psychtobase.src.Constants as Constants
+import src.log as log
+import src.Constants as Constants
+import main
 
 import webbrowser
 
@@ -17,7 +16,6 @@ from PyQt6.QtWidgets import QApplication, QMainWindow, QPushButton, QCheckBox, Q
 
 #the icon, in base64 (because its easier to compile)
 icon = b64decode("iVBORw0KGgoAAAANSUhEUgAAAEAAAABABAMAAABYR2ztAAAAFVBMVEX/////3fv/fdtsPpT/LDdYtf8AKUvOkdnQAAAACXBIWXMAAC4jAAAuIwF4pT92AAABRUlEQVRIx73UQbLCIAwAUJzWvf03EC/gNBdgEfcuLDco9z/CB0JLgQDq/PlZ1clrkoZWIf4mTpcemLpg6oKpCy490BZTT5wm2QWyOWgf/Eh5bTUBC1oCQLqoN4HZA1sC7lx+oHwd3GQIC4ArIPe4fgnmKHgA8iC+AAPA3AOxxA24Pb8B5j1/bwJ75QAiqgzAlrdgREzFDoAAYiYGHmABgMCIRQlaFeUhjIDLsjzfB1ufDTwWime5D/eUW9oGcyqiCXzwYORBHCJuRZxDUtfAljcpULGA8cDUgLCp1RVY0yExTqrdzXpdPgVWjCo8hBUmA8KfLgagjS6AL+EQPaLhAPoyfk8mzKCSHvQWVUF4UcIqCLyUKAQtW9O6UYlcqHgYLDiepu2QA/p9jvlPAXXYwev4cSVBIv36sgj314Eo/wJ4If4nfgHb6rE0etNCVQAAAABJRU5ErkJggg==")
-_windowTitleSuffix = "v0.1 [BETA]"
 _defaultsFile = '.defaults'
 _vocalSplitEnabledByDefault = False
 
@@ -73,6 +71,7 @@ class Window(QMainWindow):
 	def __init__(self):
 		super().__init__()
 
+		_windowTitleSuffix = f"v{Constants.VERSION} [BETA]"
 		self.setWindowTitle(f"FNF Porter {_windowTitleSuffix}")
 		wid = 750
 		hei = 650
@@ -104,7 +103,7 @@ class Window(QMainWindow):
 		# thingDefaultPath
 		modDP = ''
 		bGDP = ''
-		if ospath.exists(_defaultsFile):
+		if Path(_defaultsFile).exists():
 			try:
 				parse = open(_defaultsFile, 'r').read()
 				for index, line in enumerate(parse.split('\n')):
@@ -133,9 +132,9 @@ class Window(QMainWindow):
 		self.onlyCharts.move(rX, 140)
 		self.onlyCharts.setToolTip("A default option. Quick for fast and only chart converting.")
 
-		self.onlySongs = QRadioButton('Only Songs', self)
+		self.onlySongs = QRadioButton('Only Audio', self)
 		self.onlySongs.move(rX, 170)
-		self.onlySongs.setToolTip("A default option. Quick for fast and only song converting.")
+		self.onlySongs.setToolTip("A default option. Quick for fast and only audio converting/copying.")
 
 		self.onlyChars = QRadioButton('Only Characters', self) # not to be confused with onlyCharts
 		self.onlyChars.move(rX, 200)
@@ -189,81 +188,127 @@ class Window(QMainWindow):
 		sX = int(wid / 2)
 		sSX = sX + 10
 
+		_currentYPos = 100
+
 		self.optionsLabel = QLabel("Options", self)
-		self.optionsLabel.move(sX, 100)
+		self.optionsLabel.move(sX, _currentYPos)
 		self.optionsLabel.resize(220, 30)
 
+		_currentYPos += 40
+
 		self.charts = QCheckBox("Charts", self)
-		self.charts.move(sX, 140)
+		self.charts.move(sX, _currentYPos)
 		self.charts.setToolTip("Select all charts in the \"/data/\" directory of your mod and convert them.")
 
-		self.songs = QCheckBox("Songs", self)
-		self.songs.move(sX, 170)
-		self.songs.setToolTip("Select all songs in the \"/songs/\" directory of your mod and copy them.")
+		_currentYPos += 30
+
+		self.songs = QCheckBox("Audio", self)
+		self.songs.move(sX, _currentYPos)
+		self.songs.setToolTip("Select audio in different directories of your mod and copy them.")
 
 		self.songs.stateChanged.connect(self.songsSection)
 
+		_currentYPos += 20
+
 		self.insts = QCheckBox("Instrumentals", self)
-		self.insts.move(sSX, 190)
+		self.insts.move(sSX, _currentYPos)
 		self.insts.setToolTip("Copy over \"Inst.ogg\" files.")
 
+		_currentYPos += 20
+
 		self.voices = QCheckBox("Voices", self)
-		self.voices.move(sSX, 210)
+		self.voices.move(sSX, _currentYPos)
 		self.voices.setToolTip("Copy over \"Voices.ogg\" files.")
+
+		_currentYPos += 20
 
 		# Is available just not for avoiding error :D
 		self.vocalsplit = QCheckBox("Vocal Split", self)
-		self.vocalsplit.move(sSX, 230)
+		self.vocalsplit.move(sSX, _currentYPos)
 		self.vocalsplit.setToolTip("Splits \"Voices.ogg\" files into two files (\"Voices-opponent.ogg\" and \"Voices-player.ogg\") using their charts. This requires ffmpeg in PATH, and Charts enabled.")
 
+		_currentYPos += 20
+
+		self.music = QCheckBox("Music", self)
+		self.music.move(sSX, _currentYPos)
+		self.music.setToolTip("Copies over files in the \"music\" directory of your mod.")
+
+		_currentYPos += 20
+
+		self.sounds = QCheckBox("Sounds", self)
+		self.sounds.move(sSX, _currentYPos)
+		self.sounds.setToolTip("Copies over files and folders in the \"sounds\" directory of your mod.")
+
+		_currentYPos += 40
+
 		self.chars = QCheckBox("Characters", self)
-		self.chars.move(sX, 270)
+		self.chars.move(sX, _currentYPos)
 		self.chars.setToolTip("Select all characters in the \"/characters/\" directory of your mod and convert them.")
 
 		self.chars.stateChanged.connect(self.characterSection)
 
+		_currentYPos += 20
+
 		self.icons = QCheckBox("Health Icons", self)
-		self.icons.move(sSX, 290)
-		self.icons.setToolTip("Copies over all of your character icon .png files from the \"/images/icons/\" directory of your mod.")
+		self.icons.move(sSX, _currentYPos)
+		self.icons.setToolTip("Copies over all of your character icon .png files from the \"/images/icons/\" directory of your mod. This also generates Freeplay Icons (These require characters enabled).")
+
+		_currentYPos += 20
 
 		self.jsons = QCheckBox(".json files", self)
-		self.jsons.move(sSX, 310)
+		self.jsons.move(sSX, _currentYPos)
 		self.jsons.setToolTip("Converts your character's .json files to the appropiate format.")
 
+		_currentYPos += 20
+
 		self.charassets = QCheckBox("Assets", self)
-		self.charassets.move(sSX, 330)
+		self.charassets.move(sSX, _currentYPos)
 		self.charassets.setToolTip("Copies over your .png and .xml files from the \"/images/characters/\" directory of your mod.")
 
+		_currentYPos += 40
+
 		self.weeks = QCheckBox("Weeks", self)
-		self.weeks.move(sX, 370)
+		self.weeks.move(sX, _currentYPos)
 		self.weeks.setToolTip("Select week conversions.")
 
 		self.weeks.stateChanged.connect(self.weekSection)
 
+		_currentYPos += 20
+
 		self.props = QCheckBox("Menu Characters (Props)", self)
-		self.props.move(sSX, 390)
+		self.props.move(sSX, _currentYPos)
 		self.props.resize(400, 30)
 		self.props.setToolTip("Converts your menu character .json files from the \"/images/menucharacters/\" directory of your mod to the appropiate format.")
 
+		_currentYPos += 20
+
 		self.titles = QCheckBox("Week Images (Titles)", self)
-		self.titles.move(sSX, 410)
+		self.titles.move(sSX, _currentYPos)
 		self.titles.resize(400, 30)
 		self.titles.setToolTip("Copies over your .png files from the \"/images/storymenu/\" directory of your mod.")
 
+		_currentYPos += 20
+
 		self.levels = QCheckBox("Levels", self)
-		self.levels.move(sSX, 430)
+		self.levels.move(sSX, _currentYPos)
 		self.levels.setToolTip("Converts your week .json files from the \"/weeks/\" directory of your mod to the appropiate format.")
 
+		_currentYPos += 40
+
 		self.stages = QCheckBox("Stages", self)
-		self.stages.move(sX, 470)
+		self.stages.move(sX, _currentYPos)
 		self.stages.setToolTip("Converts stage .jsons from the \"/stages/\" directory of your mod and parses the .lua files to asign props.")
 
+		_currentYPos += 30
+
 		self.meta = QCheckBox("Pack Meta", self)
-		self.meta.move(sX, 500)
+		self.meta.move(sX, _currentYPos)
 		self.meta.setToolTip("Converts your \"pack.json\" to the appropiate format, and copies your \"pack.png\" file.")
 
+		_currentYPos += 30
+
 		self.images = QCheckBox("Images", self)
-		self.images.move(sX, 530)
+		self.images.move(sX, _currentYPos)
 		self.images.setToolTip("Copies over your .png and .xml files from the \"/images/\" directory of your mod.")
 
 		self.convert = QPushButton("Convert", self)
@@ -278,6 +323,8 @@ class Window(QMainWindow):
 		self.insts.setChecked(checked)
 		self.voices.setChecked(checked)
 		self.vocalsplit.setChecked(checked == _vocalSplitEnabledByDefault and checked != False)
+		self.music.setChecked(checked)
+		self.sounds.setChecked(checked)
 		self.chars.setChecked(checked)
 		self.icons.setChecked(checked)
 		self.jsons.setChecked(checked)
@@ -294,6 +341,8 @@ class Window(QMainWindow):
 		self.insts.setEnabled(enabled)
 		self.voices.setEnabled(enabled)
 		self.vocalsplit.setEnabled(enabled)
+		self.music.setEnabled(enabled)
+		self.sounds.setEnabled(enabled)
 		self.chars.setEnabled(enabled)
 		self.icons.setEnabled(enabled)
 		self.jsons.setEnabled(enabled)
@@ -326,6 +375,8 @@ class Window(QMainWindow):
 				self.insts.setChecked(True)
 				self.voices.setChecked(True)
 				self.vocalsplit.setChecked(_vocalSplitEnabledByDefault)
+				self.music.setChecked(True)
+				self.sounds.setChecked(True)
 			if self.sender() == self.onlyChars:
 				self.allToDefaults(False)
 
@@ -348,10 +399,14 @@ class Window(QMainWindow):
 			self.insts.setEnabled(True)
 			self.voices.setEnabled(True)
 			self.vocalsplit.setEnabled(_vocalSplitEnabledByDefault)
+			self.sounds.setEnabled(True)
+			self.music.setEnabled(True)
 		elif state == 0:  # Unchecked
 			self.insts.setEnabled(False)
 			self.voices.setEnabled(False)
 			self.vocalsplit.setEnabled(False)
+			self.sounds.setEnabled(False)
+			self.music.setEnabled(False)
 
 	def characterSection(self, state):
 		if state == 2:  # Checked
@@ -385,16 +440,18 @@ class Window(QMainWindow):
 		# the code below should go on the callback when the person presses the convert button
 		psych_mod_folder_path = self.modLineEdit.text()
 		result_path = self.baseGameLineEdit.text()
-		if os.path.exists(result_path):	
+		if Path(result_path).exists():	
 			logging.warn(f'Folder {result_path} already existed before porting, files may have been overwritten.')
 			#i was trying to get this to be a window but it wasnt working
 		options = Constants.DEFAULT_OPTIONS
 		options['charts'] = self.charts.isChecked()
 		if self.songs.isChecked():
-			logging.info('Songs will be converted')
+			logging.info('Audio will be converted')
 			options['songs']['inst'] = self.insts.isChecked()
 			options['songs']['voices'] = self.voices.isChecked()
 			options['songs']['split'] = self.vocalsplit.isChecked()
+			options['songs']['music'] = self.music.isChecked()
+			options['songs']['sounds'] = self.sounds.isChecked()
 		if self.chars.isChecked():
 			logging.info('Characters will be converted')
 			options['characters']['json'] = self.jsons.isChecked()
@@ -410,7 +467,8 @@ class Window(QMainWindow):
 		options['images'] = self.images.isChecked()
 
 		try:
-			open(_defaultsFile, 'w').write(f'{psych_mod_folder_path}\n{result_path}')
+			# Now writing the last log file, which we can query to the user
+			open(_defaultsFile, 'w').write(f'{psych_mod_folder_path}\n{result_path}\n{log.logMemory.current_log_file}')
 		except Exception as e:
 			logging.error(f'Problems with your save file: {e}')
 
@@ -426,10 +484,18 @@ class Window(QMainWindow):
 		webbrowser.open(f'https://gamebanana.com/tools/{_GB_ToolID}')
 
 	def openLogFile(self):
-		file = log.logRetain.log
-		realLogPath = os.path.abspath(file)
+		file = log.logMemory.current_log_file
+		realLogPath = Path(file).resolve()
+		print(realLogPath)
 		logging.info(f'Attempting to open file: {realLogPath}')
-		os.startfile(realLogPath, "open")
+
+		currentPlatform = platform.system()
+
+		if currentPlatform == 'Windows':
+			subprocess.Popen(['notepad.exe', str(realLogPath)])
+		elif currentPlatform == 'Darwin':
+			subprocess.Popen(['open', str(realLogPath)])
+
 	def open_dialog(self, title, inputs, button, body):
 		self.dialog = SimpleDialog(title, inputs, button, body)
 		self.dialog.show()

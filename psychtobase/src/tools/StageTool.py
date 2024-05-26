@@ -1,7 +1,7 @@
 import copy
 import logging
-import psychtobase.src.Constants as Constants
-import psychtobase.src.window as window
+import src.Constants as Constants
+import src.window as window
 
 def convert(stageJSON, assetName, luaProps):
     stageTemplate = copy.deepcopy(Constants.STAGE)
@@ -149,10 +149,11 @@ def toFNFProps(props):
                     name = animation['an']
                     prefix = animation['p']
 
-                    _animation_template['frameRate'] = fps
-                    _animation_template['looped'] = loop
-                    _animation_template['name'] = name
-                    _animation_template['prefix'] = prefix
+                    # Best ensure data type is correct or stage fails to load.
+                    _animation_template['frameRate'] = int(fps)
+                    _animation_template['looped'] = bool(loop)
+                    _animation_template['name'] = str(name)
+                    _animation_template['prefix'] = str(prefix)
 
                     _prop_template['animations'].append(_animation_template)
 

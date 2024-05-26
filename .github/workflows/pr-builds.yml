@@ -1,7 +1,7 @@
 name: FNF Porter Build
 
 on:
-  push:
+  pull_request:
     branches: [ "main" ]
 
 permissions:
@@ -43,7 +43,7 @@ jobs:
         pip install pyinstaller numpy pydub luaparser pyqt6 pillow
     - name: Build with PyInstaller
       run: |
-        pyinstaller --onefile psychtobase/main.py --icon=${{ matrix.icon }} --noconsole -n "FNF Porter actions-${{ github.run_number }}"
+        pyinstaller --onefile psychtobase/main.py --icon=${{ matrix.icon }} --noconsole -n "FNF Porter pullrequest-${{ github.event.pull_request.number }}"
     - name: Upload build artifact
       uses: actions/upload-artifact@v4
       with:

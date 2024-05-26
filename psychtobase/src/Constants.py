@@ -4,10 +4,12 @@ A module full of templates needed for mod conversion.
 
 DEFAULT_OPTIONS = {
   'charts': False,
-  'songs': {
+  'songs': { # Technically "audios", but whatever
     'inst': False,
     'voices': False,
-    'split': False
+    'split': False,
+    'music': False,
+    'sounds': False
   },
   'characters': {
     'icons': False,
@@ -33,6 +35,8 @@ STAGES = {
 CHARACTERS = {
 	"pico-player": "pico-playable"
 }
+
+## templates begin here
 
 BASE_CHART_METADATA = {
 	"version": "2.2.0",
@@ -67,7 +71,7 @@ BASE_CHART_METADATA = {
 
 	"timeFormat": "ms",
 	"timeChanges": [],
-	"generatedBy": "FNF Porter (by Gusborg, tposejank, and BombasticTom)"
+	"generatedBy": "FNF Porter (by Gusborg, tposejank, BombasticTom & VocalFan)"
 }
 
 BASE_CHART = {
@@ -75,7 +79,7 @@ BASE_CHART = {
 	"scrollSpeed": {},
 	"events": [],
 	"notes": {},
-	"generatedBy": "FNF Porter (by Gusborg, tposejank, and BombasticTom)"
+	"generatedBy": "FNF Porter (by Gusborg, tposejank, BombasticTom & VocalFan)"
 }
 
 CHARACTER = {
@@ -304,7 +308,7 @@ STAGE_PROP_ANIMATED = {
     "animType": "sparrow",
     "name": "", # Psych Engine TAG
     "isPixel": False,
-    "startingAnimation": "idle",
+    "startingAnimation": "Idle",
     "assetPath": "stage assets/Road",
     "scroll": [1, 1],
     "animations": []
@@ -374,6 +378,12 @@ FILE_LOCS = {	# If the indent fucks up again its GitHub's fault
     'SONGS':
     ['/songs/','/songs/'],
 
+    'SOUNDS':
+    ['/sounds/', '/sounds/'],
+
+    'MUSIC':
+    ['/music/', '/music/'],
+
     'WEEKS':
     ['/weeks/','/data/levels/'],
 
@@ -398,3 +408,5 @@ FILE_LOCS = {	# If the indent fucks up again its GitHub's fault
     'FREEPLAYICON':
     ['/images/icons/','/images/freeplay/icons'],
 }
+
+VERSION = "0.2"

@@ -1,10 +1,11 @@
 """Utility tool for configuring the logger"""
 
 import logging
-import psychtobase.src.window as window
+import src.window as window
+import sys
 
 from time import strftime
-from os import mkdir
+from pathlib import Path
 
 class CustomHandler(logging.StreamHandler):
     def emit(self, record):
@@ -12,11 +13,11 @@ class CustomHandler(logging.StreamHandler):
         print(log_entry)
         window.window.logsLabel.append(log_entry)
         
-class RetainLog():
+class LogMem():
     def __init__(self, log):
-        self.log = log
+        self.current_log_file = log
         
-logRetain = RetainLog('Dunno')
+logMemory = LogMem('No file yet recorded')
 
 def setup() -> logging.RootLogger:
 	"""instance of Logger module, will be used for logging operations"""
@@ -28,7 +29,7 @@ def setup() -> logging.RootLogger:
 	# log format
 	log_format = logging.Formatter("%(asctime)s: [%(filename)s:%(lineno)d] [%(levelname)s] %(message)s", "%H:%M:%S")
 
-	try: mkdir("logs")
+	try: Path("logs").mkdir(exist_ok=True)
 	except: pass
      
 	# file handler
@@ -36,7 +37,7 @@ def setup() -> logging.RootLogger:
 	file_handler = logging.FileHandler(log_file)
 	file_handler.setFormatter(log_format)
      
-	logRetain.log = log_file
+	logMemory.current_log_file = log_file
 
     # console handler
 	console_handler = CustomHandler()
@@ -50,3 +51,12 @@ def setup() -> logging.RootLogger:
 	logger.info("Logger initialized!")
 
 	return logger
+
+def log_exception(exc_type, exc_value, exc_traceback):
+    """Log uncaught exceptions."""
+    logger = logging.getLogger()
+    if not issubclass(exc_type, KeyboardInterrupt):
+        logger.error("Uncaught exception", exc_info=(exc_type, exc_value, exc_traceback))
+
+# Configure global exception handler to use the logger
+sys.excepthook = log_exception

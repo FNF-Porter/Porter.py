@@ -1,5 +1,5 @@
 import json
-import os
+from pathlib import Path
 
 class Paths:
 	assetsDir = ''
@@ -17,8 +17,8 @@ class Paths:
 			return Paths.getPreloadPath(file)
 		return Paths.getLibraryPathForce(file, library)
 
-	getLibraryPathForce = staticmethod(lambda file, library : os.path.join(Paths.assetsDir, library, file))
-	getPreloadPath = staticmethod(lambda file : os.path.join(Paths.assetsDir, file))
+	getLibraryPathForce = staticmethod(lambda file, library: Paths.assetsDir / library / file)
+	getPreloadPath = staticmethod(lambda file: Paths.assetsDir / Path(file))
 
 	txt = staticmethod(lambda key, library=None: Paths.getPath(f'{key}.txt', library))
 	xml = staticmethod(lambda key, library=None: Paths.getPath(f'{key}.xml', library))
@@ -50,4 +50,4 @@ class Paths:
 
 	@staticmethod
 	def join(*path) -> str:
-		return os.path.join(*path)
+		return str(Path(path[0]).joinpath(*path[1:]))

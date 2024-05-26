@@ -1,3 +1,5 @@
+import src.Constants as Constants
+
 def convertPack(packJson):
     return {
         "title": packJson['name'],
@@ -11,7 +13,7 @@ def convertPack(packJson):
 def defaultPolymodMeta():
     return {
         "title": "Unknown mod",
-        "description": "Unknown mod by Unknown creator. Converted by FNF Porter v0.1",
+        "description": f"Unknown mod by Unknown creator. Converted by FNF Porter v{Constants.VERSION}",
         "author": "Unknown creator",
         "api_version": "0.1.0",
         "mod_version": "1.0.0",

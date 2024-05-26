@@ -13,7 +13,7 @@ body:
       label: What is the preset selected?
       options:
         - Charts only
-        - Songs only
+        - Audio only
         - Characters only
         - Stages only
         - Full mod
@@ -23,7 +23,11 @@ body:
 
   - type: textarea
     attributes:
-      label: What are the contents of the latest .log file? (if applicable)
+      label: If you chose what to convert, what did you pick? (if applicable)
+
+  - type: textarea
+    attributes:
+      label: What are the contents of the latest .log file? (if applicable) (If you don't know what the last log file was, open the ".defaults" file, where you will find the name of the log file in the third line.)
 
   - type: textarea
     attributes:

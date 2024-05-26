@@ -1,23 +1,26 @@
 import json
-import os
 import logging
 import copy
-from psychtobase.src import window, Constants
-from psychtobase.src import files
+from pathlib import Path
+from src import window, Constants
+from src import files
 
 class CharacterObject:
 	def __init__(self, path: str, resultPath) -> None:
-		self.charName:str = os.path.basename(path)
+		self.charName:str = Path(path).name
 		self.resultPath = resultPath
 		self.pathName:str = path
 		self.psychChar = {}
-		self.character:dict = Constants.CHARACTER.copy()
+		self.character:dict = copy.deepcopy(Constants.CHARACTER)
 		self.characterName:str = None
+
+		self.iconID:str = None
 
 		self.loadCharacter()
 
 	def loadCharacter(self):
-		self.psychChar = json.loads(open(self.pathName, 'r').read())
+		with open(self.pathName, 'r') as file:
+			self.psychChar = json.load(file)
 		self.characterJson = files.removeTrail(self.charName)
 
 	def convert(self):
@@ -29,9 +32,11 @@ class CharacterObject:
 		self.character['name'] = englishCharacterName
 		self.character['assetPath'] = char['image']
 		self.character['singTime'] = char['sing_duration']
-		self.character['scale'] = char['scale']
+		# Disable scaling. Look at https://github.com/FunkinCrew/Funkin/issues/2543 for why this exists.
+		# self.character['scale'] = char['scale']
 		self.character['isPixel'] = char['scale'] >= 6
 		self.character['healthIcon']['id'] = char['healthicon']
+		self.iconID = char['healthicon']
 		self.character['healthIcon']['isPixel'] = char['scale'] >= 6
 		self.character['flipX'] = char.get('flip_x', False)
 
@@ -49,9 +54,10 @@ class CharacterObject:
 			self.character['animations'].append(animTemplate)
 
 		logging.info(f'Character {englishCharacterName} successfully converted')
+		self.characterName = englishCharacterName
 
 	def save(self):
-		savePath = os.path.join(self.resultPath, self.characterJson)
+		savePath = Path(self.resultPath) / self.characterJson
 
 		logging.info(f'Character {self.characterName} saved to {savePath}.json')
 
