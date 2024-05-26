@@ -16,7 +16,6 @@ from PyQt6.QtWidgets import QApplication, QMainWindow, QPushButton, QCheckBox, Q
 
 #the icon, in base64 (because its easier to compile)
 icon = b64decode("iVBORw0KGgoAAAANSUhEUgAAAEAAAABABAMAAABYR2ztAAAAFVBMVEX/////3fv/fdtsPpT/LDdYtf8AKUvOkdnQAAAACXBIWXMAAC4jAAAuIwF4pT92AAABRUlEQVRIx73UQbLCIAwAUJzWvf03EC/gNBdgEfcuLDco9z/CB0JLgQDq/PlZ1clrkoZWIf4mTpcemLpg6oKpCy490BZTT5wm2QWyOWgf/Eh5bTUBC1oCQLqoN4HZA1sC7lx+oHwd3GQIC4ArIPe4fgnmKHgA8iC+AAPA3AOxxA24Pb8B5j1/bwJ75QAiqgzAlrdgREzFDoAAYiYGHmABgMCIRQlaFeUhjIDLsjzfB1ufDTwWime5D/eUW9oGcyqiCXzwYORBHCJuRZxDUtfAljcpULGA8cDUgLCp1RVY0yExTqrdzXpdPgVWjCo8hBUmA8KfLgagjS6AL+EQPaLhAPoyfk8mzKCSHvQWVUF4UcIqCLyUKAQtW9O6UYlcqHgYLDiepu2QA/p9jvlPAXXYwev4cSVBIv36sgj314Eo/wJ4If4nfgHb6rE0etNCVQAAAABJRU5ErkJggg==")
-_windowTitleSuffix = "v0.1 [BETA]"
 _defaultsFile = '.defaults'
 _vocalSplitEnabledByDefault = False
 
@@ -72,6 +71,7 @@ class Window(QMainWindow):
 	def __init__(self):
 		super().__init__()
 
+		_windowTitleSuffix = f"v{Constants.VERSION} [BETA]"
 		self.setWindowTitle(f"FNF Porter {_windowTitleSuffix}")
 		wid = 750
 		hei = 650

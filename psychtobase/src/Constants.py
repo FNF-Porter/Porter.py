@@ -36,6 +36,8 @@ CHARACTERS = {
 	"pico-player": "pico-playable"
 }
 
+## templates begin here
+
 BASE_CHART_METADATA = {
 	"version": "2.2.0",
 	"songName": "",
@@ -406,3 +408,5 @@ FILE_LOCS = {	# If the indent fucks up again its GitHub's fault
     'FREEPLAYICON':
     ['/images/icons/','/images/freeplay/icons'],
 }
+
+VERSION = "0.2"

@@ -7,7 +7,7 @@ Ports FNF mods between engines using Python. Right now, there's only support for
 Go to the [releases tab](https://github.com/gusborg88/fnf-porter/releases) for slightly older versions. Read the dependencies section if you want to build it yourself.
 
 ## Issues?
-Report it in the [issues tab](https://github.com/gusborg88/fnf-porter/issues/new).
+Report it in the [issues tab](https://github.com/gusborg88/fnf-porter/issues/).
 
 Check if it **already exists** before reporting though!
 
