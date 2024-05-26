@@ -401,6 +401,7 @@ def convert(psych_mod_folder, result_folder, options):
                     luaProps = StageLuaParse.parseStage(stageLua)
                 except Exception as e:
                     logging.error(f'Could not complete parsing of {stageLua}: {e}')
+                    continue
 
             logging.info(f'Converting Stage JSON')
             stageJSONConverted = json.dumps(StageTool.convert(stageJSON, os.path.basename(asset), luaProps), indent=4)
