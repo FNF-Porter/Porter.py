@@ -147,9 +147,8 @@ def convert(psych_mod_folder, result_folder, options):
 
                 songChart.convert()
 
-                songName = songChart.songNameRaw
                 charts.append({
-                    'songKey': songName,
+                    'songKey': songChart.songFile,
                     'sections': songChart.sections,
                     'bpm': songChart.startingBpm,
                     'player': songChart.metadata['playData']['characters']['player'],
