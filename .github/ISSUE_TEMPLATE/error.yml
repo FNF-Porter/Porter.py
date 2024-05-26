@@ -6,11 +6,15 @@ body:
       label: What is the preset selected?
       options:
         - Charts only
-        - Songs only
+        - Audio only
         - Characters only
         - Stages only
         - Full mod
         - I chose
+        
+  - type: textarea
+    attributes:
+      label: If you chose what to convert, what did you pick? (if applicable)
 
   - type: dropdown
     attributes:
