@@ -30,7 +30,8 @@ class CharacterObject:
 		self.character['name'] = englishCharacterName
 		self.character['assetPath'] = char['image']
 		self.character['singTime'] = char['sing_duration']
-		self.character['scale'] = char['scale']
+		# Disable scaling. Look at https://github.com/FunkinCrew/Funkin/issues/2543 for why this exists.
+		# self.character['scale'] = char['scale']
 		self.character['isPixel'] = char['scale'] >= 6
 		self.character['healthIcon']['id'] = char['healthicon']
 		self.character['healthIcon']['isPixel'] = char['scale'] >= 6
