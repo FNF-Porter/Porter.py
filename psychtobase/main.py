@@ -374,6 +374,22 @@ def convert(psych_mod_folder, result_folder, options):
                         except Exception as e:
                             logging.error(f'Failed to copy {asset}: {e}')
 
+            if songOptions['music']:
+                sounds_dir = Constants.FILE_LOCS.get('MUSIC')
+                psychSounds = modName + sounds_dir[0]
+                baseSounds = sounds_dir[1]
+
+                allsoundsindirsounds = files.findAll(f'{psychSounds}*')
+            
+                for asset in allsoundsindirsounds:
+                    logging.info(f'Copying asset {asset}')
+                    try:
+                        folderMake(f'{result_folder}/{modFoldername}{baseSounds}')
+                        fileCopy(asset,
+                            f'{result_folder}/{modFoldername}{baseSounds}{Path(asset).name}')
+                    except Exception as e:
+                        logging.error(f'Could not copy asset {asset}: {e}')
+
     weekCOptions = options.get('weeks', {
             'props': False, # Asset
             'levels': False,

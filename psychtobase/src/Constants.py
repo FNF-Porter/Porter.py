@@ -9,7 +9,7 @@ DEFAULT_OPTIONS = {
     'voices': False,
     'split': False,
     'music': False,
-    'sounds': True
+    'sounds': False
   },
   'characters': {
     'icons': False,
