@@ -51,6 +51,7 @@ class CharacterObject:
 			self.character['animations'].append(animTemplate)
 
 		logging.info(f'Character {englishCharacterName} successfully converted')
+		self.characterName = englishCharacterName
 
 	def save(self):
 		savePath = Path(self.resultPath) / self.characterJson
