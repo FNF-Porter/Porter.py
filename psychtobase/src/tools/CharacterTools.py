@@ -14,6 +14,8 @@ class CharacterObject:
 		self.character:dict = copy.deepcopy(Constants.CHARACTER)
 		self.characterName:str = None
 
+		self.iconID:str = None
+
 		self.loadCharacter()
 
 	def loadCharacter(self):
@@ -34,6 +36,7 @@ class CharacterObject:
 		# self.character['scale'] = char['scale']
 		self.character['isPixel'] = char['scale'] >= 6
 		self.character['healthIcon']['id'] = char['healthicon']
+		self.iconID = char['healthicon']
 		self.character['healthIcon']['isPixel'] = char['scale'] >= 6
 		self.character['flipX'] = char.get('flip_x', False)
 

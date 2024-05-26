@@ -22,6 +22,9 @@ if __name__ == '__main__':
 # Main
 
 charts = []
+characterMap = {
+    # 'charactr': 'Name In English'
+}
 vocalSplitMasterToggle = True
 
 def folderMake(folder_path):
@@ -197,6 +200,10 @@ def convert(psych_mod_folder, result_folder, options):
 
                 converted_char.convert()
                 converted_char.save()
+                                                     # For THOSE
+                fileBasename = converted_char.iconID.replace('icon-', '')
+                characterMap[fileBasename] = converted_char.characterName
+                logging.info(f'Saved {converted_char.characterName} to character map using their icon id: {fileBasename}.')
             else:
                 logging.warn(f'{character} is a directory, or not a json! Skipped')
 
@@ -225,17 +232,27 @@ def convert(psych_mod_folder, result_folder, options):
                     
                     destination = f'{result_folder}/{modFoldername}{bgCharacterAssets}{filename}'
                     fileCopy(character, destination)
-                    # Woah, freeplay icons
-                    logging.getLogger('PIL').setLevel(logging.INFO)
-                    with Image.open(character) as img:
-                        # Get the winning/normal half of icons
-                        normal_half = img.crop((0, 0, 150, 150))
-                        # Scale to 50x50, same size as BF and GF pixel icons
-                        pixel_img = normal_half.resize((50, 50), Image.Resampling.NEAREST)
-                        pixel_name = filename[5:-4] + 'pixel' + filename[-4:]
-                        freeplay_destination = f'{result_folder}/{modFoldername}{freeplayDir}/{pixel_name}'
-                        pixel_img.save(freeplay_destination)
-                        logging.info(f'Saving converted freeplay icon to {freeplay_destination}')
+                    keyForThisIcon = filename.replace('icon-', '').replace('.png', '')
+                    logging.info('Checking if ' + keyForThisIcon + ' is in the characterMap')
+
+                    if characterMap.get(keyForThisIcon, None) != None:
+                        try:
+                            # Woah, freeplay icons
+                            logging.getLogger('PIL').setLevel(logging.INFO)
+                            with Image.open(character) as img:
+                                # Get the winning/normal half of icons
+                                normal_half = img.crop((0, 0, 150, 150))
+                                # Scale to 50x50, same size as BF and GF pixel icons
+                                pixel_img = normal_half.resize((50, 50), Image.Resampling.NEAREST)
+
+                                
+                                pixel_name = characterMap.get(keyForThisIcon) + 'pixel.png'
+
+                                freeplay_destination = f'{result_folder}/{modFoldername}{freeplayDir}/{pixel_name}'
+                                pixel_img.save(freeplay_destination)
+                                logging.info(f'Saving converted freeplay icon to {freeplay_destination}')
+                        except Exception as ___exc:
+                            logging.error(f"Failed to create character {keyForThisIcon}'s freeplay icon: {___exc}")
                 except Exception as e:
                     logging.error(f'Could not copy asset {character}: {e}')
             else:
