@@ -11,13 +11,14 @@ class CharacterObject:
 		self.resultPath = resultPath
 		self.pathName:str = path
 		self.psychChar = {}
-		self.character:dict = Constants.CHARACTER.copy()
+		self.character:dict = copy.deepcopy(Constants.CHARACTER)
 		self.characterName:str = None
 
 		self.loadCharacter()
 
 	def loadCharacter(self):
-		self.psychChar = json.loads(open(self.pathName, 'r').read())
+		with open(self.pathName, 'r') as file:
+			self.psychChar = json.load(file)
 		self.characterJson = files.removeTrail(self.charName)
 
 	def convert(self):
