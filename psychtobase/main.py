@@ -200,9 +200,13 @@ def convert(psych_mod_folder, result_folder, options):
 
                 converted_char.convert()
                 converted_char.save()
-                                                     # For THOSE
+
+                # For THOSE
                 fileBasename = converted_char.iconID.replace('icon-', '')
-                characterMap[fileBasename] = converted_char.characterName
+                if fileBasename in characterMap:
+                    characterMap[fileBasename].append(converted_char.characterName)
+                else:
+                    characterMap[fileBasename] = [converted_char.characterName]
                 logging.info(f'Saved {converted_char.characterName} to character map using their icon id: {fileBasename}.')
             else:
                 logging.warn(f'{character} is a directory, or not a json! Skipped')
@@ -235,7 +239,7 @@ def convert(psych_mod_folder, result_folder, options):
                     keyForThisIcon = filename.replace('icon-', '').replace('.png', '')
                     logging.info('Checking if ' + keyForThisIcon + ' is in the characterMap')
 
-                    if characterMap.get(keyForThisIcon, None) != None:
+                    if keyForThisIcon in characterMap:
                         try:
                             # Woah, freeplay icons
                             logging.getLogger('PIL').setLevel(logging.INFO)
@@ -245,12 +249,11 @@ def convert(psych_mod_folder, result_folder, options):
                                 # Scale to 50x50, same size as BF and GF pixel icons
                                 pixel_img = normal_half.resize((50, 50), Image.Resampling.NEAREST)
 
-                                
-                                pixel_name = characterMap.get(keyForThisIcon) + 'pixel.png'
-
-                                freeplay_destination = f'{result_folder}/{modFoldername}{freeplayDir}/{pixel_name}'
-                                pixel_img.save(freeplay_destination)
-                                logging.info(f'Saving converted freeplay icon to {freeplay_destination}')
+                                for characterName in characterMap[keyForThisIcon]:
+                                    pixel_name = characterName + 'pixel.png'
+                                    freeplay_destination = f'{result_folder}/{modFoldername}{freeplayDir}/{pixel_name}'
+                                    pixel_img.save(freeplay_destination)
+                                    logging.info(f'Saving converted freeplay icon to {freeplay_destination}')
                         except Exception as ___exc:
                             logging.error(f"Failed to create character {keyForThisIcon}'s freeplay icon: {___exc}")
                 except Exception as e:
