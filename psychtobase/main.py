@@ -242,7 +242,9 @@ def convert(psych_mod_folder, result_folder, options):
     songOptions = options.get('songs', {
         'inst': False,
         'voices': False,
-        'split': False
+        'split': False,
+        'sounds': False,
+        'music': False
     })
     if songOptions:
         dir = Constants.FILE_LOCS.get('SONGS')
@@ -343,6 +345,51 @@ def convert(psych_mod_folder, result_folder, options):
                               f'{result_folder}/{modFoldername}{bgSongs}{songKeyFormatted}/{Path(songFile).name}')
                         except Exception as e:
                             logging.error(f'Could not copy asset {songFile}: {e}')
+            # End block for 'songs' folder
+
+            if songOptions['sounds']: # Some people use directories on sounds, so I am adding support
+                sounds_dir = Constants.FILE_LOCS.get('SOUNDS')
+                psychSounds = modName + sounds_dir[0]
+                baseSounds = sounds_dir[1]
+
+                # Thankfully, glob ignores folders or files if they do not exist
+                allsoundsindirsounds = files.findAll(f'{psychSounds}*')
+                for asset in allsoundsindirsounds:
+                    logging.info(f'Checking on {asset}')
+
+                    if Path(asset).is_dir():
+                        folderName = Path(asset).name
+                        logging.info(f'{asset} is a tree, attempting to copy it')
+                        try:
+                            pathTo = f'{result_folder}/{modFoldername}{baseSounds}{folderName}'
+                            treeCopy(asset, pathTo)
+                        except Exception as e:
+                            logging.error(f'Failed to copy {asset}: {e}')
+
+                    else:
+                        logging.info(f'{asset} is file, copying')
+                        try:
+                            folderMake(f'{result_folder}/{modFoldername}{baseSounds}')
+                            fileCopy(asset, f'{result_folder}/{modFoldername}{baseSounds}{Path(asset).name}')
+                        except Exception as e:
+                            logging.error(f'Failed to copy {asset}: {e}')
+
+            if songOptions['music']:
+                sounds_dir = Constants.FILE_LOCS.get('MUSIC')
+                psychSounds = modName + sounds_dir[0]
+                baseSounds = sounds_dir[1]
+
+                allsoundsindirsounds = files.findAll(f'{psychSounds}*')
+            
+                for asset in allsoundsindirsounds:
+                    logging.info(f'Copying asset {asset}')
+                    try:
+                        folderMake(f'{result_folder}/{modFoldername}{baseSounds}')
+                        fileCopy(asset,
+                            f'{result_folder}/{modFoldername}{baseSounds}{Path(asset).name}')
+                    except Exception as e:
+                        logging.error(f'Could not copy asset {asset}: {e}')
+
     weekCOptions = options.get('weeks', {
             'props': False, # Asset
             'levels': False,
