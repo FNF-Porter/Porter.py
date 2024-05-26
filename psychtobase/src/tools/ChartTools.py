@@ -2,6 +2,7 @@ from src import Utils, Constants, files, window
 import logging
 from pathlib import Path
 from src.Paths import Paths
+from copy import deepcopy
 
 class ChartObject:
 	"""
@@ -9,24 +10,26 @@ class ChartObject:
 
 	Args:
 		path (str): The path where the song's chart data is stored.
+		output (str): The path where you want to save the song.
 	"""
 	def __init__(self, path: str, output:str) -> None:
 		self.songPath = Path(path)
-		self.songNameRaw:str = self.songPath.name
-		self.songNamePath = self.songNameRaw.replace(' ', '-').lower()
-		self.outputpath = Path(output)
+		self.savePath = Path(output)
+
+		self.songFile = self.songPath.name
+		self.songName = self.songFile.replace("-", " ")
 
 		self.startingBpm = 0
-
 		self.sections = []
 
-		self.difficulties:list = []
-		self.metadata:dict = Constants.BASE_CHART_METADATA.copy()
+		self.metadata:dict = deepcopy(Constants.BASE_CHART_METADATA)
 		self.charts:dict = {}
+		self.difficulties:list = []
 
-		self.chart:dict = Constants.BASE_CHART.copy()
+		self.chart:dict = deepcopy(Constants.BASE_CHART)
 
 		self.initCharts()
+
 		try:
 			self.setMetadata()
 		except:
@@ -35,25 +38,24 @@ class ChartObject:
 		logging.info(f"Chart for {self.metadata.get('songName')} was created!")
 
 	def initCharts(self):
-		logging.info(f"Initialising charts for {self.songNameRaw}...")
+		logging.info(f"Initialising charts for {self.songName}...")
 
 		charts = self.charts
 
 		difficulties = self.difficulties
 		unorderedDiffs = set()
 
-		dirFiles = list(self.songPath.iterdir())
-		chartFiles = []
-		for _f in dirFiles:
-			if not _f.suffix == ".json":
-				continue
-			if _f.name.endswith("events.json"):
-				logging.warn(f'[{self.songNameRaw}] events.json not supported yet! Sorry!')
+		for file in self.songPath.iterdir():
+
+			if file.suffix == ".json":
+				if file.stem == "events":
+					# If file is events.json: skip
+					logging.warn(f'[{self.songFile}] events.json not supported yet! Sorry!')
+					continue
+			else:
+				# If file isn't json: skip
 				continue
 
-			chartFiles.append(_f)
-
-		for file in chartFiles:
 			fileName = file.stem
 			nameSplit = fileName.split("-")
 			nameLength = len(nameSplit)
@@ -62,7 +64,7 @@ class ChartObject:
 
 			if nameLength > 2:
 				difficulty = nameSplit[-1]
-			elif nameLength > 1 and fileName != self.songNameRaw:
+			elif nameLength > 1 and fileName != self.songFile:
 				difficulty = nameSplit[1]
 
 			filePath = self.songPath / fileName
@@ -96,7 +98,7 @@ class ChartObject:
 		playData = metadata["playData"]
 		characters = playData["characters"]
 
-		metadata["songName"] = sampleChart.get("song").replace("-", " ").title()
+		self.songName = metadata["songName"] = sampleChart.get("song").replace("-", " ").title()
 		metadata["artist"] = 'Unknown Artist'
 
 		logging.info(f"Initialising metadata for {self.metadata.get('songName')}...")
@@ -113,19 +115,18 @@ class ChartObject:
 
 	def convert(self):
 		logging.info(f"Chart conversion for {self.metadata.get('songName')} started!")
+
 		prevMustHit = self.sampleChart["notes"][0].get("mustHitSection", True)
 		prevTime = 0
-		self.chart["events"] = [Utils.focusCamera(0, prevMustHit)]
+
 		events = self.chart["events"]
+		events.append(Utils.focusCamera(0, prevMustHit))
 
-		firstChart = True
-
-		for diff, cChart in self.charts.items():
+		for i, (diff, cChart) in enumerate(self.charts.items()):
 			# cChart - convert Chart
 			self.chart["scrollSpeed"][diff] = cChart.get("speed")
-			self.chart["notes"][diff] = []
+			notes = self.chart["notes"][diff] = []
 
-			notes = self.chart["notes"][diff]
 			steps = 0
 
 			prev_notes = set()
@@ -139,6 +140,10 @@ class ChartObject:
 					strumTime = note[0]
 					noteData = note[1]
 					length = note[2]
+
+					if noteData < 0: # Event notes (not yet supported, simply skipping them to keep the chart valid)
+						logging.warn(f'Tried converting legacy event "{length}". Legacy events are currently not supported. Sorry!')
+						continue
 
 					if not mustHit:
 						noteData = (noteData + 4) % 8 # We're shifting the notes! Basic arithmetic operations 🤓
@@ -155,13 +160,16 @@ class ChartObject:
 					if is_duplicate:
 						total_duplicates += 1
 						continue
+
 					prev_notes.add((strumTime, noteData))
 
 					notes.append(Utils.note(noteData, length, strumTime))
 
-				if firstChart:
+				if i == 0:
+					# Genius
 					lengthInSteps = section.get("lengthInSteps", section.get("sectionBeats", 4) * 4)
 					sectionBeats = section.get("sectionBeats", lengthInSteps / 4)
+
 					bpm = section.get('bpm', self.startingBpm)
 					changeBPM = section.get('changeBPM', False)
 
@@ -184,22 +192,24 @@ class ChartObject:
 						self.metadata["timeChanges"].append(Utils.timeChange(prevTime, bpm, sectionBeats, sectionBeats, 0, [sectionBeats]*4))
 						self.stepCrochet = 15000 / bpm
 						steps = 0
-				
-			firstChart = False
+
 			if total_duplicates > 0:
-				logging.warn(f"{total_duplicates} duplicate notes detected and removed from '{diff}' chart!")
+				logging.warn(f"We found {total_duplicates} duplicate notes in '{diff}' difficulty data! Notes were successfully removed.")
 
 		logging.info(f"Chart conversion for {self.metadata.get('songName')} was completed!")
 
 	def save(self):
-		folder = Path(Constants.FILE_LOCS.get('CHARTFOLDER')[1]) / self.songNamePath
-		saveDir = f'{self.outputpath}{folder}'
+		# In case there were issues in how the Song was previously named, we save it under a new name!
+		newSongFile = Utils.formatToSongPath(self.songName)
+
+		folder = Path(Constants.FILE_LOCS.get('CHARTFOLDER')[1]) / newSongFile
+		saveDir = f'{self.savePath}{folder}'
 		files.folderMake(saveDir)
 
-		savePath = Paths.join(saveDir, f'{self.songNamePath}-metadata')
-		Paths.writeJson(savePath, self.metadata, 2)
+		output = Paths.join(saveDir, f'{self.songFile}-metadata')
+		Paths.writeJson(output, self.metadata, 2)
 
-		savePath = Paths.join(saveDir, f'{self.songNamePath}-chart')
-		Paths.writeJson(savePath, self.chart, 2)
+		output = Paths.join(saveDir, f'{newSongFile}-chart')
+		Paths.writeJson(output, self.chart, 2)
 
-		logging.info(f"[{self.songNamePath}] Saving {self.metadata.get('songName')} to {saveDir}")
+		logging.info(f"[{newSongFile}] Saving {self.songName} to {saveDir}")

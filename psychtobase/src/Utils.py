@@ -4,6 +4,7 @@ A class full of tools needed for mod conversion.
 
 import time
 from src import Constants
+from re import sub
 
 def getRuntime(start:float) -> float:
 	return start - time.time()
@@ -69,3 +70,12 @@ def coolText(text:str) -> str:
 
 	text = " " * ((length - len(text)) // 2) + text
 	return "\n" + "=" * length + f"\n{text}\n" + "=" * length
+
+def formatToSongPath(name:str) -> str:
+	invalidChars = r'[~&\\;:<>#]'
+	hideChars = r'[.,\'"%?!]'
+	
+	name = name.replace(" ", "-").lower()
+	name = sub(invalidChars, '-', name)
+
+	return sub(hideChars, '', name).strip("-")
