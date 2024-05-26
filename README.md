@@ -20,10 +20,11 @@ Thanks for contributing! You'll need to install [Python](https://www.python.org/
 You can simply run dependency-install.bat to install all of these at once. You have to go to [python.org](https://www.python.org/downloads/) and get Python first, though.
 - luaparser
 - numpy
+- pillow
 - pydub
 - pyinstaller
 - PyQt6
-You can start the window by running setup.py.
+You can start the window by running main.py
 
 Note that your build won't have a signature/key/what ever you call it, so Windows Defender will probably delete it. Github actions makes builds that don't have this issue, so use these instead.
 
