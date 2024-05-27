@@ -109,7 +109,9 @@ CHARACTER = {
 ANIMATION = {
 	"name": None,
 	"prefix": None,
-	"offsets": [0, 0]
+	"offsets": [0, 0],
+  "frameRate": 24,
+  "frameIndices": []
 }
 
 LEVEL_PROP_DEFAULTS = {

@@ -47,6 +47,8 @@ class CharacterObject:
 			animTemplate['name'] = animation['anim']
 			animTemplate['prefix'] = animation['name']
 			animTemplate['offsets'] = animation['offsets']
+			animTemplate['frameRate'] = animation['fps']
+			animTemplate['frameIndices'] = animation['indices']
 
 			logging.info(f'[{englishCharacterName}] Converting animation {animation}')
 			#note to remove this later
