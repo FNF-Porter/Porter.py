@@ -12,7 +12,7 @@ def parseStage(lua_script_path):
 
     calls = {}
 
-    allowedMethods = ['makeLuaSprite', 'makeAnimatedLuaSprite', 'addAnimationByPrefix', 'addLuaSprite']
+    allowedMethods = ['makeLuaSprite', 'setScrollFactor', 'scaleObject', 'makeAnimatedLuaSprite', 'addAnimationByPrefix', 'addLuaSprite']
     allowedFuncs = ['onCreate', 'onCreatePost']
 
     # Note: addLuaSprite only checks for if a character is after the characters!
@@ -66,7 +66,7 @@ def parseStage(lua_script_path):
                 calls[curFunc][node.func.id].append(arguments)
 
             except Exception as e:
-                logging.error(f'Failed to asign arguments of this call: {e}')
+                logging.error(f'Failed to assign arguments of this call: {e}')
 
     #print(f'{calls}')
 
