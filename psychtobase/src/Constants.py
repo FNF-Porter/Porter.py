@@ -102,7 +102,7 @@ ANIMATION = {
 	"name": None,
 	"prefix": None,
 	"offsets": [0, 0],
-  "fps": 24,
+  "frameRate": 24,
   "frameIndices": []
 }
 
