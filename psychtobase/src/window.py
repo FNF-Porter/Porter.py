@@ -11,11 +11,11 @@ import main
 import webbrowser
 
 from PyQt6.QtCore import QSize
-from PyQt6.QtGui import QIcon, QPixmap
-from PyQt6.QtWidgets import QApplication, QMainWindow, QPushButton, QCheckBox, QLabel, QLineEdit, QPushButton, QFileDialog, QDialog, QVBoxLayout, QRadioButton, QTextBrowser
+from PyQt6.QtGui import QIcon, QPixmap, QImage
+from PyQt6.QtWidgets import QApplication, QMainWindow, QPushButton, QCheckBox, QLabel, QLineEdit, QFileDialog, QDialog, QVBoxLayout, QRadioButton, QTextBrowser, QWidget
 
-#the icon, in base64 (because its easier to compile)
-icon = b64decode("iVBORw0KGgoAAAANSUhEUgAAAEAAAABABAMAAABYR2ztAAAAFVBMVEX/////3fv/fdtsPpT/LDdYtf8AKUvOkdnQAAAACXBIWXMAAC4jAAAuIwF4pT92AAABRUlEQVRIx73UQbLCIAwAUJzWvf03EC/gNBdgEfcuLDco9z/CB0JLgQDq/PlZ1clrkoZWIf4mTpcemLpg6oKpCy490BZTT5wm2QWyOWgf/Eh5bTUBC1oCQLqoN4HZA1sC7lx+oHwd3GQIC4ArIPe4fgnmKHgA8iC+AAPA3AOxxA24Pb8B5j1/bwJ75QAiqgzAlrdgREzFDoAAYiYGHmABgMCIRQlaFeUhjIDLsjzfB1ufDTwWime5D/eUW9oGcyqiCXzwYORBHCJuRZxDUtfAljcpULGA8cDUgLCp1RVY0yExTqrdzXpdPgVWjCo8hBUmA8KfLgagjS6AL+EQPaLhAPoyfk8mzKCSHvQWVUF4UcIqCLyUKAQtW9O6UYlcqHgYLDiepu2QA/p9jvlPAXXYwev4cSVBIv36sgj314Eo/wJ4If4nfgHb6rE0etNCVQAAAABJRU5ErkJggg==")
+icon = b64decode(Constants.BASE64_IMAGES.get('windowIcon'))
+_windowTitleSuffix = "v0.1 [BETA]"
 _defaultsFile = '.defaults'
 _vocalSplitEnabledByDefault = False
 
@@ -61,6 +61,34 @@ class SimpleDialog(QDialog):
 		# print(self.input_values)
 
 		self.close()
+
+class ErrorMessage(QDialog):
+	def __init__(self, text, actual_error_text):
+		super().__init__()
+		layout = QVBoxLayout()
+		self.setLayout(layout)
+		try:
+			text
+		except:
+			#if text isnt given itll set it to unknown error
+			text = 'Unknown Error'
+		try:
+			actual_error_text
+		except:
+			actual_error_text = "the fucking error handler had a bug dude, you're fucked"
+		self.setWindowTitle('Error!')
+		self.setFixedSize(QSize(400, 200))
+		
+		pixmap = QPixmap()
+		pixmap.loadFromData(b64decode(Constants.BASE64_IMAGES.get('errorIcon')))
+		self.errorIcon = QImage(pixmap)
+
+		self.text = QLabel('Hello Bro', self)
+		self.text.move(20, 80)
+		self.text.resize(360, 40)
+
+		self.openLog = QPushButton('Open log file', self)
+		self.openLog.clicked.connect(Window.openLogFile)
 		
 class Window(QMainWindow):
 	def closeEvent(self, event):
@@ -84,7 +112,7 @@ class Window(QMainWindow):
 		pixmap.loadFromData(icon)
 		self.setWindowIcon(QIcon(pixmap))
 
-		self.modLabel = 		QLabel("Path to your Psych Engine mod:", self)
+		self.modLabel = QLabel("Path to your Psych Engine mod:", self)
 		self.baseGameLabel = 	QLabel("Path to Base Game mods folder:", self)
 		self.modLabel.move(20, 20)
 		self.modLabel.resize(220, 30)
@@ -130,29 +158,23 @@ class Window(QMainWindow):
 
 		self.onlyCharts = QRadioButton('Only Charts', self)
 		self.onlyCharts.move(rX, 140)
-		self.onlyCharts.setToolTip("A default option. Quick for fast and only chart converting.")
 
 		self.onlySongs = QRadioButton('Only Audio', self)
 		self.onlySongs.move(rX, 170)
-		self.onlySongs.setToolTip("A default option. Quick for fast and only audio converting/copying.")
 
 		self.onlyChars = QRadioButton('Only Characters', self) # not to be confused with onlyCharts
 		self.onlyChars.move(rX, 200)
 		self.onlyChars.resize(400, 30)
-		self.onlyChars.setToolTip("A default option. Quick for fast and only character converting.")
 
 		self.onlyStages = QRadioButton('Only Stages', self)
 		self.onlyStages.move(rX, 230)
-		self.onlyStages.setToolTip("A default option. Quick for fast and only stage converting.")
 
 		self.fullMod = QRadioButton('Full Mod', self)
 		self.fullMod.move(rX, 260)
-		self.fullMod.setToolTip("A default option. Quick for converting the entire mod.")
 		self.fullMod.setChecked(True) # Default
 
-		self.iChoose = QRadioButton('Let me choose', self)
+		self.iChoose = QRadioButton('Custom', self)
 		self.iChoose.move(rX, 290)
-		self.iChoose.setToolTip("Select this to customize your conversion experience.")
 
 		self.onlyCharts.toggled.connect(self.radioCheck)
 		self.onlySongs.toggled.connect(self.radioCheck)
@@ -173,7 +195,7 @@ class Window(QMainWindow):
 		self.logsLabel.resize(320, 270)
 
 		self.helpButton = QPushButton("Report an issue", self)
-		self.helpButton.setToolTip('https://github.com/gusborg88/fnf-porter/issues/new')
+		self.helpButton.setToolTip('https://github.com/gusborg88/fnf-porter/issues/new/choose/')
 		self.helpButton.move(130, 320)
 		self.helpButton.resize(100, 30)
 		self.helpButton.clicked.connect(self.goToIssues)
@@ -317,6 +339,7 @@ class Window(QMainWindow):
 
 		self.radioCheck(True, True)
 
+
 	def allToDefaults(self, checked = True, enabled = False):
 		self.charts.setChecked(checked)
 		self.songs.setChecked(checked)
@@ -442,7 +465,6 @@ class Window(QMainWindow):
 		result_path = self.baseGameLineEdit.text()
 		if Path(result_path).exists():	
 			logging.warn(f'Folder {result_path} already existed before porting, files may have been overwritten.')
-			#i was trying to get this to be a window but it wasnt working
 		options = Constants.DEFAULT_OPTIONS
 		options['charts'] = self.charts.isChecked()
 		if self.songs.isChecked():
@@ -473,11 +495,15 @@ class Window(QMainWindow):
 			logging.error(f'Problems with your save file: {e}')
 
 		if psych_mod_folder_path != None and result_path != None:
-			main.convert(psych_mod_folder_path, result_path, options)
+			try:
+				main.convert(psych_mod_folder_path, result_path, options)
+			except Exception as e:
+				self.throwError('poop', {e})
+		else:
+			logging.warn('Select an input folder or output folder first!')
 
 	def goToIssues(self):
-		#note this is a custom link that puts some things into the body, it should be the same as in readme.md
-		webbrowser.open('https://github.com/gusborg88/fnf-porter/issues/new?body=Log+file+output+(check+logs+folder):%0A```%0A%0A```')
+		webbrowser.open('https://github.com/gusborg88/fnf-porter/issues/new/choose')
 
 	def goToGB(self):
 		_GB_ToolID = '16982'
@@ -505,6 +531,10 @@ class Window(QMainWindow):
 
 		return values
 	
+	def throwError(self, text, actual_error_text):
+		self.newError = ErrorMessage(text, actual_error_text)
+		self.newError().show
+
 	def prompt(self, inputs, title, body):
 		button = 'Continue'
 		return self.open_dialog(title=title, inputs=inputs, button=button, body=body)
@@ -517,7 +547,15 @@ def init():
 	logging.info('Initiating window')
 
 	# initiate the window
-	window.show()
+	try:
+		window.show()
+	except Exception as e:
+		#why does this never fire
+		logging.critical(f'Window could not show! {e}')
+	
+	#work in progress
+	#Window.throwError(self=QDialog, text='d', actual_error_text='poooop')
+	print('pooop')
 
 	app.exec()
 
