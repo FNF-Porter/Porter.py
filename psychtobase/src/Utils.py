@@ -48,7 +48,7 @@ def note(data:int, length:float, time:str) -> dict:
 	"""
 	Function created for faster creation of note data.
 	"""
-	if length == 0:
+	if length == 0 or isinstance(length, str): # String check for more modified Psych Engines
 		return {"d": data, "t": time} # This is how the base game charts handle it so...
 	return {"d": data, "l": length, "t": time}
 
