@@ -78,4 +78,4 @@ def formatToSongPath(name:str) -> str:
 	name = name.replace(" ", "-").lower()
 	name = sub(invalidChars, '-', name)
 
-	return sub(hideChars, '', name).strip("-")
+	return sub(hideChars, '', name)
