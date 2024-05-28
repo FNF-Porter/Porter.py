@@ -270,7 +270,7 @@ def convert(psych_mod_folder, result_folder, options):
 
         folderMake(f'{result_folder}/{modFoldername}{bgSongs}')
 
-        _allSongFiles = files.findAll(f'{psychSongs}*.ogg')
+        _allSongFiles = files.findAll(f'{psychSongs}*')
 
         for song in _allSongFiles:
             _songKeyUnformatted = Path(song).name
