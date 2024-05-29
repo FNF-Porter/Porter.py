@@ -52,17 +52,23 @@ def note(data:int, length:float, time:str) -> dict:
 		return {"d": data, "t": time} # This is how the base game charts handle it so...
 	return {"d": data, "l": length, "t": time}
 
-def event(event:str, time:float, values:dict) -> dict:
+def event(time:float, event:str, values:dict) -> dict:
 	"""
 	Function created for faster creation of events.
 	"""
-	return {"e": event, "t": time, "v": values}
+	return {"t": time, "e": event, "v": values}
 
 def focusCamera(time:float, char:bool):
 	"""
 	Function created for faster creation of camera change events.
 	"""
-	return event("FocusCamera", time, {"char": "0" if char else "1"})
+	return event(time, "FocusCamera", {"char": "0" if char else "1"})
+
+def playAnimation(time:float, target: str, anim: str, force: bool):
+	"""
+	Function created for faster creation of Play Animation events
+	"""
+	return event(time, "PlayAnimation", {"target": target, "anim": anim, "force": force})
 
 def coolText(text:str) -> str:
 	length = max(30, len(text) + 5)

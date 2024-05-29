@@ -27,6 +27,7 @@ class ChartObject:
 		self.difficulties:list = []
 
 		self.chart:dict = deepcopy(Constants.BASE_CHART)
+		self.chart["events"] = []
 
 		self.initCharts()
 
@@ -49,8 +50,7 @@ class ChartObject:
 
 			if file.suffix == ".json":
 				if file.stem == "events":
-					# If file is events.json: skip
-					logging.warn(f'[{self.songFile}] events.json not supported yet! Sorry!')
+					self.convertEvents(file)
 					continue
 			else:
 				# If file isn't json: skip
@@ -113,6 +113,26 @@ class ChartObject:
 		metadata["ratings"] = {diff: 0 for diff in self.difficulties} # Ratings don't do much now so :P
 		metadata["timeChanges"] = [Utils.timeChange(0, self.startingBpm, 4, 4, 0, [4]*4)]
 
+	def convertEvents(self, file):
+		logging.info(f"Events conversion for {self.songName} started!")
+
+		file = file.with_suffix('')
+		fileJson = Paths.parseJson(file)
+		events_data = fileJson.get("song", {}).get("events", [])
+
+		for event in events_data:
+			time = event[0]
+			event_type = event[1][0][0]
+
+			if event_type == "Play Animation":
+				anim = event[1][0][1]
+				target = event[1][0][2].lower() # When the game is stupid and doesn't like capitalization
+				self.chart["events"].append(Utils.playAnimation(time, target, anim, True))
+			else:
+				logging.warn(f"Conversion for event {event_type} is not implemented!")
+
+		logging.info(f"Events conversion for {self.songName} complete!")
+
 	def convert(self):
 		logging.info(f"Chart conversion for {self.metadata.get('songName')} started!")
 
@@ -121,6 +141,8 @@ class ChartObject:
 
 		events = self.chart["events"]
 		events.append(Utils.focusCamera(0, prevMustHit))
+
+		existing_play_anims = set()
 
 		for i, (diff, cChart) in enumerate(self.charts.items()):
 			# cChart - convert Chart
@@ -163,6 +185,23 @@ class ChartObject:
 
 					prev_notes.add((strumTime, noteData))
 
+					# Alt Animation implementation using Play Animations!
+					if len(note) > 3 and note[3] == "Alt Animation":
+						target = "player" if noteData in range(4) else "opponent"
+						if noteData in [0, 4]:
+						    anim = "singLEFT-alt"
+						elif noteData in [1, 5]:
+						    anim = "singDOWN-alt"
+						elif noteData in [2, 6]:
+						    anim = "singUP-alt"
+						elif noteData in [3, 7]:
+						    anim = "singRIGHT-alt"
+						play_animation = (strumTime, target, anim, True)
+
+						if play_animation not in existing_play_anims:
+							events.append(Utils.playAnimation(strumTime, target, anim, True))
+							existing_play_anims.add(play_animation)
+
 					notes.append(Utils.note(noteData, length, strumTime))
 
 				if i == 0:
@@ -195,6 +234,23 @@ class ChartObject:
 
 			if total_duplicates > 0:
 				logging.warn(f"We found {total_duplicates} duplicate notes in '{diff}' difficulty data! Notes were successfully removed.")
+
+        # Process events within the chart file becuz fuck us
+		if "events" in cChart:
+			for event in cChart["events"]:
+				time = event[0]
+				event_type = event[1][0][0]
+
+				if event_type == "Play Animation":
+					anim = event[1][0][1]
+					target = event[1][0][2].lower()
+					play_animation = (time, target, anim, True)
+
+					if play_animation not in existing_play_anims:
+						events.append(Utils.playAnimation(time, target, anim, True))
+						existing_play_anims.add(play_animation)
+				else:
+					logging.warn(f"Conversion for event {event_type} is not implemented!")
 
 		logging.info(f"Chart conversion for {self.metadata.get('songName')} was completed!")
 
