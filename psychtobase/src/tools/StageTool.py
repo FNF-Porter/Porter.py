@@ -51,12 +51,6 @@ def getProps(parentFunc, parentFuncName, luaFilename):
 
         call = pictureProp[0]
 
-        z_index = 0 
-        if parentFuncName == 'onCreatePost':
-            z_index = index
-        else:
-            z_index = -len(propArr) + index
-
         animated = False
         if call == 'makeAnimatedLuaSprite':
             animated = True
@@ -66,7 +60,7 @@ def getProps(parentFunc, parentFuncName, luaFilename):
             's': sprite, # Sprite
             'x': pos[0], # X
             'y': pos[1], # Y
-            'z': z_index, # Z index
+            'z': 0, # Z index
             'a': animated, # Animated
             'as': [], # Animations
             'scale': scale, # Scale
@@ -87,31 +81,22 @@ def getProps(parentFunc, parentFuncName, luaFilename):
 
         for prop in _props:
             if prop['t'] == tag:
-                thisProp = prop
-
-                thisProp['as'].append({
+                prop['as'].append({
                     'an': animName,
                     'p': prefix,
                     'f': fps,
                     'l': loop
                 })
         
-    for addProp in parentFunc.get('addLuaSprite', []):
-        thisProp = None
+    addSpriteOrder = [addProp[1] for addProp in parentFunc.get('addLuaSprite', [])]
 
-        tag = addProp[1]
-        afterChars = False
-        if len(addProp) > 2:
-            afterChars = addProp[2]
-
+    for i, tag in enumerate(addSpriteOrder):
         for prop in _props:
             if prop['t'] == tag:
-                thisProp = prop
-
-        if thisProp:
-            if afterChars:
-                newZ = int(thisProp['z']) + 300
-                thisProp['z'] = newZ
+                if len(parentFunc.get('addLuaSprite', [])[i]) > 2 and parentFunc.get('addLuaSprite', [])[i][2]:
+                    prop['z'] = 300 + i
+                else:
+                    prop['z'] = i - len(addSpriteOrder)
 
     return _props
 
