@@ -122,6 +122,13 @@ class ChartObject:
 		fileJson = Paths.parseJson(file)
 		events_data = fileJson.get("song", {}).get("events", [])
 
+		# Sometimes numbers are used instead of names
+		target_nums = {
+        	"0": "bf",
+        	"1": "dad",
+        	"2": "gf"
+    	}
+
 		for event in events_data:
 			time = event[0]
 			event_type = event[1][0][0]
@@ -129,10 +136,18 @@ class ChartObject:
 			if event_type == "Play Animation":
 				anim = event[1][0][1]
 				target = event[1][0][2].lower() # When the game is stupid and doesn't like capitalization
+				if str(target) in target_nums:
+					target = target_nums[str(target)]
+				else:
+					target = target.lower()
 				self.chart["events"].append(Utils.playAnimation(time, target, anim, True))
 			elif event_type == "Change Character":
 				target = event[1][0][1].lower()
 				char = event[1][0][2]
+				if str(target) in target_nums:
+					target = target_nums[str(target)]
+				else:
+					target = target.lower()
 				self.chart["events"].append(Utils.changeCharacter(time, target, char))
 			else:
 				logging.warn(f"Conversion for event {event_type} is not implemented!")
@@ -243,6 +258,12 @@ class ChartObject:
 
         # Process events within the chart file becuz fuck us
 		if self.shouldConvertEvents:
+			# Sometimes numbers are used instead of names
+			target_nums = {
+        		"0": "bf",
+        		"1": "dad",
+        		"2": "gf"
+    		}
 			if "events" in cChart:
 				for event in cChart["events"]:
 					time = event[0]
@@ -255,6 +276,12 @@ class ChartObject:
 						if event_type == "Play Animation":
 							anim = stacked_event[1]
 							target = stacked_event[2].lower()
+
+							if str(target) in target_nums:
+								target = target_nums[str(target)]
+							else:
+								target = target.lower()
+
 							play_animation = (time, target, anim, True)
 
 							if play_animation not in existing_events:
@@ -263,6 +290,12 @@ class ChartObject:
 						elif event_type == "Change Character":
 							target = stacked_event[1].lower()
 							char = stacked_event[2]
+
+							if str(target) in target_nums:
+								target = target_nums[str(target)]
+							else:
+								target = target.lower()
+
 							change_character = (time, target, char)
 
 							if change_character not in existing_events:
