@@ -268,7 +268,8 @@ def convert(psych_mod_folder, result_folder, options):
         psychSongs = modName + dir[0]
         bgSongs = dir[1]
 
-        folderMake(f'{result_folder}/{modFoldername}{bgSongs}')
+        #folderMake(f'{result_folder}/{modFoldername}{bgSongs}') fix for #50, why?
+        # During the other folderMake calls, we absolutely check if the parent folder 'songs' exist to create it blah blah.
 
         _allSongFiles = files.findAll(f'{psychSongs}*')
 
