@@ -455,16 +455,16 @@ def convert(psych_mod_folder, result_folder, options):
         psychWeeks = f'{modName}{dir[0]}'
         baseLevels = dir[1]
 
-        #if Path(psychWeeks).exists(follow_symlinks=False):
-        #    allPng = files.findAll(f'{psychWeeks}*.png')
-        #    for asset in allPng:
-        #        logging.info(f'Copying week: {asset}')
-        #        try:
-        #            folderMake(f'{result_folder}/{modFoldername}{baseLevels}')
-        #            fileCopy(asset,
-        #                f'{result_folder}/{modFoldername}{baseLevels}{Path(asset).name}')
-        #        except Exception as e:
-        #            logging.error(f'Could not copy asset {asset}: {e}')
+        if Path(psychWeeks).exists(follow_symlinks=False):
+           allPng = files.findAll(f'{psychWeeks}*.png')
+           for asset in allPng:
+               logging.info(f'Copying week: {asset}')
+               try:
+                   folderMake(f'{result_folder}/{modFoldername}{baseLevels}')
+                   fileCopy(asset,
+                       f'{result_folder}/{modFoldername}{baseLevels}{Path(asset).name}')
+               except Exception as e:
+                   logging.error(f'Could not copy asset {asset}: {e}')
         #else: 
         #    logging.info(f'A week for {modName} has no story menu image, replacing with a default.')
         #    with open(f'week{modName}.png', 'wb') as fh:
