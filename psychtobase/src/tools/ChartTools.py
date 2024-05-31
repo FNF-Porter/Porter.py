@@ -128,6 +128,10 @@ class ChartObject:
 				anim = event[1][0][1]
 				target = event[1][0][2].lower() # When the game is stupid and doesn't like capitalization
 				self.chart["events"].append(Utils.playAnimation(time, target, anim, True))
+			elif event_type == "Change Character":
+				target = event[1][0][1].lower()
+				char = event[1][0][2]
+				self.chart["events"].append(Utils.changeCharacter(time, target, char))
 			else:
 				logging.warn(f"Conversion for event {event_type} is not implemented!")
 
@@ -142,7 +146,7 @@ class ChartObject:
 		events = self.chart["events"]
 		events.append(Utils.focusCamera(0, prevMustHit))
 
-		existing_play_anims = set()
+		existing_events = set()
 
 		for i, (diff, cChart) in enumerate(self.charts.items()):
 			# cChart - convert Chart
@@ -198,9 +202,9 @@ class ChartObject:
 						    anim = "singRIGHT-alt"
 						play_animation = (strumTime, target, anim, True)
 
-						if play_animation not in existing_play_anims:
+						if play_animation not in existing_events:
 							events.append(Utils.playAnimation(strumTime, target, anim, True))
-							existing_play_anims.add(play_animation)
+							existing_events.add(play_animation)
 
 					notes.append(Utils.note(noteData, length, strumTime))
 
@@ -246,9 +250,17 @@ class ChartObject:
 					target = event[1][0][2].lower()
 					play_animation = (time, target, anim, True)
 
-					if play_animation not in existing_play_anims:
+					if play_animation not in existing_events:
 						events.append(Utils.playAnimation(time, target, anim, True))
-						existing_play_anims.add(play_animation)
+						existing_events.add(play_animation)
+				elif event_type == "Change Character":
+					target = event[1][0][1].lower()
+					char = event[1][0][2]
+					change_character = (time, target, char)
+
+					if change_character not in existing_events:
+						events.append(Utils.changeCharacter(time, target, char))
+						existing_events.add(change_character)
 				else:
 					logging.warn(f"Conversion for event {event_type} is not implemented!")
 

@@ -58,6 +58,12 @@ def event(time:float, event:str, values:dict) -> dict:
 	"""
 	return {"t": time, "e": event, "v": values}
 
+def changeCharacter(time:float, target: str, char: str):
+	"""
+	Function created for faster creation of Change Character events
+	"""
+	return event(time, "Change Character", {"target": target, "char": char})
+
 def focusCamera(time:float, char:bool):
 	"""
 	Function created for faster creation of camera change events.
