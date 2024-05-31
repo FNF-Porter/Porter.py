@@ -243,26 +243,30 @@ class ChartObject:
 		if "events" in cChart:
 			for event in cChart["events"]:
 				time = event[0]
-				event_type = event[1][0][0]
 
-				if event_type == "Play Animation":
-					anim = event[1][0][1]
-					target = event[1][0][2].lower()
-					play_animation = (time, target, anim, True)
+				all_events = event[1]
 
-					if play_animation not in existing_events:
-						events.append(Utils.playAnimation(time, target, anim, True))
-						existing_events.add(play_animation)
-				elif event_type == "Change Character":
-					target = event[1][0][1].lower()
-					char = event[1][0][2]
-					change_character = (time, target, char)
+				for stacked_event in all_events:
+					event_type = stacked_event[0]
 
-					if change_character not in existing_events:
-						events.append(Utils.changeCharacter(time, target, char))
-						existing_events.add(change_character)
-				else:
-					logging.warn(f"Conversion for event {event_type} is not implemented!")
+					if event_type == "Play Animation":
+						anim = stacked_event[1]
+						target = stacked_event[2].lower()
+						play_animation = (time, target, anim, True)
+
+						if play_animation not in existing_events:
+							events.append(Utils.playAnimation(time, target, anim, True))
+							existing_events.add(play_animation)
+					elif event_type == "Change Character":
+						target = stacked_event[1].lower()
+						char = stacked_event[2]
+						change_character = (time, target, char)
+
+						if change_character not in existing_events:
+							events.append(Utils.changeCharacter(time, target, char))
+							existing_events.add(change_character)
+					else:
+						logging.warn(f"Conversion for event {event_type} is not implemented!")
 
 		logging.info(f"Chart conversion for {self.metadata.get('songName')} was completed!")
 
