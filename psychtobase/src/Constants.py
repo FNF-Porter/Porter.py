@@ -3,7 +3,10 @@ A module full of templates needed for mod conversion.
 """
 
 DEFAULT_OPTIONS = {
-  'charts': False,
+  'charts': {
+    'songs': False,  # Chart supremacy!
+    'events': False
+  },
   'songs': { # Technically "audios", but whatever
     'inst': False,
     'voices': False,
@@ -417,6 +420,9 @@ FILE_LOCS = {	# If the indent fucks up again its GitHub's fault
     
     'FREEPLAYICON':
     ['/images/icons/','/images/freeplay/icons'],
+
+    'SCRIPTS_DIR':
+    ['/scripts/', '/scripts/'] # Do we need this? YES!
 }
 
 VERSION = "0.2"

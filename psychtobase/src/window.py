@@ -19,6 +19,7 @@ _windowTitleSuffix = "v0.1 [BETA]"
 _defaultsFile = '.defaults'
 _vocalSplitEnabledByDefault = False
 
+app = QApplication([])
 class SimpleDialog(QDialog):
 	def __init__(self, title, inputs, button, body):
 		super().__init__()
@@ -63,32 +64,49 @@ class SimpleDialog(QDialog):
 		self.close()
 
 class ErrorMessage(QDialog):
-	def __init__(self, text, actual_error_text):
+	def __init__(self, text, actual_error_text, windowObject):
 		super().__init__()
-		layout = QVBoxLayout()
-		self.setLayout(layout)
+		layout = QVBoxLayout(self)
+		self.layout = layout
+
 		try:
 			text
 		except:
 			#if text isnt given itll set it to unknown error
 			text = 'Unknown Error'
+
 		try:
 			actual_error_text
 		except:
-			actual_error_text = "the fucking error handler had a bug dude, you're fucked"
-		self.setWindowTitle('Error!')
-		self.setFixedSize(QSize(400, 200))
+			actual_error_text = "the fucking error handler had a bug dude, you're fucked! This is indeed a classic FNF moment"
+
+		self.setWindowTitle(text)
+
+		widErr = 400
+		heiErr = 200
+
+		self.setFixedSize(QSize(widErr, heiErr))
 		
 		pixmap = QPixmap()
 		pixmap.loadFromData(b64decode(Constants.BASE64_IMAGES.get('errorIcon')))
 		self.errorIcon = QImage(pixmap)
 
-		self.text = QLabel('Hello Bro', self)
-		self.text.move(20, 80)
-		self.text.resize(360, 40)
+		self.text = QLabel(actual_error_text, self)
+		self.text.move(20, 20)
+		self.text.resize(widErr - 40, heiErr - 40)
 
 		self.openLog = QPushButton('Open log file', self)
-		self.openLog.clicked.connect(Window.openLogFile)
+		self.openLog.move((widErr - self.openLog.width()) - 20, (heiErr - self.openLog.height()) - 20)
+		self.openLog.clicked.connect(windowObject.openLogFile)
+
+		self.buttonContinue = QPushButton("I dont care", self)
+		self.buttonContinue.clicked.connect(self.on_button_clicked)
+		self.buttonContinue.move((widErr - (self.openLog.width() + self.buttonContinue.width())) - 20, (heiErr - self.buttonContinue.height()) - 20)
+
+		self.exec()
+
+	def on_button_clicked(self):
+		self.close()
 		
 class Window(QMainWindow):
 	def closeEvent(self, event):
@@ -208,7 +226,15 @@ class Window(QMainWindow):
 
 		## Section 3, Options
 		sX = int(wid / 2)
-		sSX = sX + 10
+
+		_catItemLeftSpacing = 15 # Categorized group padding-left.
+
+		sSX = sX + _catItemLeftSpacing
+
+		_newCheckbox = 20 # A checkbox, categorized or not.
+		_newCheckboxInCat = 20 # A checkbox inside a categorized group.
+		_newCheckboxAfterCat = 30 # A checkbox after a categorized group of checkboxes.
+		_spacingBelowLabel = 40 # A checkbox below a label.
 
 		_currentYPos = 100
 
@@ -216,13 +242,21 @@ class Window(QMainWindow):
 		self.optionsLabel.move(sX, _currentYPos)
 		self.optionsLabel.resize(220, 30)
 
-		_currentYPos += 40
+		_currentYPos += _spacingBelowLabel
 
 		self.charts = QCheckBox("Charts", self)
 		self.charts.move(sX, _currentYPos)
 		self.charts.setToolTip("Select all charts in the \"/data/\" directory of your mod and convert them.")
 
-		_currentYPos += 30
+		self.charts.stateChanged.connect(self.chartsEventsSection)
+
+		_currentYPos += _newCheckboxInCat
+
+		self.events = QCheckBox("Events", self)
+		self.events.move(sSX, _currentYPos)
+		self.events.setToolTip("Adds minimal support for events: \"Play Animation\", \"Alt Animation\" notes and \"Change Character\" (Creates a module file at the root of your mod).")
+
+		_currentYPos += _newCheckboxAfterCat
 
 		self.songs = QCheckBox("Audio", self)
 		self.songs.move(sX, _currentYPos)
@@ -230,38 +264,38 @@ class Window(QMainWindow):
 
 		self.songs.stateChanged.connect(self.songsSection)
 
-		_currentYPos += 20
+		_currentYPos += _newCheckboxInCat
 
 		self.insts = QCheckBox("Instrumentals", self)
 		self.insts.move(sSX, _currentYPos)
 		self.insts.setToolTip("Copy over \"Inst.ogg\" files.")
 
-		_currentYPos += 20
+		_currentYPos += _newCheckboxInCat
 
 		self.voices = QCheckBox("Voices", self)
 		self.voices.move(sSX, _currentYPos)
 		self.voices.setToolTip("Copy over \"Voices.ogg\" files.")
 
-		_currentYPos += 20
+		_currentYPos += _newCheckboxInCat
+
+		self.music = QCheckBox("Music", self)
+		self.music.move(sSX, _currentYPos)
+		self.music.setToolTip("Copies over files in the \"music\" directory of your mod.")
+
+		_currentYPos += _newCheckboxInCat
+
+		self.sounds = QCheckBox("Sounds", self)
+		self.sounds.move(sSX, _currentYPos)
+		self.sounds.setToolTip("Copies over files and folders in the \"sounds\" directory of your mod.")
+		
+		_currentYPos += _newCheckboxInCat
 
 		# Is available just not for avoiding error :D
 		self.vocalsplit = QCheckBox("Vocal Split", self)
 		self.vocalsplit.move(sSX, _currentYPos)
 		self.vocalsplit.setToolTip("Splits \"Voices.ogg\" files into two files (\"Voices-opponent.ogg\" and \"Voices-player.ogg\") using their charts. This requires ffmpeg in PATH, and Charts enabled.")
 
-		_currentYPos += 20
-
-		self.music = QCheckBox("Music", self)
-		self.music.move(sSX, _currentYPos)
-		self.music.setToolTip("Copies over files in the \"music\" directory of your mod.")
-
-		_currentYPos += 20
-
-		self.sounds = QCheckBox("Sounds", self)
-		self.sounds.move(sSX, _currentYPos)
-		self.sounds.setToolTip("Copies over files and folders in the \"sounds\" directory of your mod.")
-
-		_currentYPos += 40
+		_currentYPos += _newCheckboxAfterCat
 
 		self.chars = QCheckBox("Characters", self)
 		self.chars.move(sX, _currentYPos)
@@ -269,25 +303,25 @@ class Window(QMainWindow):
 
 		self.chars.stateChanged.connect(self.characterSection)
 
-		_currentYPos += 20
+		_currentYPos += _newCheckboxInCat
 
 		self.icons = QCheckBox("Health Icons", self)
 		self.icons.move(sSX, _currentYPos)
 		self.icons.setToolTip("Copies over all of your character icon .png files from the \"/images/icons/\" directory of your mod. This also generates Freeplay Icons (These require characters enabled).")
 
-		_currentYPos += 20
+		_currentYPos += _newCheckboxInCat
 
 		self.jsons = QCheckBox(".json files", self)
 		self.jsons.move(sSX, _currentYPos)
 		self.jsons.setToolTip("Converts your character's .json files to the appropiate format.")
 
-		_currentYPos += 20
+		_currentYPos += _newCheckboxInCat
 
 		self.charassets = QCheckBox("Assets", self)
 		self.charassets.move(sSX, _currentYPos)
 		self.charassets.setToolTip("Copies over your .png and .xml files from the \"/images/characters/\" directory of your mod.")
 
-		_currentYPos += 40
+		_currentYPos += _newCheckboxAfterCat
 
 		self.weeks = QCheckBox("Weeks", self)
 		self.weeks.move(sX, _currentYPos)
@@ -295,39 +329,39 @@ class Window(QMainWindow):
 
 		self.weeks.stateChanged.connect(self.weekSection)
 
-		_currentYPos += 20
+		_currentYPos += _newCheckboxInCat
 
 		self.props = QCheckBox("Menu Characters (Props)", self)
 		self.props.move(sSX, _currentYPos)
 		self.props.resize(400, 30)
 		self.props.setToolTip("Converts your menu character .json files from the \"/images/menucharacters/\" directory of your mod to the appropiate format.")
 
-		_currentYPos += 20
+		_currentYPos += _newCheckboxInCat
 
 		self.titles = QCheckBox("Week Images (Titles)", self)
 		self.titles.move(sSX, _currentYPos)
 		self.titles.resize(400, 30)
 		self.titles.setToolTip("Copies over your .png files from the \"/images/storymenu/\" directory of your mod.")
 
-		_currentYPos += 20
+		_currentYPos += _newCheckboxInCat
 
 		self.levels = QCheckBox("Levels", self)
 		self.levels.move(sSX, _currentYPos)
 		self.levels.setToolTip("Converts your week .json files from the \"/weeks/\" directory of your mod to the appropiate format.")
 
-		_currentYPos += 40
+		_currentYPos += _newCheckboxAfterCat
 
 		self.stages = QCheckBox("Stages", self)
 		self.stages.move(sX, _currentYPos)
 		self.stages.setToolTip("Converts stage .jsons from the \"/stages/\" directory of your mod and parses the .lua files to asign props.")
 
-		_currentYPos += 30
+		_currentYPos += _newCheckbox
 
 		self.meta = QCheckBox("Pack Meta", self)
 		self.meta.move(sX, _currentYPos)
 		self.meta.setToolTip("Converts your \"pack.json\" to the appropiate format, and copies your \"pack.png\" file.")
 
-		_currentYPos += 30
+		_currentYPos += _newCheckbox
 
 		self.images = QCheckBox("Images", self)
 		self.images.move(sX, _currentYPos)
@@ -339,9 +373,9 @@ class Window(QMainWindow):
 
 		self.radioCheck(True, True)
 
-
 	def allToDefaults(self, checked = True, enabled = False):
 		self.charts.setChecked(checked)
+		self.events.setChecked(checked)
 		self.songs.setChecked(checked)
 		self.insts.setChecked(checked)
 		self.voices.setChecked(checked)
@@ -359,7 +393,10 @@ class Window(QMainWindow):
 		self.stages.setChecked(checked)
 		self.meta.setChecked(checked)
 		self.images.setChecked(checked)
+
+
 		self.charts.setEnabled(enabled)
+		self.events.setEnabled(enabled)
 		self.songs.setEnabled(enabled)
 		self.insts.setEnabled(enabled)
 		self.voices.setEnabled(enabled)
@@ -389,6 +426,7 @@ class Window(QMainWindow):
 
 				self.charts.setEnabled(True)
 				self.charts.setChecked(True)
+				self.events.setChecked(True)
 			if self.sender() == self.onlySongs:
 				self.allToDefaults(False)
 
@@ -416,6 +454,12 @@ class Window(QMainWindow):
 				self.stages.setChecked(True)
 			if self.sender() == self.iChoose:
 				self.allToDefaults(True, True)
+	
+	def chartsEventsSection(self, state):
+		if state == 2:  # Checked
+			self.events.setEnabled(True)
+		elif state == 0:  # Unchecked
+			self.events.setEnabled(False)
 
 	def songsSection(self, state):
 		if state == 2:  # Checked
@@ -466,7 +510,10 @@ class Window(QMainWindow):
 		if Path(result_path).exists():	
 			logging.warn(f'Folder {result_path} already existed before porting, files may have been overwritten.')
 		options = Constants.DEFAULT_OPTIONS
-		options['charts'] = self.charts.isChecked()
+		options['charts']['songs'] = self.charts.isChecked()
+		if self.charts.isChecked():
+			logging.info('Misc of charts will be converted')
+			options['charts']['events'] = self.events.isChecked()
 		if self.songs.isChecked():
 			logging.info('Audio will be converted')
 			options['songs']['inst'] = self.insts.isChecked()
@@ -489,8 +536,17 @@ class Window(QMainWindow):
 		options['images'] = self.images.isChecked()
 
 		try:
+			optionsParsed = ''
+			for key in options.keys():
+				if type(options[key]) == bool:
+					optionsParsed += '\n	' + key + ': ' + 'Yes' if options[key] else 'No'
+				elif type(options[key]) == dict:
+					optionsParsed += '\n	' + key + ':'
+					for subkey in options[key].keys():
+						optionsParsed += '\n		' + subkey + ': ' + 'Yes' if bool(options[key][subkey]) else 'No'
+
 			# Now writing the last log file, which we can query to the user
-			open(_defaultsFile, 'w').write(f'{psych_mod_folder_path}\n{result_path}\n{log.logMemory.current_log_file}')
+			open(_defaultsFile, 'w').write(f'{psych_mod_folder_path}\n{result_path}\n\nLAST LOG: {log.logMemory.current_log_file}\n======================\nOPTIONS:{optionsParsed}')
 		except Exception as e:
 			logging.error(f'Problems with your save file: {e}')
 
@@ -498,7 +554,7 @@ class Window(QMainWindow):
 			try:
 				main.convert(psych_mod_folder_path, result_path, options)
 			except Exception as e:
-				self.throwError('poop', {e})
+				self.throwError('Exception ocurred', f'{e}')
 		else:
 			logging.warn('Select an input folder or output folder first!')
 
@@ -532,15 +588,16 @@ class Window(QMainWindow):
 		return values
 	
 	def throwError(self, text, actual_error_text):
-		self.newError = ErrorMessage(text, actual_error_text)
-		self.newError().show
+		self.newError = ErrorMessage(text, actual_error_text, self)
+		self.newError.show()
+
+		# if the user does something, because exec is blocking call we close it!
+		self.newError.hide()
 
 	def prompt(self, inputs, title, body):
 		button = 'Continue'
 		return self.open_dialog(title=title, inputs=inputs, button=button, body=body)
-
-app = QApplication([])
-
+	
 window = Window()
 
 def init():

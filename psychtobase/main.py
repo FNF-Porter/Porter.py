@@ -5,7 +5,7 @@ import shutil
 import time
 from pathlib import Path
 from PIL import Image
-from src import Constants, log, Paths, Utils, files, window
+from src import Constants, log, Paths, Utils, files, window, FileContents
 from src.tools import ModConvertTools as ModTools
 import threading
 
@@ -117,8 +117,11 @@ def convert(psych_mod_folder, result_folder, options):
         else:
             logging.warn(f'Could not find {modName}{psychCredits}')
 
-    if options.get('charts', False):
-        
+    chartOptions = options.get('charts', {
+        'songs': False,
+        'events':False
+    })
+    if chartOptions['songs']:
         chartFolder = Constants.FILE_LOCS.get('CHARTFOLDER')
         psychChartFolder = modName + chartFolder[0]
 
@@ -133,7 +136,7 @@ def convert(psych_mod_folder, result_folder, options):
                 outputpath = f'{result_folder}/{modFoldername}'
 
                 try:
-                    songChart = ChartObject(song, outputpath)
+                    songChart = ChartObject(song, outputpath, chartOptions['events']) # The arg to specify events!
                 except FileNotFoundError:
                     logging.warning(f"{song} data not found! Skipping...")
                     continue
@@ -155,6 +158,16 @@ def convert(psych_mod_folder, result_folder, options):
 
                 logging.info(f'{song} charts converted, saving')
                 songChart.save()
+    if chartOptions['events']:
+        _pathsModRoot = Constants.FILE_LOCS.get('SCRIPTS_DIR')
+        baseGameModRoot = _pathsModRoot[1]
+
+        try:
+            folderMake(f'{result_folder}/{modFoldername}{baseGameModRoot}')
+            with open(f'{result_folder}/{modFoldername}{baseGameModRoot}{FileContents.CHANGE_CHARACTER_EVENT_HXC_NAME}', 'w') as scriptFile:
+                scriptFile.write(FileContents.CHANGE_CHARACTER_EVENT_HXC_CONTENTS)
+        except Exception as e:
+            logging.error("Failed creating the scripts folder: " + e)
 
     if options.get('characters', {
             'assets': False
