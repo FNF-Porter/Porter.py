@@ -189,7 +189,7 @@ class ChartObject:
 
 					prev_notes.add((strumTime, noteData))
 
-					# Alt Animation implementation using Play Animations!
+					# Alt Singing Animation implementation using Play Animations!
 					if len(note) > 3 and note[3] == "Alt Animation":
 						target = "player" if noteData in range(4) else "opponent"
 						if noteData in [0, 4]:
