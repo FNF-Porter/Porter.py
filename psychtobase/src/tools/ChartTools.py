@@ -193,13 +193,13 @@ class ChartObject:
 					if len(note) > 3 and note[3] == "Alt Animation":
 						target = "player" if noteData in range(4) else "opponent"
 						if noteData in [0, 4]:
-						    anim = "singLEFT-alt"
+							anim = "singLEFT-alt"
 						elif noteData in [1, 5]:
-						    anim = "singDOWN-alt"
+							anim = "singDOWN-alt"
 						elif noteData in [2, 6]:
-						    anim = "singUP-alt"
+							anim = "singUP-alt"
 						elif noteData in [3, 7]:
-						    anim = "singRIGHT-alt"
+							anim = "singRIGHT-alt"
 						play_animation = (strumTime, target, anim, True)
 
 						if play_animation not in existing_events:
