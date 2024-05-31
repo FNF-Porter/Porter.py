@@ -74,7 +74,7 @@ def playAnimation(time:float, target: str, anim: str, force: bool):
 	"""
 	Function created for faster creation of Play Animation events
 	"""
-	return event(time, "PlayAnimation", {"target": target, "anim": anim, "force": force})
+	return event(time, "PlayAnimation", {"target": target, "anim": anim, "force": force}) # Force is enabled on Play Animation events, not Alt Animation
 
 def coolText(text:str) -> str:
 	length = max(30, len(text) + 5)

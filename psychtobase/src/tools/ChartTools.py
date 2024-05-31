@@ -217,10 +217,10 @@ class ChartObject:
 							anim = "singUP-alt"
 						elif noteData in [3, 7]:
 							anim = "singRIGHT-alt"
-						play_animation = (strumTime, target, anim, True)
+						play_animation = (strumTime, target, anim)
 
 						if play_animation not in existing_events:
-							events.append(Utils.playAnimation(strumTime, target, anim, True))
+							events.append(Utils.playAnimation(strumTime, target, anim, False))
 							existing_events.add(play_animation)
 
 					notes.append(Utils.note(noteData, length, strumTime))
