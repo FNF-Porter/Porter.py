@@ -244,12 +244,14 @@ def convert(psych_mod_folder, result_folder, options):
                 try:
                     filename = Path(character).name
                     # Some goofy ah mods don't name icons with icon-, causing them to be invalid in base game.
-                    if not filename.startswith('icon-') and filename != 'readme.txt':
+                    if not filename.startswith('icon-'):
                         logging.warn(f"Invalid icon name being renamed from '{filename}' to 'icon-{filename}'!")
                         filename = 'icon-' + filename
                     
                     destination = f'{result_folder}/{modFoldername}{bgCharacterAssets}{filename}'
                     fileCopy(character, destination)
+
+                    # Part 2, generating free play icons.
                     keyForThisIcon = filename.replace('icon-', '').replace('.png', '')
                     logging.info('Checking if ' + keyForThisIcon + ' is in the characterMap')
 
@@ -472,16 +474,15 @@ def convert(psych_mod_folder, result_folder, options):
         psychWeeks = f'{modName}{dir[0]}'
         baseLevels = dir[1]
 
-        if Path(psychWeeks).exists(follow_symlinks=False):
-           allPng = files.findAll(f'{psychWeeks}*.png')
-           for asset in allPng:
-               logging.info(f'Copying week: {asset}')
-               try:
-                   folderMake(f'{result_folder}/{modFoldername}{baseLevels}')
-                   fileCopy(asset,
-                       f'{result_folder}/{modFoldername}{baseLevels}{Path(asset).name}')
-               except Exception as e:
-                   logging.error(f'Could not copy asset {asset}: {e}')
+        allPng = files.findAll(f'{psychWeeks}*.png')
+        for asset in allPng:
+            logging.info(f'Copying week title asset: {asset}')
+            try:
+                folderMake(f'{result_folder}/{modFoldername}{baseLevels}')
+                fileCopy(asset,
+                    f'{result_folder}/{modFoldername}{baseLevels}{Path(asset).name}')
+            except Exception as e:
+                logging.error(f'Could not copy asset {asset}: {e}')
         #else: 
         #    logging.info(f'A week for {modName} has no story menu image, replacing with a default.')
         #    with open(f'week{modName}.png', 'wb') as fh:
