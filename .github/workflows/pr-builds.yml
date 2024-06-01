@@ -37,5 +37,5 @@ jobs:
     - name: Upload build artifact
       uses: actions/upload-artifact@v4
       with:
-        name: FNF_Porter_Build_PR_${{ github.event.pull_request.number }}
+        name: FNF_Porter_Build_${{ matrix.os }}_PR_${{ github.event.pull_request.number }}
         path: dist/*
