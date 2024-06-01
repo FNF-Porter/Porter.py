@@ -41,12 +41,13 @@ class Paths:
 			print(f"Error! {e}")
 
 	@staticmethod
-	def openTextFile(file: str):
+	def openFile(file: str):
 		try:
-			with open(Paths.txt(file), 'r') as f:
+			with open(Paths.getPath(file), 'r') as f:
 				return f.read()
 		except Exception as e:
 			print(f"ERROR | {e}")
+			return None
 
 	@staticmethod
 	def join(*path) -> str:

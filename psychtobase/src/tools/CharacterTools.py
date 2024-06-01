@@ -2,46 +2,66 @@ import json
 import logging
 import copy
 from pathlib import Path
-from src import window, Constants
+from src import Constants
 from src import files
+import lxml.etree as ET 
+from src import Utils
+from src.Paths import Paths
 
 class CharacterObject:
-	def __init__(self, path: str, resultPath) -> None:
-		self.charName:str = Path(path).name
+	def __init__(self, path, resultPath):
+		self.pathName = path
 		self.resultPath = resultPath
-		self.pathName:str = path
-		self.psychChar = {}
-		self.character:dict = copy.deepcopy(Constants.CHARACTER)
-		self.characterName:str = None
 
-		self.iconID:str = None
+		self.characterFile = Path(path).name
+		self.characterName = None
+		self.iconID = None
+
+		self.psychCharacter:dict = {}
+		self.character = copy.deepcopy(Constants.CHARACTER)
 
 		self.loadCharacter()
 
 	def loadCharacter(self):
 		with open(self.pathName, 'r') as file:
-			self.psychChar = json.load(file)
-		self.characterJson = files.removeTrail(self.charName)
+			self.psychCharacter = json.load(file)
+
+		self.characterJson = files.removeTrail(self.characterFile)
+		self.characterName = ' '.join([string.capitalize() for string in self.characterJson.split('-')])
 
 	def convert(self):
-		char = self.psychChar
+		characterName = self.characterName
 
-		logging.info(f'Converting character {self.charName}')
+		character = self.character
+		psychCharacter = self.psychCharacter
 
-		englishCharacterName = ' '.join([string.capitalize() for string in self.characterJson.split('-')])
-		self.character['name'] = englishCharacterName
-		self.character['assetPath'] = char['image']
-		self.character['singTime'] = char['sing_duration']
-		# Disable scaling. Look at https://github.com/FunkinCrew/Funkin/issues/2543 for why this exists.
-		# self.character['scale'] = char['scale']
-		self.character['isPixel'] = char['scale'] >= 6
-		self.character['healthIcon']['id'] = char['healthicon']
-		self.iconID = char['healthicon']
-		self.character['healthIcon']['isPixel'] = char['scale'] >= 6
-		self.character['flipX'] = char.get('flip_x', False)
+		logging.info(f'Converting character {self.characterName}')
 
-		#i love object oriented programming and making a million variables for no reason!
-		for animation in char['animations']:
+		character['name'] = characterName
+		character['assetPath'] = psychCharacter['image']
+		character['singTime'] = psychCharacter['sing_duration']
+
+		"""
+		Disable scaling. Look at https://github.com/FunkinCrew/Funkin/issues/2543 for why this exists.
+
+		TEMPORARY FIX:
+			Resize the whole spritesheet in some editing program
+			Use ShadowFi's XML Resizer app: https://drive.google.com/file/d/1GoROyQKnMxiM6I0JUZ2_WKM5Aim6nY2o/view
+
+			Eg: If the scale of your sprite was 0.6, you want to resize both Sprite Sheet and the XML to 60% of their original size.
+
+		character['scale'] = psychCharacter['scale']
+		"""
+
+		character['isPixel'] = psychCharacter['scale'] >= 6
+		character['healthIcon']['id'] = psychCharacter['healthicon']
+		character['healthIcon']['isPixel'] = psychCharacter['scale'] >= 6
+		character['flipX'] = psychCharacter.get('flip_x', False)
+
+		self.iconID = psychCharacter['healthicon']
+
+		# I love object oriented programming and making a million variables for no reason!
+		for animation in psychCharacter['animations']:
 			animTemplate = copy.deepcopy(Constants.ANIMATION)
 
 			animTemplate['name'] = animation['anim']
@@ -50,13 +70,17 @@ class CharacterObject:
 			animTemplate['frameRate'] = animation['fps']
 			animTemplate['frameIndices'] = animation['indices']
 
-			logging.info(f'[{englishCharacterName}] Converting animation {animation}')
-			#note to remove this later
+			# Note to remove this later
+			logging.info(f'[{characterName}] Converting animation {animation}')
 
 			self.character['animations'].append(animTemplate)
 
-		logging.info(f'Character {englishCharacterName} successfully converted')
-		self.characterName = englishCharacterName
+		# STILL WORKING ON IT
+		# file = Paths.openFile(Paths.join(Utils.getModPath(), "images", self.psychCharacter.get("image", "")) + ".xml")
+		# if file != None:
+		# 	xml = ET.iterparse(file)
+
+		logging.info(f'Character {characterName} successfully converted')
 
 	def save(self):
 		savePath = Path(self.resultPath) / self.characterJson

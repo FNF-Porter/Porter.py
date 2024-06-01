@@ -64,6 +64,8 @@ def convert(psych_mod_folder, result_folder, options):
     modFoldername = Path(psych_mod_folder).name
 
     logging.info(f'Converting from{psych_mod_folder} to {result_folder}')
+    
+    # Utils.setModPath(modName)
 
     if options.get('modpack_meta', False):
         logging.info('Converting pack.json')

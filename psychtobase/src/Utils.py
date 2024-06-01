@@ -6,6 +6,8 @@ import time
 from src import Constants
 from re import sub
 
+# modPath = ""
+
 def getRuntime(start:float) -> float:
 	return start - time.time()
 
@@ -79,3 +81,10 @@ def formatToSongPath(name:str) -> str:
 	name = sub(invalidChars, '-', name)
 
 	return sub(hideChars, '', name).strip("-")
+
+# def setModPath(name:str):
+# 	global modPath
+# 	modPath = name
+
+# def getModPath() -> str:
+# 	return modPath
