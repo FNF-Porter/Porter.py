@@ -1,5 +1,7 @@
 name: Error
 description: You need help resolving an error/crash in the converter
+labels: ["bug"]
+title: "[ERROR]: "
 body:
   - type: dropdown
     attributes:

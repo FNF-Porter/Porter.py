@@ -50,21 +50,33 @@ def note(data:int, length:float, time:str) -> dict:
 	"""
 	Function created for faster creation of note data.
 	"""
-	if length == 0:
+	if length == 0 or isinstance(length, str): # String check for more modified Psych Engines
 		return {"d": data, "t": time} # This is how the base game charts handle it so...
 	return {"d": data, "l": length, "t": time}
 
-def event(event:str, time:float, values:dict) -> dict:
+def event(time:float, event:str, values:dict) -> dict:
 	"""
 	Function created for faster creation of events.
 	"""
-	return {"e": event, "t": time, "v": values}
+	return {"t": time, "e": event, "v": values}
+
+def changeCharacter(time:float, target: str, char: str):
+	"""
+	Function created for faster creation of Change Character events
+	"""
+	return event(time, "Change Character", {"target": target, "char": char})
 
 def focusCamera(time:float, char:bool):
 	"""
 	Function created for faster creation of camera change events.
 	"""
-	return event("FocusCamera", time, {"char": "0" if char else "1"})
+	return event(time, "FocusCamera", {"char": "0" if char else "1"})
+
+def playAnimation(time:float, target: str, anim: str, force: bool):
+	"""
+	Function created for faster creation of Play Animation events
+	"""
+	return event(time, "PlayAnimation", {"target": target, "anim": anim, "force": force}) # Force is enabled on Play Animation events, not Alt Animation
 
 def coolText(text:str) -> str:
 	length = max(30, len(text) + 5)
@@ -80,7 +92,7 @@ def formatToSongPath(name:str) -> str:
 	name = name.replace(" ", "-").lower()
 	name = sub(invalidChars, '-', name)
 
-	return sub(hideChars, '', name).strip("-")
+	return sub(hideChars, '', name)
 
 # def setModPath(name:str):
 # 	global modPath
