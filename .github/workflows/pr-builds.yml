@@ -13,6 +13,16 @@ jobs:
     strategy:
       matrix:
         os: [windows-latest, macos-latest, ubuntu-latest]
+        include:
+          - os: windows-latest
+            icon: icon.ico
+            command: pyinstaller build.spec
+          - os: macos-latest
+            icon: icon.icns
+            command: pyinstaller --onefile psychtobase/main.py --icon=icon.icns --noconsole -n "FNF Porter"
+          - os: ubuntu-latest
+            icon: ""
+            command: pyinstaller --onefile psychtobase/main.py --noconsole -n "FNF Porter"
 
     steps:
     - uses: actions/checkout@v4
