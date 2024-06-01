@@ -1,5 +1,6 @@
-from glob import glob
 import logging
+
+from glob import glob
 from pathlib import Path
 
 def removeTrail(filename):
@@ -9,6 +10,7 @@ def findAll(folder):
     # return all files inside of a directory
     # currently only used by the main
     # update this!
+
     logging.info(f'Finding all files or directories with glob: {folder}')
     return glob(folder)
 

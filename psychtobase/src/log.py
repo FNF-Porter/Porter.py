@@ -1,11 +1,11 @@
 """Utility tool for configuring the logger"""
 
 import logging
-import src.window as window
 import sys
 
-from time import strftime
+from . import window
 from pathlib import Path
+from time import strftime
 
 class CustomHandler(logging.StreamHandler):
     def emit(self, record):

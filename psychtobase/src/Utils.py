@@ -3,7 +3,8 @@ A class full of tools needed for mod conversion.
 """
 
 import time
-from src import Constants
+
+from . import Constants
 from re import sub
 
 # modPath = ""

@@ -1,7 +1,7 @@
 import copy
 import logging
-import src.Constants as Constants
-import src.window as window
+
+from .. import Constants
 
 def convert(stageJSON, assetName, luaProps):
     stageTemplate = copy.deepcopy(Constants.STAGE)

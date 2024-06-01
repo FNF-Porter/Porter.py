@@ -1,8 +1,10 @@
-from src import Utils, Constants, files, window 
 import logging
-from pathlib import Path
-from src.Paths import Paths
+
+from .. import Constants, files, Utils
+from ..Paths import Paths
+
 from copy import deepcopy
+from pathlib import Path
 
 class ChartObject:
 	"""

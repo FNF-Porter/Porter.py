@@ -1,5 +1,6 @@
 import logging
 import numpy as np
+
 from pydub import AudioSegment
 
 def vocalsplit(chart, bpm, origin, path, key, characters):

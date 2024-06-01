@@ -1,7 +1,8 @@
-from copy import deepcopy
 import json
 import logging
-import src.Constants as Constants
+
+from .. import Constants
+from copy import deepcopy
 
 def convert(weekJSON, modfolder, week_filename):
     level = deepcopy(Constants.LEVEL)

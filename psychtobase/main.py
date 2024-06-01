@@ -1,18 +1,20 @@
-from base64 import b64decode
 import json
 import logging
 import shutil
+import threading
 import time
+
+from base64 import b64decode
 from pathlib import Path
 from PIL import Image
-from src import Constants, log, Paths, Utils, files, window, FileContents
+
+from src import Constants, FileContents, files, log, Utils, window
+
+from src.tools import StageLuaParse, StageTool, VocalSplit, WeekTools
 from src.tools import ModConvertTools as ModTools
-import threading
 
 from src.tools.CharacterTools import CharacterObject
 from src.tools.ChartTools import ChartObject 
-from src.tools import VocalSplit, WeekTools, StageTool, StageLuaParse
-from src import Utils
 
 if __name__ == '__main__':
     log.setup()
@@ -143,7 +145,7 @@ def convert(psych_mod_folder, result_folder, options):
                     logging.warning(f"{song} data not found! Skipping...")
                     continue
                 except Exception as e:
-                    logging.warning("ERROR!" + e)
+                    logging.warning("ERROR: " + str(e))
                     continue
                 else:
                     logging.info(f'{song} successfully initialized! Converting')

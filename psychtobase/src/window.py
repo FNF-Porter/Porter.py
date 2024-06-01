@@ -1,21 +1,23 @@
-from base64 import b64decode
-from pathlib import Path
+
+
+
+import logging
+import main
 import platform
 import subprocess
-import time
-import logging
-import src.log as log
-import src.Constants as Constants
-import main
-
 import webbrowser
 
+from . import log, Constants
+from base64 import b64decode
+from pathlib import Path
+
 from PyQt6.QtCore import QSize
-from PyQt6.QtGui import QIcon, QPixmap, QImage
-from PyQt6.QtWidgets import QApplication, QMainWindow, QPushButton, QCheckBox, QLabel, QLineEdit, QFileDialog, QDialog, QVBoxLayout, QRadioButton, QTextBrowser, QWidget
+from PyQt6.QtGui import QIcon, QImage, QPixmap
+from PyQt6.QtWidgets import QApplication, QCheckBox, QDialog, QFileDialog, QLabel, QLineEdit, QMainWindow, QPushButton, QRadioButton, QTextBrowser, QVBoxLayout
 
 icon = b64decode(Constants.BASE64_IMAGES.get('windowIcon'))
-_windowTitleSuffix = "v0.1 [BETA]"
+
+_windowTitleSuffix = f"v{Constants.VERSION} [BETA]"
 _defaultsFile = '.defaults'
 _vocalSplitEnabledByDefault = False
 
@@ -117,7 +119,6 @@ class Window(QMainWindow):
 	def __init__(self):
 		super().__init__()
 
-		_windowTitleSuffix = f"v{Constants.VERSION} [BETA]"
 		self.setWindowTitle(f"FNF Porter {_windowTitleSuffix}")
 		wid = 750
 		hei = 650
@@ -551,10 +552,10 @@ class Window(QMainWindow):
 			logging.error(f'Problems with your save file: {e}')
 
 		if psych_mod_folder_path != None and result_path != None:
-			try:
+			# try:
 				main.convert(psych_mod_folder_path, result_path, options)
-			except Exception as e:
-				self.throwError('Exception ocurred', f'{e}')
+			# except Exception as e:
+				# self.throwError('Exception ocurred', f'{e}')
 		else:
 			logging.warn('Select an input folder or output folder first!')
 

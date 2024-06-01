@@ -1,4 +1,4 @@
-import src.Constants as Constants
+from .. import Constants
 
 def convertPack(packJson):
     return {

@@ -1,8 +1,8 @@
-import json
+import logging
+
+from . import StageTool
 from luaparser import ast
 from luaparser.astnodes import *
-import logging
-import src.tools.StageTool as StageTool
 
 def parseStage(lua_script_path):
     lua_script = open(lua_script_path, 'r').read()

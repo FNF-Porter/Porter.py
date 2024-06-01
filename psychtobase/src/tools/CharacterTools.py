@@ -1,12 +1,13 @@
+import copy
 import json
 import logging
-import copy
+
+from .. import Constants, files
 from pathlib import Path
-from src import Constants
-from src import files
-import lxml.etree as ET 
-from src import Utils
-from src.Paths import Paths
+
+# import lxml.etree as ET 
+# from src import Utils
+# from src.Paths import Paths
 
 class CharacterObject:
 	def __init__(self, path, resultPath):
