@@ -16,7 +16,7 @@ jobs:
         include:
           - os: windows-latest
             icon: icon.ico
-            ext: .exe
+            ext: 
           - os: macos-latest
             icon: icon.icns
             ext: 
