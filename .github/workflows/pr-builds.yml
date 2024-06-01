@@ -13,16 +13,6 @@ jobs:
     strategy:
       matrix:
         os: [windows-latest, macos-latest, ubuntu-latest]
-        include:
-          - os: windows-latest
-            icon: icon.ico
-            ext: .exe
-          - os: macos-latest
-            icon: icon.icns
-            ext: 
-          - os: ubuntu-latest
-            icon: ""
-            ext: 
 
     steps:
     - uses: actions/checkout@v4
@@ -43,9 +33,9 @@ jobs:
         pip install pyinstaller numpy pydub luaparser pyqt6 pillow
     - name: Build with PyInstaller
       run: |
-        pyinstaller --onefile psychtobase/main.py --icon=${{ matrix.icon }} --noconsole -n "FNF Porter pullrequest-${{ github.event.pull_request.number }}"
+        pyinstaller build.spec
     - name: Upload build artifact
       uses: actions/upload-artifact@v4
       with:
-        name: FNF_Porter_Build_${{ matrix.os }}
-        path: dist/*${{ matrix.ext }}
+        name: FNF_Porter_Build_PR_${{ github.event.pull_request.number }}
+        path: dist/*
