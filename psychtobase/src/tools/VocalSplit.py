@@ -1,7 +1,26 @@
 import logging
+from pathlib import Path
 import numpy as np
 
 from pydub import AudioSegment
+import platform
+
+def assignFfmpeg(audiosegment:AudioSegment):
+    if platform.system() == 'Windows':
+        ffmpeg_path = Path('ffmpeg.exe')
+
+        if Path.exists(ffmpeg_path):
+            ffmpeg_to_use = str(ffmpeg_path.resolve()).replace('\\', '/').replace('.exe', '')
+            print('FFmpeg for AudioSegment: ' + ffmpeg_to_use)
+            audiosegment.converter = ffmpeg_to_use
+        else:
+            logging.warn('FFmpeg path does not exist')
+    else:
+        logging.info('No effect, your platform is not Windows:' + platform.system())
+
+def assignFfmpegBulk(audiosegments:list):
+    for audiosegment in audiosegments:
+        assignFfmpeg(audiosegment)
 
 def vocalsplit(chart, bpm, origin, path, key, characters):
     beatLength = (60 / bpm) * 1000
@@ -35,9 +54,13 @@ def vocalsplit(chart, bpm, origin, path, key, characters):
 
         songSteps += section.get('lengthInSteps', 16)
 
+    assignFfmpegBulk([AudioSegment])
+
     originalVocals = AudioSegment.from_ogg(origin + "Voices.ogg")
     vocalsBF = AudioSegment.empty()
     vocalsOpponent = AudioSegment.empty()
+
+    assignFfmpegBulk([vocalsBF, vocalsOpponent])
 
     arr = np.array(sectionDirs)
 
@@ -50,6 +73,8 @@ def vocalsplit(chart, bpm, origin, path, key, characters):
 
         chunk = originalVocals[section_start_time:next_section_time]
         silence = AudioSegment.silent(duration=len(chunk))
+
+        # assignFfmpeg(silence)
 
         if arr[i, 2] or arr[i, 1] == False:  # Duet or not must hit
             vocalsOpponent += chunk

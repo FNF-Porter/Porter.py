@@ -24,7 +24,6 @@ fnf-porter.log
 ## PyInstaller
 build/
 dist/
-*.spec
 
 ## FNF Porter files
 **/logs/*
