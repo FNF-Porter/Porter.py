@@ -19,7 +19,7 @@ icon = b64decode(Constants.BASE64_IMAGES.get('windowIcon'))
 
 _windowTitleSuffix = f"v{Constants.VERSION} [BETA]"
 _defaultsFile = '.defaults'
-_vocalSplitEnabledByDefault = False
+_vocalSplitEnabledByDefault = platform.system() == 'Windows'
 
 app = QApplication([])
 class SimpleDialog(QDialog):
@@ -613,7 +613,7 @@ def init():
 	
 	#work in progress
 	#Window.throwError(self=QDialog, text='d', actual_error_text='poooop')
-	print('pooop')
+	# print('pooop')
 
 	app.exec()
 
