@@ -556,6 +556,7 @@ class Window(QMainWindow):
 				main.convert(psych_mod_folder_path, result_path, options)
 			# except Exception as e:
 				# self.throwError('Exception ocurred', f'{e}')
+				# This is kinda(?) unfinished
 		else:
 			logging.warn('Select an input folder or output folder first!')
 
