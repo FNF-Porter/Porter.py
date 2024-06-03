@@ -552,10 +552,10 @@ class Window(QMainWindow):
 			logging.error(f'Problems with your save file: {e}')
 
 		if psych_mod_folder_path != None and result_path != None:
-			try:
+			# try:
 				main.convert(psych_mod_folder_path, result_path, options)
-			except Exception as e:
-				self.throwError('Exception ocurred', f'{e}')
+			# except Exception as e:
+				# self.throwError('Exception ocurred', f'{e}')
 		else:
 			logging.warn('Select an input folder or output folder first!')
 
