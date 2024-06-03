@@ -644,73 +644,114 @@ def convert(psych_mod_folder, result_folder, options):
 
             # Get if the user selected sounds
             if songOptions['music']:
+                # Get the paths to the music directory
                 sounds_dir = Constants.FILE_LOCS.get('MUSIC')
                 psychSounds = modName + sounds_dir[0]
                 baseSounds = sounds_dir[1]
 
+                # Get all the files (misleading variable name)
                 allsoundsindirsounds = files.findAll(f'{psychSounds}*')
             
+                # Iterate through all the files
                 for asset in allsoundsindirsounds:
                     logging.info(f'Copying asset {asset}')
+                    # Try except to avoid any errors
                     try:
+                        # Make the folder
                         folderMake(f'{result_folder}/{modFoldername}{baseSounds}')
+                        # Copy the file
                         fileCopy(asset,
                             f'{result_folder}/{modFoldername}{baseSounds}{Path(asset).name}')
                     except Exception as e:
                         logging.error(f'Could not copy asset {asset}: {e}')
 
+    # Define the week conversion options
     weekCOptions = options.get('weeks', {
             'props': False, # Asset
             'levels': False,
             'titles': False # Asset
         })  
+    # See if levels was selected from the week options
     if weekCOptions['levels']:
         logging.info('Converting weeks (levels)...')
 
+        # Get the paths to the week files
         dir = Constants.FILE_LOCS.get('WEEKS')
         psychWeeks = modName + dir[0]
         baseLevels = dir[1]
 
+        # Create the folder where the weeks should go
         folderMake(f'{result_folder}/{modFoldername}{baseLevels}')
 
+        # Find all the jsons in the psych engine mod's weeks
         for week in files.findAll(f'{psychWeeks}*.json'):
-            logging.info(f'Loading {week} into the converter...')
+            try:
+                logging.info(f'Loading {week} into the converter...')
 
-            weekJSON = json.loads(open(week, 'r').read())
-            week_filename = Path(week).name
-            converted_week = WeekTools.convert(weekJSON, modName, week_filename)
-            open(f'{result_folder}/{modFoldername}{baseLevels}{week_filename}', 'w').write(json.dumps(converted_week, indent=4))
+                # Open the json as a file
+                weekJSON = json.loads(open(week, 'r').read())
 
+                # Get the week key
+                week_filename = Path(week).name
+
+                # Convert the week
+                converted_week = WeekTools.convert(weekJSON, modName, week_filename)
+                
+                # Write it to a new JSON file
+                open(f'{result_folder}/{modFoldername}{baseLevels}{week_filename}', 'w').write(json.dumps(converted_week, indent=4))
+            except Exception as e:
+                logging.error(f'Error converting week {week}: {e}')
+
+    # See if props was selected from the week options
     if weekCOptions['props']:
         logging.info('Copying prop assets...')
 
+        # Get the paths to the character asset files
         dir = Constants.FILE_LOCS.get('WEEKCHARACTERASSET')
         psychWeeks = modName + dir[0]
         baseLevels = dir[1]
 
+        # Get all xml files in the assets folder
         allXml = files.findAll(f'{psychWeeks}*.xml')
+
+        # Get all png files in the assets folder
         allPng = files.findAll(f'{psychWeeks}*.png')
+
+        # Combine and iterate
         for asset in allXml + allPng:
             logging.info(f'Copying {asset}')
+
+            # Try except to avoid any errors
             try:
+                # Create the folder where they should go
                 folderMake(f'{result_folder}/{modFoldername}{baseLevels}')
+                # Copy the file
                 fileCopy(asset,
                     f'{result_folder}/{modFoldername}{baseLevels}{Path(asset).name}')
             except Exception as e:
                 logging.error(f'Could not copy asset {asset}: {e}')
 
+    # See if titles was selected from the week options
     if weekCOptions['titles']:
         logging.info('Copying level titles...')
 
+        # Get the paths to the week images
         dir = Constants.FILE_LOCS.get('WEEKIMAGE')
         psychWeeks = f'{modName}{dir[0]}'
         baseLevels = dir[1]
 
+        # Find all pngs there
         allPng = files.findAll(f'{psychWeeks}*.png')
+
+        # Get all the pngs
         for asset in allPng:
             logging.info(f'Copying week title asset: {asset}')
+
+            # Try except to avoid any errors
             try:
+                # Make the folder
                 folderMake(f'{result_folder}/{modFoldername}{baseLevels}')
+                # Copy the file
                 fileCopy(asset,
                     f'{result_folder}/{modFoldername}{baseLevels}{Path(asset).name}')
             except Exception as e:
@@ -726,71 +767,106 @@ def convert(psych_mod_folder, result_folder, options):
         #        except Exception as e:
         #            logging.error(f"Couldn't generate week image to {modFoldername}/{baseLevels}: {e}")
 
+    # See if stages was selected
     if options.get('stages', False):
         logging.info('Converting stages...')
 
+        # Get the paths to stages
         dir = Constants.FILE_LOCS.get('STAGE')
         psychStages = modName + dir[0]
         baseStages = dir[1]
 
+        # Get all stage JSONS
         allStageJSON = files.findAll(f'{psychStages}*.json')
+        # Iterate through all stage JSONS
         for asset in allStageJSON:
             logging.info(f'Converting {asset}')
+
+            # Make the folder for the stages
             folderMake(f'{result_folder}/{modFoldername}{baseStages}')
+
+            # Open the stage JSON as a json object
             stageJSON = json.loads(open(asset, 'r').read())
+
+            # Get the path to it
             assetPath = f'{result_folder}/{modFoldername}{baseStages}{Path(asset).name}'
         
+            # Get the lua path
             stageLua = asset.replace('.json', '.lua')
             logging.info(f'Parsing .lua with matching .json name: {stageLua}')
 
+            # Build array of lua props
             luaProps = []
+
+            # Check if the lua file exists
             if Path(stageLua).exists():
                 logging.info(f'Parsing {stageLua} and attempting to extract methods and calls')
+
+                # Try except to avoid any errors
                 try:
+                    # Assign props by reading and parsing the lua file
                     luaProps = StageLuaParse.parseStage(stageLua)
                 except Exception as e:
                     logging.error(f'Could not complete parsing of {stageLua}: {e}')
                     continue
 
             logging.info(f'Converting Stage JSON')
+
+            # Save the stage JSON as a JSON.
             stageJSONConverted = json.dumps(StageTool.convert(stageJSON, Path(asset).name, luaProps), indent=4)
             open(assetPath, 'w').write(stageJSONConverted)
 
+    # Check if the user selected images
     if options.get('images'): # Images include XMLs
         logging.info('Copying images')
 
+        # Get the path to the images folder
         dir = Constants.FILE_LOCS.get('IMAGES')
         psychImages = modName + dir[0]
         baseImages = dir[1]
 
+        # Find all files in the images folder
         allimagesandfolders = files.findAll(f'{psychImages}*')
         for asset in allimagesandfolders:
             logging.info(f'Checking on {asset}')
 
+            # For directories, to make sure we don't copy directories by Psych Engine 
             if Path(asset).is_dir():
                 logging.info(f'{asset} is directory, checking if it should be excluded...')
+
+                # Get the folder's name
                 folderName = Path(asset).name
+
+                # Check if this folder is not in the exclude list
                 if not folderName in Constants.EXCLUDE_FOLDERS_IMAGES['PsychEngine']:
                     logging.info(f'{asset} is not excluded... attempting to copy.')
+                    # Try except to avoid any errors
                     try:
                         pathTo = f'{result_folder}/{modFoldername}{baseImages}{folderName}'
-                        #logging.debug(pathTo)
-
-                        #folderMake(f'{result_folder}/{modFoldername}{baseImages}{folderName}')
+                        # Copy it
                         treeCopy(asset, pathTo)
                     except Exception as e:
                         logging.error(f'Failed to copy {asset}: {e}')
                 else:
+                    # It is excluded
                     logging.warn(f'{asset} is excluded. Skipped')
 
             else:
+                # It is a file
                 logging.info(f'{asset} is file, copying')
+
+                # Try except to avoid any errors
                 try:
+                    # Make the folder
                     folderMake(f'{result_folder}/{modFoldername}{baseImages}')
+                    # Copy the file
                     fileCopy(asset, f'{result_folder}/{modFoldername}{baseImages}{Path(asset).name}')
                 except Exception as e:
                     logging.error(f'Failed to copy {asset}: {e}')
 
+    # Complete the conversion by announcing it has completed
     logging.info(Utils.coolText("CONVERSION COMPLETED"))
+
+    # Announce how long it took to convert it
     logging.info(f'Conversion done: Took {time.time() - runtime}s')
 
