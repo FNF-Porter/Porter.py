@@ -222,7 +222,7 @@ class ChartObject:
 						play_animation = (strumTime, target, anim)
 
 						if play_animation not in existing_events:
-							events.append(Utils.playAnimation(strumTime, target, anim, False))
+							events.append(Utils.playAnimation(strumTime, target, anim, True)) #We should add a custom note type that plays the animation when the note is PRESSED.
 							existing_events.add(play_animation)
 
 					notes.append(Utils.note(noteData, length, strumTime))
