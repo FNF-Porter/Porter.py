@@ -28,6 +28,7 @@ You can simply run `dependency-install.bat` to install all of these at once. You
 - `pydub`
 - `pyinstaller`
 - `PyQt6`
+
 You can start the window by running `psychtobase/main.py`,
 or alternatively run `build.bat` to build the application yourself.
 
