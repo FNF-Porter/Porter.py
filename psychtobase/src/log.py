@@ -43,8 +43,6 @@ def setup() -> logging.RootLogger:
 	console_handler = CustomHandler()
 	console_handler.setFormatter(log_format)
 
-	_GB_ToolID = ''
-
 	logger.handlers.clear()
 	logger.addHandler(file_handler)
 	logger.addHandler(console_handler)

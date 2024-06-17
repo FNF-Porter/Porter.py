@@ -538,18 +538,14 @@ class Window(QMainWindow):
 
 		try:
 			optionsParsed = ''
-			for key in options.keys():
-				if type(options[key]) == bool:
-					optionsParsed += '\n	' + key + ': ' + 'Yes' if options[key] else 'No'
-				elif type(options[key]) == dict:
-					optionsParsed += '\n	' + key + ':'
-					for subkey in options[key].keys():
-						optionsParsed += '\n		' + subkey + ': ' + 'Yes' if bool(options[key][subkey]) else 'No'
+			for key in options:
+				optionsParsed += f'\n	{key = }'
 
 			# Now writing the last log file, which we can query to the user
 			open(_defaultsFile, 'w').write(f'{psych_mod_folder_path}\n{result_path}\n\nLAST LOG: {log.logMemory.current_log_file}\n======================\nOPTIONS:{optionsParsed}')
 		except Exception as e:
 			logging.error(f'Problems with your save file: {e}')
+			self.throwError(f'Problems on your save file! {e}')
 
 		if psych_mod_folder_path != None and result_path != None:
 			# try:
@@ -609,12 +605,7 @@ def init():
 	try:
 		window.show()
 	except Exception as e:
-		#why does this never fire
 		logging.critical(f'Window could not show! {e}')
-	
-	#work in progress
-	#Window.throwError(self=QDialog, text='d', actual_error_text='poooop')
-	# print('pooop')
 
 	app.exec()
 

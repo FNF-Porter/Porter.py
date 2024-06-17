@@ -425,4 +425,4 @@ FILE_LOCS = {	# If the indent fucks up again its GitHub's fault
     ['/scripts/', '/scripts/'] # Do we need this? YES!
 }
 
-VERSION = "0.2"
+VERSION = "0.3"

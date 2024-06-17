@@ -7,9 +7,10 @@ import time
 from . import Constants
 from re import sub
 
-# modPath = ""
-
 def getRuntime(start:float) -> float:
+	"""
+	Small function to keep track of runtime
+	"""
 	return start - time.time()
 
 def character(name:str) -> str:

@@ -50,9 +50,10 @@ class CharacterObject:
 			Use ShadowFi's XML Resizer app: https://drive.google.com/file/d/1GoROyQKnMxiM6I0JUZ2_WKM5Aim6nY2o/view
 
 			Eg: If the scale of your sprite was 0.6, you want to resize both Sprite Sheet and the XML to 60% of their original size.
-
-		character['scale'] = psychCharacter['scale']
 		"""
+
+		## It is fixed!
+		character['scale'] = psychCharacter['scale']
 
 		character['isPixel'] = psychCharacter['scale'] >= 6
 		character['healthIcon']['id'] = psychCharacter['healthicon']

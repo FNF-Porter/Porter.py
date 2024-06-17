@@ -193,3 +193,6 @@ class ChangeCharacterHandler extends Module {
 
 # VocalFan, you are officially removed from the dev team! I hate this song. 😡
 # https://youtu.be/22tVWwmTie8?si=2TNmHTDoT7UgQvZ-
+
+# Calm down, dude! This song is better!
+# https://youtu.be/VMp55KH_3wo
