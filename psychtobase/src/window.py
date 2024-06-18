@@ -23,8 +23,31 @@ _vocalSplitEnabledByDefault = platform.system() == 'Windows'
 
 app = QApplication([])
 
-class PsychToBaseUI():
+
+class BaseUI():
 	def __init__(self, targetWindow:QMainWindow):
+		super().__init__()
+
+		self.widgetsList = []
+
+	def showAll(self):
+		for widget in self.widgetsList:
+			try:
+				widget.show()
+			except Exception as e:
+				logging.error(f'Could not show UI element!: {e}')
+
+	def hideAll(self):
+		for widget in self.widgetsList:
+			try:
+				widget.hide()
+			except Exception as e:
+				logging.error(f'Could not hide UI element!: {e}')
+				
+class PsychToBaseUI(BaseUI):
+	def __init__(self, targetWindow:QMainWindow):
+		super().__init__(targetWindow)
+
 		self.senderWindow = targetWindow
 
 		self.modLabel = QLabel("Path to your Psych Engine mod:", targetWindow)
@@ -275,12 +298,48 @@ class PsychToBaseUI():
 
 		self.radioCheck(True, True)
 
-		# self.elementsPsychToBaseUI.append(
-		# 	self.modLabel,
-		# 	self.baseGameLabel,
-		# 	self.findModButton,
-		# 	self.findBaseGameButton
-		# )
+		self.widgetsList += [
+			self.modLabel,
+			self.baseGameLabel,
+			self.findModButton,
+			self.findBaseGameButton,
+			self.modLineEdit,
+			self.baseGameLineEdit,
+			self.defaultsLabel,
+			self.onlyChars,
+			self.onlySongs,
+			self.onlyChars,
+			self.onlyCharts,
+			self.onlyStages,
+			self.fullMod,
+			self.iChoose,
+			self.ohioSkibidi,
+			self.helpButton,
+			self.gbButton,
+			self.optionsLabel,
+			self.charts,
+			self.events,
+			self.songs,
+			self.insts,
+			self.voices,
+			self.music,
+			self.sounds,
+			self.vocalsplit,
+			self.chars,
+			self.icons,
+			self.jsons,
+			self.charassets,
+			self.weeks,
+			self.props,
+			self.titles,
+			self.levels,
+			self.stages,
+			self.meta,
+			self.images,
+			self.convert
+		]
+
+		#self.hideAll()
 
 	def allToDefaults(self, checked = True, enabled = False):
 		self.charts.setChecked(checked)
