@@ -425,4 +425,5 @@ FILE_LOCS = {	# If the indent fucks up again its GitHub's fault
     ['/scripts/', '/scripts/'] # Do we need this? YES!
 }
 
-VERSION = "0.3"
+VERSION = "1.0"
+GAME_BANANA_TOOL = 16982
