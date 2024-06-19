@@ -1,6 +1,7 @@
 
 
 
+import json
 import logging
 import main
 import platform
@@ -14,6 +15,8 @@ from pathlib import Path
 from PyQt6.QtCore import QSize
 from PyQt6.QtGui import QIcon, QImage, QPixmap, QFont
 from PyQt6.QtWidgets import *
+
+import src.tools.VocalSplit as VocalSplit
 
 icon = b64decode(Constants.BASE64_IMAGES.get('windowIcon'))
 
@@ -56,12 +59,125 @@ class BaseUI():
 			except Exception as e:
 				logging.error(f'Could not hide UI element!: {e}')
 
+class VocalSplitUI(BaseUI):
+	def __init__(self, targetWindow:QMainWindow):
+		super().__init__(targetWindow)
+
+		self.stateId = 'vocalsplit'
+
+		self.featureName = QLabel(f'Vocal Split', targetWindow)
+		self.featureName.resize(100, 30)
+
+		elementsY = 50
+
+		self.featureName.move(20, elementsY)
+
+		elementsY += 40
+
+		self.vocsLabel = QLabel("Vocals", targetWindow)
+		self.vocsLabel.resize(220, 30)
+
+		self.findVoc = QPushButton("Locate...", targetWindow)
+		self.findVoc.setToolTip("Open File Dialog")
+		self.vocLineEdit = QLineEdit('', targetWindow)
+		self.chartLineEdit = QLineEdit('', targetWindow)
+
+		def findVocsOFD():
+			vocalsOgg = QFileDialog.getOpenFileName(self.senderWindow, "Select Vocals .OGG", filter="*.ogg")
+			if len(vocalsOgg[0]) > 0:
+				self.vocLineEdit.setText(vocalsOgg[0])
+
+		self.supportedChartFormats = [
+			'Legacy FNF',
+			'Funkin\' 0.4.1'
+		]
+
+		self.findVoc.clicked.connect(findVocsOFD)
+
+		#elementsY += 30
+
+		#elementsY += 40
+
+		self.vocsLabel.move(20, elementsY)
+		self.findVoc.move((targetWindow.width() - 20) - self.findVoc.width(), elementsY)
+		self.vocLineEdit.move((self.findVoc.x() - 20) - 400, elementsY)
+
+		self.vocLineEdit.resize(400, 30)
+		self.chartLineEdit.resize(400, 30)
+
+		elementsY += 40
+
+		self.chartFormatLabel = QLabel("Chart", targetWindow)
+		self.chartFormatLabel.move(20, elementsY)
+
+		self.findChart = QPushButton("Locate...", targetWindow)
+		self.findChart.move((targetWindow.width() - 20) - self.findChart.width(), elementsY)
+
+		self.chartLineEdit.move((self.findChart.x() - 20) - 400, elementsY)
+
+		def findChartLocation():
+			chartFile = QFileDialog.getOpenFileName(self.senderWindow, "Select Chart File", filter="*.json")
+			if len(chartFile[0]) > 0:
+				self.chartLineEdit.setText(chartFile[0])
+
+		self.findChart.clicked.connect(findChartLocation)
+
+		elementsY += 40
+
+		self.chartFormatDropdown = QComboBox(targetWindow)
+		self.chartFormatDropdown.addItems(self.supportedChartFormats)
+		dropDownX = int((targetWindow.width() - 20) - self.findVoc.width())
+		self.chartFormatDropdown.move(dropDownX, elementsY)
+
+		def startVocalSplit():
+			try:
+				resultPath = Path(self.vocLineEdit.text()).parent
+
+				if self.chartFormatDropdown.currentIndex() == 0:
+					chartFile = json.loads(open(self.chartLineEdit.text(), 'r').read())['song']
+
+					chartBPM = chartFile['bpm']
+					sections = chartFile['notes']
+
+					songName = chartFile['song']
+
+					VocalSplit.vocalsplit(
+						chart=sections,
+						bpm=chartBPM,
+						origin=self.vocLineEdit.text(),
+						path=f'{resultPath}/',
+						key=songName,
+						characters=['Player', 'Opponent'],
+						ignoreOgg=True
+					)
+				elif self.chartFormatDropdown.currentIndex() == 1:
+					raise Exception('Unsupported Chart Format for Vocal Split!')
+			except Exception as e:
+				logging.error(f'Failed to perform vocal split operation', exc_info=e)
+
+		self.convert = QPushButton("Start", targetWindow)
+		self.convert.move((targetWindow.width() - 20) - self.convert.width(), (targetWindow.logsLabel.y() - 20) - self.convert.height())
+		self.convert.clicked.connect(startVocalSplit)
+
+		self.widgetsList += [
+			self.featureName,
+			self.vocsLabel,
+			self.findVoc,
+			self.vocLineEdit,
+			self.chartLineEdit,
+			self.findChart,
+			self.chartFormatLabel,
+			self.chartFormatDropdown,
+			self.convert
+		]
+
 class HomePageUI(BaseUI):
 	def __init__(self, targetWindow:QMainWindow):
 		super().__init__(targetWindow)
 
 		self.stateId = 'home'
 
+		# Remove the back button, since this is the home page
 		self.homeButton.hide()
 		self.widgetsList.remove(self.homeButton)
 
@@ -102,6 +218,13 @@ class HomePageUI(BaseUI):
 		self.discordButton = QPushButton('Discord', targetWindow)
 		self.discordButton.move((targetWindow.width() - 20) - self.discordButton.width(), 20)
 
+		def goToVocalSplit():
+			targetWindow.goToState('vocalsplit')
+
+		self.vocalSplitButton = QPushButton('Vocal Split', targetWindow)
+		self.vocalSplitButton.move(20, (targetWindow.logsLabel.y() - 20) - self.vocalSplitButton.height())
+		self.vocalSplitButton.clicked.connect(goToVocalSplit)
+
 		def openDiscord():
 			webbrowser.open('https://discord.gg/3nqMvtCsJJ')
 
@@ -123,7 +246,8 @@ class HomePageUI(BaseUI):
 			self.loadUi,
 			self.toLabel,
 			self.appName,
-			self.discordButton
+			self.discordButton,
+			self.vocalSplitButton
 		]
 
 	def dropdownChanged(self):
@@ -744,8 +868,9 @@ class Window(QMainWindow):
 
 		self.psychToBaseUI = PsychToBaseUI(self)
 		self.homePageUI = HomePageUI(self)
+		self.vocalSplitUI = VocalSplitUI(self)
 
-		self.stateList = [self.homePageUI, self.psychToBaseUI]
+		self.stateList = [self.homePageUI, self.psychToBaseUI, self.vocalSplitUI]
 
 		self.goToState('home')
 

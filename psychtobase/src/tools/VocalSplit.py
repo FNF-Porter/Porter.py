@@ -22,7 +22,7 @@ def assignFfmpegBulk(audiosegments:list):
     for audiosegment in audiosegments:
         assignFfmpeg(audiosegment)
 
-def vocalsplit(chart, bpm, origin, path, key, characters):
+def vocalsplit(chart, bpm, origin, path, key, characters, ignoreOgg = False):
     beatLength = (60 / bpm) * 1000
     stepLength = beatLength / 4
     sectionLength = beatLength * 4
@@ -44,7 +44,7 @@ def vocalsplit(chart, bpm, origin, path, key, characters):
 
         songTime = lastSteps + (songSteps * stepLength)
         mustHit = section['mustHitSection']
-        isDuet = section['isDuet']
+        isDuet = section.get('isDuet', False)
 
         # print('Section at', songTime)
         # print('Must Hit', mustHit)
@@ -56,7 +56,11 @@ def vocalsplit(chart, bpm, origin, path, key, characters):
 
     assignFfmpegBulk([AudioSegment])
 
-    originalVocals = AudioSegment.from_ogg(origin + "Voices.ogg")
+    ahhStupid = 'Voices.ogg'
+    if ignoreOgg:
+        ahhStupid = ''
+
+    originalVocals = AudioSegment.from_ogg(origin + ahhStupid)
     vocalsBF = AudioSegment.empty()
     vocalsOpponent = AudioSegment.empty()
 
