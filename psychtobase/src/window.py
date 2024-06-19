@@ -28,7 +28,19 @@ class BaseUI():
 	def __init__(self, targetWindow:QMainWindow):
 		super().__init__()
 
-		self.widgetsList = []
+		self.senderWindow = targetWindow
+
+		self.homeButton = QPushButton('<|-- Back', targetWindow)
+		self.homeButton.move(5, 5)
+
+		def goToHome():
+			targetWindow.goToState('home')
+
+		self.homeButton.clicked.connect(goToHome)
+
+		self.widgetsList = [self.homeButton]
+
+		self.stateId = None
 
 	def showAll(self):
 		for widget in self.widgetsList:
@@ -43,26 +55,112 @@ class BaseUI():
 				widget.hide()
 			except Exception as e:
 				logging.error(f'Could not hide UI element!: {e}')
+
+class HomePageUI(BaseUI):
+	def __init__(self, targetWindow:QMainWindow):
+		super().__init__(targetWindow)
+
+		self.stateId = 'home'
+
+		self.homeButton.hide()
+		self.widgetsList.remove(self.homeButton)
+
+		self.engineDropdownFrom = QComboBox(targetWindow)
+		self.engineDropdownTo = QComboBox(targetWindow)
+		self.toLabel = QLabel('to', targetWindow)
+
+		groupOptionsY = 100
+
+		leftButtonX = int((targetWindow.width() / 2) - (self.engineDropdownFrom.width() + 50))
+		rightButtonX = int((targetWindow.width() / 2) + 50)
+		toX = int((targetWindow.width() / 2) - 8)
+		buttonX = int((targetWindow.width() / 2) - 100)
+
+		self.engineDropdownFrom.move(leftButtonX, groupOptionsY)
+		self.engineDropdownTo.move(rightButtonX, groupOptionsY)
+		self.toLabel.move(toX, groupOptionsY)
+
+		self.supportedConversions = [
+			('Psych Engine', 'Base Game'),
+			#('Base Game', 'Psych Engine')
+		]
+
+		for engineFrom, engineTo in self.supportedConversions:
+			self.engineDropdownFrom.addItem(engineFrom)
+			self.engineDropdownTo.addItem(engineTo)
+
+		self.engineDropdownFrom.currentIndexChanged.connect(self.dropdownChanged)
+		self.engineDropdownTo.currentIndexChanged.connect(self.dropdownChanged)
+
+		self.loadUi = QPushButton('Convert', targetWindow)
+		self.loadUi.resize(200, 30)
+		self.loadUi.move(buttonX, groupOptionsY + 50)
+
+		self.appName = QLabel(f'FNF Porter {_windowTitleSuffix}', targetWindow)
+		self.appName.resize(300, 30)
+		self.appName.move(20, 20)
+		self.discordButton = QPushButton('Discord', targetWindow)
+		self.discordButton.move((targetWindow.width() - 20) - self.discordButton.width(), 20)
+
+		def openDiscord():
+			webbrowser.open('https://discord.gg/3nqMvtCsJJ')
+
+		def onStateClicked():
+			indexFrom = self.engineDropdownFrom.currentIndex()
+			indexTo = self.engineDropdownTo.currentIndex()
+			stateTuple = (self.supportedConversions[indexFrom][0], self.supportedConversions[indexTo][1])
+
+			targetWindow.goToStateWithConversionTuple(stateTuple)
+
+		self.loadUi.clicked.connect(onStateClicked)
+		self.discordButton.clicked.connect(openDiscord)
+
+		self.dropdownChanged()
+
+		self.widgetsList += [
+			self.engineDropdownFrom,
+			self.engineDropdownTo,
+			self.loadUi,
+			self.toLabel,
+			self.appName,
+			self.discordButton
+		]
+
+	def dropdownChanged(self):
+		indexF = self.engineDropdownFrom.currentIndex()
+		indexT = self.engineDropdownTo.currentIndex()
+
+		isCompatible = self.isConversionCompatible(indexF, indexT)
+		self.loadUi.setEnabled(isCompatible)
+		self.loadUi.setText('Convert' if isCompatible else 'Not supported')
+
+	def isConversionCompatible(self, indexFrom, indexTo):
+		tupleToCompareFrom = (self.supportedConversions[indexFrom][0], self.supportedConversions[indexTo][1])
+		#print(tupleToCompareFrom)
+		return tupleToCompareFrom in self.supportedConversions
 				
 class PsychToBaseUI(BaseUI):
 	def __init__(self, targetWindow:QMainWindow):
 		super().__init__(targetWindow)
 
-		self.senderWindow = targetWindow
+		self.stateId = 'psych2base'
+
+		modLineY = 50
+		baseLineY = modLineY + 40
 
 		self.modLabel = QLabel("Path to your Psych Engine mod:", targetWindow)
 		self.baseGameLabel = 	QLabel("Path to Base Game mods folder:", targetWindow)
-		self.modLabel.move(20, 20)
+		self.modLabel.move(20, modLineY)
 		self.modLabel.resize(220, 30)
-		self.baseGameLabel.move(20, 60)
+		self.baseGameLabel.move(20, baseLineY)
 		self.baseGameLabel.resize(220, 30)
 
 		self.findModButton = QPushButton("Locate...", targetWindow)
 		self.findBaseGameButton = QPushButton("Locate...", targetWindow)
 		self.findModButton.setToolTip("Open File Dialog")
 		self.findBaseGameButton.setToolTip("Open File Dialog")
-		self.findModButton.move((targetWindow.width() - 20) - self.findModButton.width(), 20)
-		self.findBaseGameButton.move((targetWindow.width() - 20) - self.findBaseGameButton.width(), 60)  # Move the button closer to the other one
+		self.findModButton.move((targetWindow.width() - 20) - self.findModButton.width(), modLineY)
+		self.findBaseGameButton.move((targetWindow.width() - 20) - self.findBaseGameButton.width(), baseLineY)  # Move the button closer to the other one
 		self.findModButton.clicked.connect(self.findMod)
 		self.findBaseGameButton.clicked.connect(self.findBaseGame)
 
@@ -82,37 +180,51 @@ class PsychToBaseUI(BaseUI):
 
 		self.modLineEdit = QLineEdit(modDP, targetWindow)
 		self.baseGameLineEdit = QLineEdit(bGDP, targetWindow)
-		self.modLineEdit.move((self.findModButton.x() - 20) - 400, 20)
-		self.baseGameLineEdit.move((self.findBaseGameButton.x() - 20) - 400, 60)
+		self.modLineEdit.move((self.findModButton.x() - 20) - 400, modLineY)
+		self.baseGameLineEdit.move((self.findBaseGameButton.x() - 20) - 400, baseLineY)
 		self.modLineEdit.resize(400, 30)  # Adjust the size as needed
 		self.baseGameLineEdit.resize(400, 30)  # Adjust the size as needed
 
 		## Section 1, PRESETS
 		rX = 20
 
+		thingsY = baseLineY + 40
+
 		self.defaultsLabel = QLabel("Presets", targetWindow)
-		self.defaultsLabel.move(rX, 100)
+		self.defaultsLabel.move(rX, thingsY)
 		self.defaultsLabel.resize(220, 30)
 
+		thingsY += 30
+
 		self.onlyCharts = QRadioButton('Only Charts', targetWindow)
-		self.onlyCharts.move(rX, 140)
+		self.onlyCharts.move(rX, thingsY)
+
+		thingsY += 30
 
 		self.onlySongs = QRadioButton('Only Audio', targetWindow)
-		self.onlySongs.move(rX, 170)
+		self.onlySongs.move(rX, thingsY)
+
+		thingsY += 30
 
 		self.onlyChars = QRadioButton('Only Characters', targetWindow) # not to be confused with onlyCharts
-		self.onlyChars.move(rX, 200)
+		self.onlyChars.move(rX, thingsY)
 		self.onlyChars.resize(400, 30)
 
+		thingsY += 30
+
 		self.onlyStages = QRadioButton('Only Stages', targetWindow)
-		self.onlyStages.move(rX, 230)
+		self.onlyStages.move(rX, thingsY)
+
+		thingsY += 30
 
 		self.fullMod = QRadioButton('Full Mod', targetWindow)
-		self.fullMod.move(rX, 260)
+		self.fullMod.move(rX, thingsY)
 		self.fullMod.setChecked(True) # Default
 
+		thingsY += 30
+
 		self.iChoose = QRadioButton('Custom', targetWindow)
-		self.iChoose.move(rX, 290)
+		self.iChoose.move(rX, thingsY)
 
 		self.onlyCharts.toggled.connect(self.radioCheck)
 		self.onlySongs.toggled.connect(self.radioCheck)
@@ -155,7 +267,7 @@ class PsychToBaseUI(BaseUI):
 		_newCheckboxInCat = 20 # A checkbox inside a categorized group.
 		_newCheckboxAfterCat = 30 # A checkbox after a categorized group of checkboxes.
 		_spacingBelowLabel = 40 # A checkbox below a label.
-		_defaultYPos = 100
+		_defaultYPos = baseLineY + 40
 
 		_currentYPos = _defaultYPos
 
@@ -610,7 +722,7 @@ class Window(QMainWindow):
 		self.setWindowTitle(f"FNF Porter {_windowTitleSuffix}")
 		wid = 750
 		hei = 750
-		
+
 		self.setFixedSize(QSize(wid, hei))
 		self.setMinimumSize(QSize(wid, hei))
 		self.setMaximumSize(QSize(wid, hei))
@@ -631,6 +743,27 @@ class Window(QMainWindow):
 		self.logsLabel.setFont(font)
 
 		self.psychToBaseUI = PsychToBaseUI(self)
+		self.homePageUI = HomePageUI(self)
+
+		self.stateList = [self.homePageUI, self.psychToBaseUI]
+
+		self.goToState('home')
+
+	def goToStateWithConversionTuple(self, conversion):
+		states = {
+			('Psych Engine', 'Base Game'): 'psych2base'
+		}
+
+		if conversion in states:
+			self.goToState(states[conversion])
+
+	def goToState(self, stateId = ''):
+		#print(stateId)
+
+		for state in self.stateList:
+			state.hideAll()
+			if state.stateId == stateId:
+				state.showAll()
 	
 	def openLogFile(self):
 		file = log.logMemory.current_log_file
