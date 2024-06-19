@@ -33,7 +33,7 @@ class BaseUI():
 
 		self.senderWindow = targetWindow
 
-		self.homeButton = QPushButton('<|-- Back', targetWindow)
+		self.homeButton = QPushButton('<|== Back', targetWindow)
 		self.homeButton.move(5, 5)
 
 		def goToHome():
