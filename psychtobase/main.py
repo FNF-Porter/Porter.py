@@ -340,11 +340,11 @@ def convert(psych_mod_folder, result_folder, options):
                     if fileBasename in characterMap:
 
                         # Appends it to the array of character names
-                        characterMap[fileBasename].append(converted_char.characterName)
+                        characterMap[fileBasename].append(converted_char.characterId)
                     else:
                         # If it doesnt exist, create a new array
-                        characterMap[fileBasename] = [converted_char.characterName]
-                    logging.info(f'Saved {converted_char.characterName} to character map using their icon id: {fileBasename}.')
+                        characterMap[fileBasename] = [converted_char.characterId]
+                    logging.info(f'Saved {converted_char.characterId} to character map using their icon id: {fileBasename}.')
                 except Exception as e:
                     logging.error(f'Failed to convert character {character}')
             else:

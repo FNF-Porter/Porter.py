@@ -17,6 +17,7 @@ class CharacterObject:
 		self.characterFile = Path(path).name
 		self.characterName = None
 		self.iconID = None
+		self.characterId = None
 
 		self.psychCharacter:dict = {}
 		self.character = copy.deepcopy(Constants.CHARACTER)
@@ -26,6 +27,8 @@ class CharacterObject:
 	def loadCharacter(self):
 		with open(self.pathName, 'r') as file:
 			self.psychCharacter = json.load(file)
+
+		self.characterId = Path(self.pathName).name.replace('.json', '')
 
 		self.characterJson = files.removeTrail(self.characterFile)
 		self.characterName = ' '.join([string.capitalize() for string in self.characterJson.split('-')])
