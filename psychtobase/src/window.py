@@ -147,11 +147,69 @@ class VocalSplitUI(BaseUI):
 						origin=self.vocLineEdit.text(),
 						path=f'{resultPath}/',
 						key=songName,
-						characters=['Player', 'Opponent'],
+						characters=[chartFile['player1'], chartFile['player2']],
 						ignoreOgg=True
 					)
-				elif self.chartFormatDropdown.currentIndex() == 1:
-					raise Exception('Unsupported Chart Format for Vocal Split!')
+				elif self.chartFormatDropdown.currentIndex() == 1: ## I DO NOT KNOW IF THIS WORKS. I hope it does
+					metadataFile = QFileDialog.getOpenFileName(self.senderWindow, "Select Metadata File", filter="*.json")
+					if len(metadataFile[0]) > 0:
+						metaFile = metadataFile[0]
+
+						metadata = json.loads(open(metaFile, 'r').read())
+						chartFile = json.loads(open(self.chartLineEdit.text(), 'r').read())
+
+						chartBPM = metadata['timeChanges'][0]['bpm']
+
+						def parseSections(focusCameraEvents):
+							returner = []
+
+							timeLastValid = 0
+
+							for event in focusCameraEvents:
+								time = event['t']
+
+								if event['e'] != 'FocusCamera':
+									continue
+
+								stepCrochet = ((60 / chartBPM) * 1000) / 4
+								stepsItTook = round((time - timeLastValid) / stepCrochet)
+								isEventMustHitNew = type(event['v']) == dict
+
+								#print(isEventMustHitNew, mustHitEvent)
+
+								isMustHitForBF = False
+
+								if isEventMustHitNew:
+									isMustHitForBF = event['v']['char'] == 1
+								else:
+									isMustHitForBF = event['v'] == 1
+
+								returner.append({
+									'mustHitSection': isMustHitForBF,
+									'lengthInSteps': stepsItTook
+								})
+
+								timeLastValid = time
+
+							return returner
+													
+						sections = parseSections(chartFile['events'])
+
+						songName = metadata['songName']
+
+						VocalSplit.vocalsplit(
+							chart=sections,
+							bpm=chartBPM,
+							origin=self.vocLineEdit.text(),
+							path=f'{resultPath}/',
+							key=songName,
+							characters=[metadata['playData']['characters']['player'], metadata['playData']['characters']['opponent']],
+							ignoreOgg=True
+						)
+					else:
+						raise Exception('No metadata file provided, cannot continue generating legacy chart format!')
+				else:
+					raise Exception(f'Unsupported Chart Format for Vocal Split: {self.chartFormatDropdown.currentIndex()}')
 			except Exception as e:
 				logging.error(f'Failed to perform vocal split operation', exc_info=e)
 
