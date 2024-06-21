@@ -19,10 +19,10 @@ jobs:
             command: pyinstaller build.spec
           - os: macos-latest
             icon: icon.icns
-            command: pyinstaller --onefile psychtobase/main.py --icon=icon.icns --noconsole -n "FNF Porter"
+            command: pyinstaller --onefile fnfporter/main.py --icon=icon.icns --noconsole -n "FNF Porter"
           - os: ubuntu-latest
             icon: ""
-            command: pyinstaller --onefile psychtobase/main.py --noconsole -n "FNF Porter"
+            command: pyinstaller --onefile fnfporter/main.py --noconsole -n "FNF Porter"
 
     steps:
     - uses: actions/checkout@v4

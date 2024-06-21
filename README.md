@@ -29,7 +29,7 @@ You can simply run `dependency-install.bat` to install all of these at once. You
 - `pyinstaller`
 - `PyQt6`
 
-You can start the window by running `psychtobase/main.py`,
+You can start the window by running `fnfporter/main.py`,
 or alternatively run `build.bat` to build the application yourself.
 
 Note that your build won't be signed, so Windows Defender will probably delete it. Github actions make builds that don't have this issue, so use those instead.
