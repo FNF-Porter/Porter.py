@@ -2,7 +2,7 @@ name: FNF Porter Build
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "v1.0" ]
 
 permissions:
   contents: read
