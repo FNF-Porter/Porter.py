@@ -27,4 +27,5 @@ dist/
 
 ## FNF Porter files
 **/logs/*
+.SAVE_DATA
 .defaults

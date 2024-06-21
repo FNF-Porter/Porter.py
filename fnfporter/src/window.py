@@ -16,16 +16,17 @@ from PyQt6.QtCore import QSize
 from PyQt6.QtGui import QIcon, QImage, QPixmap, QFont
 from PyQt6.QtWidgets import *
 
+import src.SaveDataManager as SaveDataManager
+
 import src.tools.VocalSplit as VocalSplit
 
 icon = b64decode(Constants.BASE64_IMAGES.get('windowIcon'))
 
 _windowTitleSuffix = f"v{Constants.VERSION} [ultra alpha based version 1]"
-_defaultsFile = '.defaults'
+_SAVE_FILE = '.SAVE_DATA'
 _vocalSplitEnabledByDefault = platform.system() == 'Windows'
 
 app = QApplication([])
-
 
 class BaseUI():
 	def __init__(self, targetWindow:QMainWindow):
@@ -256,6 +257,7 @@ class HomePageUI(BaseUI):
 
 		self.supportedConversions = [
 			('Psych Engine', 'Base Game'),
+			('Base Game', 'Psych Engine'),
 			#('Base Game', 'Psych Engine')
 		]
 
@@ -390,16 +392,13 @@ class PsychToBaseUI(ConversionUI):
 		# thingDefaultPath
 		modDP = ''
 		bGDP = ''
-		if Path(_defaultsFile).exists():
-			try:
-				parse = open(_defaultsFile, 'r').read()
-				for index, line in enumerate(parse.split('\n')):
-					if index == 0:
-						modDP = line
-					if index == 1:
-						bGDP = line
-			except Exception as e:
-				logging.error(f'Problems loading your save: {e}')
+
+		# I am not doing migration bro
+		try:
+			modDP = SaveDataManager.save.saveData['paths']['psychToBase']['psychMod']
+			bGDP = SaveDataManager.save.saveData['paths']['psychToBase']['baseGame']
+		except Exception as e:
+			print(f'Could not load default values from Save File: {e.with_traceback(e.__traceback__)}')
 
 		self.modLineEdit = QLineEdit(modDP, targetWindow)
 		self.baseGameLineEdit = QLineEdit(bGDP, targetWindow)
@@ -796,15 +795,11 @@ class PsychToBaseUI(ConversionUI):
 		options['images'] = self.images.isChecked()
 
 		try:
-			optionsParsed = ''
-			for key in options:
-				optionsParsed += f'\n	{key = }'
-
-			# Now writing the last log file, which we can query to the user
-			open(_defaultsFile, 'w').write(f'{psych_mod_folder_path}\n{result_path}\n\nLAST LOG: {log.logMemory.current_log_file}\n======================\nOPTIONS:{optionsParsed}')
+			SaveDataManager.save.saveData['paths']['psychToBase']['psychMod'] = psych_mod_folder_path
+			SaveDataManager.save.saveData['paths']['psychToBase']['baseGame'] = result_path
+			SaveDataManager.save.saveData['conversionOptions']['psychToBase'] = options
 		except Exception as e:
-			logging.error(f'Problems with your save file: {e}')
-			self.senderWindow.throwError(f'Problems on your save file! {e}')
+			logging.error('Your save data isnt initiated yet!: ', exc_info=e)
 
 		if psych_mod_folder_path != None and result_path != None:
 			# try:
@@ -819,13 +814,13 @@ class BaseToPsychUI(ConversionUI):
 	def __init__(self, targetWindow:QMainWindow):
 		super().__init__(targetWindow)
 
-		self.stateId = 'psych2base'
+		self.stateId = 'base2psych'
 
 		modLineY = 50
 		baseLineY = modLineY + 40
 
-		self.modLabel = QLabel("Path to your Psych Engine mod:", targetWindow)
-		self.baseGameLabel = 	QLabel("Path to Base Game mods folder:", targetWindow)
+		self.modLabel = QLabel("Path to your Base Game mod:", targetWindow)
+		self.baseGameLabel = 	QLabel("Path to Psych Engine mods folder:", targetWindow)
 		self.modLabel.move(20, modLineY)
 		self.modLabel.resize(220, 30)
 		self.baseGameLabel.move(20, baseLineY)
@@ -843,16 +838,12 @@ class BaseToPsychUI(ConversionUI):
 		# thingDefaultPath
 		modDP = ''
 		bGDP = ''
-		if Path(_defaultsFile).exists():
-			try:
-				parse = open(_defaultsFile, 'r').read()
-				for index, line in enumerate(parse.split('\n')):
-					if index == 0:
-						modDP = line
-					if index == 1:
-						bGDP = line
-			except Exception as e:
-				logging.error(f'Problems loading your save: {e}')
+		
+		try:
+			modDP = SaveDataManager.save.saveData['paths']['baseToPsych']['baseMod']
+			bGDP = SaveDataManager.save.saveData['paths']['baseToPsych']['psych']
+		except Exception as e:
+			print(f'Could not load default values from Save File: {e.with_traceback(e.__traceback__)}')
 
 		self.modLineEdit = QLineEdit(modDP, targetWindow)
 		self.baseGameLineEdit = QLineEdit(bGDP, targetWindow)
@@ -1247,12 +1238,9 @@ class BaseToPsychUI(ConversionUI):
 		options['images'] = self.images.isChecked()
 
 		try:
-			optionsParsed = ''
-			for key in options:
-				optionsParsed += f'\n	{key = }'
-
-			# Now writing the last log file, which we can query to the user
-			open(_defaultsFile, 'w').write(f'{psych_mod_folder_path}\n{result_path}\n\nLAST LOG: {log.logMemory.current_log_file}\n======================\nOPTIONS:{optionsParsed}')
+			SaveDataManager.save.saveData['paths']['baseToPsych']['baseMod'] = psych_mod_folder_path
+			SaveDataManager.save.saveData['paths']['baseToPsych']['psych'] = result_path
+			SaveDataManager.save.saveData['conversionOptions']['baseToPsych'] = options
 		except Exception as e:
 			logging.error(f'Problems with your save file: {e}')
 			self.senderWindow.throwError(f'Problems on your save file! {e}')
@@ -1356,6 +1344,9 @@ class ErrorMessage(QDialog):
 		
 class Window(QMainWindow):
 	def closeEvent(self, event):
+		SaveDataManager.save.save()
+		logging.info('Saving Save Data...')
+
 		logging.info('Thanks for using FNF Porter!')
 		#time.sleep(0.1)
 		event.accept()
@@ -1387,16 +1378,18 @@ class Window(QMainWindow):
 		self.logsLabel.setFont(font)
 
 		self.psychToBaseUI = PsychToBaseUI(self)
+		self.baseToPsychUI = BaseToPsychUI(self)
 		self.homePageUI = HomePageUI(self)
 		self.vocalSplitUI = VocalSplitUI(self)
 
-		self.stateList = [self.homePageUI, self.psychToBaseUI, self.vocalSplitUI]
+		self.stateList = [self.homePageUI, self.psychToBaseUI, self.vocalSplitUI, self.baseToPsychUI]
 
 		self.goToState('home')
 
 	def goToStateWithConversionTuple(self, conversion):
 		states = {
-			('Psych Engine', 'Base Game'): 'psych2base'
+			('Psych Engine', 'Base Game'): 'psych2base',
+			('Base Game', 'Psych Engine'): 'base2psych'
 		}
 
 		if conversion in states:
@@ -1444,6 +1437,7 @@ class Window(QMainWindow):
 		button = 'Continue'
 		return self.open_dialog(title=title, inputs=inputs, button=button, body=body)
 	
+SaveDataManager.initSaveData()
 window = Window()
 
 def init():
@@ -1454,6 +1448,8 @@ def init():
 		window.show()
 	except Exception as e:
 		logging.critical(f'Window could not show! {e}')
+
+	SaveDataManager.save.saveData['lastLogFile'] = log.logMemory.current_log_file
 
 	app.exec()
 
