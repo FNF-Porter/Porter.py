@@ -350,6 +350,12 @@ class ConversionUI(BaseUI):
 		self.gbButton.resize(buttonsWidth, buttonsHeight)
 		self.gbButton.clicked.connect(self.goToGB)
 
+		self.widgetsList += [
+			self.helpButton,
+			self.gbButton,
+			self.ohioSkibidi
+		]
+
 	def goToIssues(self):
 		webbrowser.open('https://github.com/gusborg88/fnf-porter/issues/new/choose')
 
@@ -621,9 +627,6 @@ class PsychToBaseUI(ConversionUI):
 			self.onlyStages,
 			self.fullMod,
 			self.iChoose,
-			self.ohioSkibidi,
-			self.helpButton,
-			self.gbButton,
 			self.optionsLabel,
 			self.charts,
 			self.events,
