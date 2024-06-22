@@ -3,6 +3,9 @@
 
 import json
 import logging
+import threading
+
+import requests
 import main
 import platform
 import subprocess
@@ -12,7 +15,7 @@ from . import log, Constants
 from base64 import b64decode
 from pathlib import Path
 
-from PyQt6.QtCore import QSize
+from PyQt6.QtCore import *
 from PyQt6.QtGui import QIcon, QImage, QPixmap, QFont
 from PyQt6.QtWidgets import *
 
@@ -281,9 +284,17 @@ class HomePageUI(BaseUI):
 		def goToVocalSplit():
 			targetWindow.goToState('vocalsplit')
 
+		def goToLibUI():
+			targetWindow.goToState('dependency_install')
+
 		self.vocalSplitButton = QPushButton('Vocal Split', targetWindow)
 		self.vocalSplitButton.move(20, (targetWindow.logsLabel.y() - 20) - self.vocalSplitButton.height())
 		self.vocalSplitButton.clicked.connect(goToVocalSplit)
+
+		self.dependencyInstall = QPushButton('Dependency Installer', targetWindow)
+		self.dependencyInstall.move(140, (targetWindow.logsLabel.y() - 20) - self.vocalSplitButton.height())
+		self.dependencyInstall.clicked.connect(goToLibUI)
+		self.dependencyInstall.resize(200, 30)
 
 		def openDiscord():
 			webbrowser.open('https://discord.gg/3nqMvtCsJJ')
@@ -307,7 +318,8 @@ class HomePageUI(BaseUI):
 			self.toLabel,
 			self.appName,
 			self.discordButton,
-			self.vocalSplitButton
+			self.vocalSplitButton,
+			self.dependencyInstall
 		]
 
 	def dropdownChanged(self):
@@ -815,6 +827,223 @@ class BaseToPsychUI(ConversionUI):
 		super().__init__(targetWindow)
 
 		self.stateId = 'base2psych'
+
+class DependencyInstallUI(BaseUI):
+	def __init__(self, targetWindow:QMainWindow):
+		super().__init__(targetWindow)
+
+		self.stateId = 'dependency_install'
+
+		def log_subprocess_output(output):
+			if output:
+				# for once its actually useful you know this
+				for line in output.splitlines():
+					logging.info(f'subprocess output: {line}')
+
+		def downloadFileStream(url, filepath):
+			response = requests.get(url, stream=True)
+			response.raise_for_status()  # Raise an exception for bad status codes
+
+			total_size = int(response.headers.get('content-length', 0))
+			downloaded_size = 0
+			chunk_size = 1024  # 1 KB
+
+			with open(filepath, 'wb') as file:
+				for chunk in response.iter_content(chunk_size=chunk_size):
+					if chunk:
+						file.write(chunk)
+						downloaded_size += len(chunk)
+						progress = (downloaded_size / total_size) * 100
+						## PRINT BECAUSE IT LITERALLY KILLS ITSELF
+						print(f'Downloaded {progress}% - {downloaded_size} out of {total_size}')
+
+		def is_process_installed(process = 'git'):
+			try:
+				subprocess.run([process, "--version"], check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+				return True
+			except subprocess.CalledProcessError:
+				return False
+			
+		def doHxCodecBugfix():
+			subprocess.Popen([
+				'haxelib', '--global', 'git', 'hxCodec', 'https://github.com/FunkinCrew/hxCodec'
+			])
+
+		def getGit():
+			subprocess.run([
+				'winget', 
+				'install', 
+				'--id',
+				'Git.Git',
+				'-e',
+				'--source',
+				'winget'
+			])
+
+		def cloneFunkin():
+			if Path.exists(Path('funkin/')):
+				logging.info('Funkin already exists. No need to clone.')
+			else:
+				targetWindow.open_dialog('[INSTALL] Clone warning', [], 'Continue', 'Friday Night Funkin\' will be cloned.\nBy downloading the game\'s assets, you understand they\nare protected by international copyright laws.\n\nCloning will take up aproximately 2 GB.\nIMPORTANT: If the program freezes, please do not close it.\nThe cloning operation will take place\nin the background.')
+
+				logging.info('Cloning funkin')
+
+				# Eric, you will not make submodules a separate step.
+				clonefunkin = subprocess.Popen([
+					'git', 'clone', '--recurse-submodules', 'https://github.com/FunkinCrew/funkin.git'
+				])
+				p_out, p_err = clonefunkin.communicate()
+
+				log_subprocess_output(p_out)
+				log_subprocess_output(p_err)
+
+		def installLibs():
+			open('buildconfig.bat', 'w').write("""@echo off
+				setlocal
+
+				set "param=%~1"
+
+				if "%param%"=="-hmm" (
+					cd funkin
+					hmm install
+				) else if "%param%"=="-test" (
+					cd funkin
+					lime test windows
+				) else if "%param%"=="-lime" (
+					cd funkin
+					haxelib run lime setup
+				)
+
+				endlocal
+				""") # fuck you hmm
+			subprocess.run(['buildconfig.bat', '-hmm'])
+
+		def installVsCommunity():
+			vsCommunityURL = 'https://download.visualstudio.microsoft.com/download/pr/165d4174-7d65-4baa-83d5-4652a3e56211/4b00323d98b594bb051f4aa7ceb4801483e6fe7af41acca8bee7515863eef292/vs_BuildTools.exe'
+			downloadFileStream(vsCommunityURL, 'vs_Community.exe')
+
+			logging.info('Running VS Community install')
+
+			subprocess.Popen([
+				'vs_Community.exe', '--add', 
+				'Microsoft.VisualStudio.Component.VC.Tools.x86.x64',
+				'--add',
+				'Microsoft.VisualStudio.Component.Windows10SDK.19041',
+				'-p'
+				])
+			
+		def compileFunkin():
+			subprocess.Popen(['buildconfig.bat', '-test'])
+			
+		def installHaxe():
+			logging.info('GET - https://api.github.com/repos/HaxeFoundation/haxe/releases/latest')
+			haxeLatestRelease = requests.get('https://api.github.com/repos/HaxeFoundation/haxe/releases/latest').json()
+
+			logging.info('Latest Haxe release is ' + haxeLatestRelease['name'])
+
+			logging.info('Looking for exe...')
+			exeFile = None
+			exeUrl = None
+			for asset in haxeLatestRelease['assets']:
+				if asset['name'].endswith('.exe') and 'win' in asset['name']:
+					logging.info(f'Found exe file: {asset['name']}')
+					exeFile = asset['name']
+					exeUrl = asset['browser_download_url']
+				else:
+					continue
+					#logging.info(f'{asset['name']} doesn\'t match.')
+
+			if exeFile != None and exeUrl != None:
+				logging.info(f'Beggining download of {exeUrl}')
+
+				downloadFileStream(exeUrl, exeFile)
+
+				logging.info('Download completed')
+				logging.info('Please run the Haxe installer.')
+
+				targetWindow.open_dialog('Please run the Haxe installer.', [], 'Yes', f'Please run the Haxe Installer:\n{exeFile} (Requires admin permission)\n\nHave you finished installing?')
+
+		def installFromScratch():
+			if not is_process_installed():
+				targetWindow.open_dialog('Git not installed.', [], 'Yes', 'Git is not installed.\nDo you wish to install it now?')
+				getGit()
+
+			if not is_process_installed('haxe'):
+				targetWindow.open_dialog('Haxe/Haxelib not installed.', [], 'Yes', 'Haxe is not installed.\nDo you wish to install it now?')
+				installHaxe()
+
+			# # next step, download hmm
+			# logging.info('Downloading haxelib hmm')
+			# subprocess.run([
+			# 	'haxelib', '--global', 'install', 'hmm'
+			# ])
+
+			# logging.info('Installing haxelib hmm')
+			# subprocess.run([
+			# 	'haxelib', '--global', 'run', 'hmm', 'setup'
+			# ])
+			# hmm shit wasnt working
+
+			cloneFunkin()
+
+			targetWindow.open_dialog('[INSTALL] Library warning', [], 'Continue', 'WARNING: While installing the libraries, the program may freeze.\nPlease do not close it.')
+
+			logging.info('Installing all libraries with hmm')
+			installLibs()
+
+			if not is_process_installed('lime'):
+				logging.info('Running haxelib run lime setup')
+				subprocess.run(['buildconfig.bat', '-lime'])
+
+			logging.info('Downloading vs_Community.exe')
+			installVsCommunity()
+			targetWindow.open_dialog('[INSTALL] Visual Studio', [], 'Yes', 'Visual Studio 2022 is currently being installed.\nHas it finished installing?')
+
+			logging.info('Doing hxCodec bugfix')
+			doHxCodecBugfix()
+
+			logging.info('Attempting to compile')
+
+			targetWindow.open_dialog('Ready to compile', [], 'Yes', 'Everything has been downloaded and is ready to compile.\nDo you wish to compile now?\n\nThe program may freeze while compiling.\nCompiling usually takes ~5-10 minutes (depending on hardware).')
+			compileFunkin()
+
+		self.labelThing = QLabel('Press any button that matches your intent.', targetWindow)
+		self.labelThing.resize(300, 30)
+		self.labelThing.move(20, 50)
+
+		self.fromScratchBaseGame = QPushButton('Funkin\' (Base Game) - From scratch', targetWindow)
+		self.fromScratchBaseGame.clicked.connect(installFromScratch)
+		self.fromScratchBaseGame.move(20, 90)
+		self.fromScratchBaseGame.resize(300, 30)
+
+		def dependencyOnly():
+			targetWindow.open_dialog('[INSTALL] Location', [], 'Yes', 'Please move the source code to the root\nof FNF Porter, in a folder named "funkin"\nin order to continue.\nHave you moved it?')
+			
+			if not is_process_installed():
+				targetWindow.open_dialog('Git not installed.', [], 'Yes', 'Git is not installed.\nDo you wish to install it now?')
+				getGit()
+
+			if not is_process_installed('haxe'):
+				targetWindow.open_dialog('Haxe/Haxelib not installed.', [], 'Yes', 'Haxe is not installed.\nDo you wish to install it now?')
+				installHaxe()
+
+			targetWindow.open_dialog('[INSTALL] Library warning', [], 'Continue', 'WARNING: While installing the libraries, the program may freeze.\nPlease do not close it.')
+
+			logging.info('Installing all libraries with hmm')
+			installLibs()
+
+			if not is_process_installed('lime'):
+				logging.info('Running haxelib run lime setup')
+				subprocess.run(['buildconfig.bat', '-lime'])
+
+		self.librariesBaseGame = QPushButton('Funkin\' (Base Game) - Libraries', targetWindow)
+		self.librariesBaseGame.clicked.connect(dependencyOnly)
+		self.librariesBaseGame.move(20, 130)
+		self.librariesBaseGame.resize(300, 30)
+		
+		self.widgetsList += [self.fromScratchBaseGame, self.librariesBaseGame, self.labelThing]
+
+		#Todo - Psych process.
 		
 class Window(QMainWindow):
 	def closeEvent(self, event):
@@ -857,6 +1086,11 @@ class Window(QMainWindow):
 		self.vocalSplitUI = VocalSplitUI(self)
 
 		self.stateList = [self.homePageUI, self.psychToBaseUI, self.vocalSplitUI, self.baseToPsychUI]
+
+		if platform.system() == 'Windows':
+			print('Windows detected. Dependency install UI will initiate.')
+			self.dependencyUI = DependencyInstallUI(self)
+			self.stateList += [self.dependencyUI]
 
 		self.goToState('home')
 
@@ -907,8 +1141,7 @@ class Window(QMainWindow):
 		# if the user does something, because exec is blocking call we close it!
 		self.newError.hide()
 
-	def prompt(self, inputs, title, body):
-		button = 'Continue'
+	def prompt(self, inputs, title, body, button = 'Continue'):
 		return self.open_dialog(title=title, inputs=inputs, button=button, body=body)
 	
 SaveDataManager.initSaveData()
@@ -949,7 +1182,8 @@ class SimpleDialog(QDialog):
 
 		self.bodyLabel = QLabel(body, self)
 		self.bodyLabel.move(20, 20)
-		self.bodyLabel.resize(430, 30)
+		self.bodyLabel.resize(430, 400)
+		self.bodyLabel.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
 		for i, input in enumerate(inputs):
 			label = QLabel(f"{input[0]}:", self)

@@ -29,3 +29,13 @@ dist/
 **/logs/*
 .SAVE_DATA
 .defaults
+
+## Install test
+
+# ignore the exes
+haxe*.exe
+vs_Community.exe
+buildconfig.bat
+
+# ignore the cloned funkin
+funkin/
