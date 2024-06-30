@@ -6,6 +6,7 @@ import funkin.play.character.BaseCharacter;
 import funkin.play.character.CharacterDataParser;
 import funkin.play.event.ScriptedSongEvent;
 import funkin.play.PlayState;
+import openfl.utils.Assets;
 //import Reflect;
 
 /**
@@ -69,7 +70,7 @@ class ChangeCharacterEvent extends ScriptedSongEvent {
 
 	//helper function
 	function getValue(field:String, def:Dynamic) {
-		var value = Type.resolveClass("Reflect").field(dataValue, field);
+		var value = Assets.resolveClass("Reflect").field(dataValue, field);
 		if (value == null)
 			return def;
 		else
@@ -169,6 +170,7 @@ class ChangeCharacterHandler extends Module {
 			ok = true;
 			var i = 0;
 			for(char in [PlayState.instance.currentStage.getBoyfriend(), PlayState.instance.currentStage.getDad(), PlayState.instance.currentStage.getGirlfriend()]) {
+				if (char == null) continue;
 				chars[i].set(char.characterId, char);
 				defaults[i] = char;
 				i++;
@@ -176,8 +178,8 @@ class ChangeCharacterHandler extends Module {
 			for(event in PlayState.instance.songEvents) {
 				if(event.value != null) {
 					//??????????????????
-					var char = Type.resolveClass("Reflect").field(event.value, 'char');
-					var target = Type.resolveClass("Reflect").field(event.value, 'target');
+					var char = Assets.resolveClass("Reflect").field(event.value, 'char');
+					var target = Assets.resolveClass("Reflect").field(event.value, 'target');
 					if(char != null && target != null && !chars[target].exists(char)) {
 						var hi = CharacterDataParser.fetchCharacter(char);
 						chars[strid.indexOf(target)].set(char, hi);
@@ -196,3 +198,6 @@ class ChangeCharacterHandler extends Module {
 
 # Calm down, dude! This song is better!
 # https://youtu.be/VMp55KH_3wo
+
+# Shoutout to simpleflips
+# https://www.youtube.com/watch?v=JmK98ehX6rc
