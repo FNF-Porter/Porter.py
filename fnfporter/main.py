@@ -17,7 +17,7 @@ from src.tools.CharacterTools import CharacterObject
 from src.tools.ChartTools import ChartObject 
 
 if __name__ == '__main__':
-    log.setup()
+    #log.setup()
     window.init()
 
 # Main

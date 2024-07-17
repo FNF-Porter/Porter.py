@@ -58,3 +58,5 @@ def log_exception(exc_type, exc_value, exc_traceback):
 
 # Configure global exception handler to use the logger
 sys.excepthook = log_exception
+
+setup()

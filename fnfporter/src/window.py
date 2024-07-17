@@ -1,10 +1,13 @@
 
 
 
+import inspect
 import json
 import logging
+import math
 import threading
 
+from PyQt6.QtWidgets import QMainWindow
 import requests
 import main
 import platform
@@ -18,6 +21,8 @@ from pathlib import Path
 from PyQt6.QtCore import *
 from PyQt6.QtGui import QIcon, QImage, QPixmap, QFont
 from PyQt6.QtWidgets import *
+
+from gbapi.GameBanana import *
 
 import src.SaveDataManager as SaveDataManager
 
@@ -1044,7 +1049,112 @@ class DependencyInstallUI(BaseUI):
 		self.widgetsList += [self.fromScratchBaseGame, self.librariesBaseGame, self.labelThing]
 
 		#Todo - Psych process.
+
+class GameBanana(BaseUI):
+	def __init__(self, targetWindow: QMainWindow):
+		super().__init__(targetWindow)
+
+		self.stateId = 'gamebanana'
+		self.api = GameBananaAPI()
+
+		self.submissionArea = QWidget()
+		self.submissionArea.setParent(targetWindow)
+		self.submissionArea.move(40, 50)
+
+		self.homeButton.move(40, 10)
+
+		self.submissionsPerPage = 4
+		self.submissionPage = 0
+
+		self.submissionWidgets = []
+		self.submissionArea.resize(targetWindow.width() - 40, targetWindow.logsLabel.y() - 10)
+		self.apiSubfeed = self.api.getSubfeed(FridayNightFunkin(), {})
+
+		def submissionPageUpdate():
+			self.prevPageButton.setEnabled(self.submissionPage != 0)
+			self.loadSubmissions(4, self.submissionPage)
+
+		def nextPage():
+			self.submissionPage += 1
+			submissionPageUpdate()
+
+		def prevPage():
+			self.submissionPage -= 1
+			if self.submissionPage < 0:
+				self.submissionPage = 0
+			submissionPageUpdate()
+
+		self.nextPageButton = QPushButton('>', targetWindow)
+		self.nextPageButton.resize(40, 30)
+		self.nextPageButton.move(targetWindow.width() - (40 + self.nextPageButton.width()), 10)
+		self.nextPageButton.clicked.connect(nextPage)
+
+		self.prevPageButton = QPushButton('<', targetWindow)
+		self.prevPageButton.resize(40, 30)
+		self.prevPageButton.move(self.nextPageButton.x() - (20 + self.prevPageButton.width()), 10)
+		self.prevPageButton.clicked.connect(prevPage)
+
+		submissionPageUpdate()
+
+	def getPixmap(self, url, width = 0, height = 0) -> QPixmap:
+		try:
+			bytesImg = requests.get(url).content
+			image = QImage()
+			image.loadFromData(bytesImg)
+			image = image.scaled(300, 300, Qt.AspectRatioMode.KeepAspectRatio)
+			pixmap = QPixmap.fromImage(image)
+			return pixmap
+		except Exception as e:
+			logging.error('Shitted myself', exc_info=e)
+		return None
+	
+	def submissionImageClicked(idx):
+		print('CLICKED ON INDEX:', idx)
+	
+	def loadSubmissions(self, perpage, page):
+		caller = inspect.currentframe().f_back
+		print(f"Called from line {caller.f_lineno} in {caller.f_code.co_name}")
+
+		for widget in self.submissionWidgets:
+			widget.hide()
 		
+		self.submissionWidgets = []
+
+		print(f'Page: {page}, Per page: {perpage}')
+		indexPage = perpage * page
+		logging.info(f'User wants to update widgets. Start: {indexPage} End: {indexPage + perpage}')
+
+		for i, submission in enumerate(self.apiSubfeed.submissions[indexPage:][:perpage]):
+			index = i%4
+
+			halfwayPoint = math.floor(self.senderWindow.width() / 2) - 20
+
+			submissionPositionX = ((halfwayPoint + 15) * (index % 2))
+			submissionPositionY = (200 * math.floor(index / 2))
+
+			submissionName = submission.body.name
+
+			print(submissionPositionX, submissionPositionY, submissionName,i)
+
+			promoImageURL = submission.images.list[0].baseUrl
+			#print(promoImageURL)
+
+			promoImagePixmap = self.getPixmap(promoImageURL)
+
+			submissionImage = QLabel(parent=self.submissionArea)
+			submissionImage.setFixedSize(promoImagePixmap.width(), promoImagePixmap.height())
+			submissionImage.setPixmap(promoImagePixmap)
+			submissionImage.move(submissionPositionX, submissionPositionY)
+
+			submissionTitle = QLabel(submissionName, self.submissionArea)
+			submissionTitle.move(submissionPositionX, submissionPositionY + promoImagePixmap.height())
+			submissionTitle.resize(math.floor(self.senderWindow.width() / 2), 30)
+
+			submissionImage.show()
+			submissionTitle.show()
+
+			self.submissionWidgets += [submissionImage, submissionTitle]
+
 class Window(QMainWindow):
 	def closeEvent(self, event):
 		SaveDataManager.save.save()
@@ -1084,15 +1194,16 @@ class Window(QMainWindow):
 		self.baseToPsychUI = BaseToPsychUI(self)
 		self.homePageUI = HomePageUI(self)
 		self.vocalSplitUI = VocalSplitUI(self)
+		self.gameBanana = GameBanana(self)
 
-		self.stateList = [self.homePageUI, self.psychToBaseUI, self.vocalSplitUI, self.baseToPsychUI]
+		self.stateList = [self.homePageUI, self.psychToBaseUI, self.vocalSplitUI, self.baseToPsychUI, self.gameBanana]
 
 		if platform.system() == 'Windows':
 			print('Windows detected. Dependency install UI will initiate.')
 			self.dependencyUI = DependencyInstallUI(self)
 			self.stateList += [self.dependencyUI]
 
-		self.goToState('home')
+		self.goToState('gamebanana')
 
 	def goToStateWithConversionTuple(self, conversion):
 		states = {
