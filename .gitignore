@@ -22,8 +22,7 @@ pppppppp.txt
 fnf-porter.log
 
 ## PyInstaller
-build/
-dist/
+export/
 
 ## FNF Porter files
 **/logs/*
