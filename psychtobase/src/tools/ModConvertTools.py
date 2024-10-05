@@ -1,40 +1,50 @@
 from .. import Constants
 
+def generateDescription(name:str = "Untitled Mod") -> str:
+	return f"{name} by Unknown creator. Converted by FNF Porter v{Constants.VERSION}"
+
 def convertPack(packJson):
-    return {
-        "title": packJson['name'],
-        "description": packJson['description'],
-        "author": "Not available",
-        "api_version": "0.1.0",
-        "mod_version": "1.0.0",
-        "license": "CC BY 4.0,MIT"
-    }
+	title = packJson.get("name", "Untitled Mod")
+	description = packJson.get("description", generateDescription(title))
+
+	return {
+		"title": title,
+		"description": description,
+		"contributors": [],
+		"dependencies": {},
+		"optionalDependencies": {},
+		"api_version": "0.5.0",
+		"mod_version": "1.0.0",
+		"license": "Apache-2.0"
+	}
 
 def defaultPolymodMeta():
-    return {
-        "title": "Unknown mod",
-        "description": f"Unknown mod by Unknown creator. Converted by FNF Porter v{Constants.VERSION}",
-        "author": "Unknown creator",
-        "api_version": "0.1.0",
-        "mod_version": "1.0.0",
-        "license": "CC BY 4.0,MIT"
-    }
+	return {
+		"title": "Untitled Mod",
+		"description": generateDescription(),
+		"contributors": [],
+		"dependencies": {},
+		"optionalDependencies": {},
+		"api_version": "0.5.0",
+		"mod_version": "1.0.0",
+		"license": "Apache-2.0"
+	}
 
 def convertCredits(text):
-    lines = text.split('\n')
+	lines = text.split('\n')
 
-    result = 'Mod credits\n'
+	result = 'Mod credits\n'
 
-    for line in lines:
-        data = line.split('::')
+	for line in lines:
+		data = line.split('::')
 
-        if len(data) > 1:
-            person = data[0]
-            icon = data[1]
-            roleDesc = data[2]
-            social = data[3]
-            color = data[4]
+		if len(data) > 1:
+			person = data[0]
+			icon = data[1]
+			roleDesc = data[2]
+			social = data[3]
+			color = data[4]
 
-            result += f'{roleDesc} - {person} ({social})\n'
+			result += f'{roleDesc} - {person} ({social})\n'
 
-    return result
+	return result
