@@ -3,6 +3,7 @@ A class full of tools needed for mod conversion.
 """
 
 import time
+import webbrowser
 
 from . import Constants
 from re import sub
@@ -95,6 +96,31 @@ def formatToSongPath(name:str) -> str:
 	name = sub(invalidChars, '-', name)
 
 	return sub(hideChars, '', name)
+
+def compareDicts(dict1:dict, dict2:dict, exclude:list = []):
+	"""
+		Compares 2 dictionaries, and removes optional data.
+		Use exclude to keep things you don't want overwritten!
+	"""
+	for k, v in dict2.items():
+		if dict1.get(k, None) == v and exclude.count(k) < 1:
+			del dict1[k]
+
+def createUrl(*urlElements: str) -> str:
+	"""
+	Returns a URL from the given elements.
+	Use `openUrl()` to open it in a browser.
+	"""
+	return "/".join(urlElements)
+
+def openUrl(*urlElements: str) -> str:
+	"""
+	Opens a page URL in your preferred browser.
+	Returns your URL as a string.
+	"""
+	url = createUrl(*urlElements)
+	webbrowser.open(url)
+	return url
 
 # def setModPath(name:str):
 # 	global modPath

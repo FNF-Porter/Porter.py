@@ -40,6 +40,7 @@ def parseStage(lua_script_path):
                     for arg in node.args:
                         #Me and the boys HATE Lua <3
                         # true.... better keep testing this!!!!! :imp:
+                        # I love lua. - Tom
                         try:
                             logging.info(f'Starting conversion of lua type: {type(arg)}')
                             match(type(arg)):
@@ -85,7 +86,7 @@ def parseStage(lua_script_path):
                                     right = arg.right.n if isinstance(arg.right, ast.Number) else (arg.right.id if isinstance(arg.right, ast.Name) else None)
                                     arguments.append(f'{left} - {right}')
                                 case _:
-                                    logging.warn(f'Unsupported type of lua node: {type(arg)}')
+                                    logging.warning(f'Unsupported type of lua node: {type(arg)}')
 
                         except Exception as e:
                             logging.error(f'Could not append arguments of this call: {e}')

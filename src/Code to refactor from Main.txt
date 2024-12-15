@@ -1,24 +1,3 @@
-import json
-import logging
-import shutil
-import threading
-import time
-
-from base64 import b64decode
-from pathlib import Path
-from PIL import Image
-
-from src import Constants, FileContents, files, log, Utils, window
-
-from src.tools import StageLuaParse, StageTool, VocalSplit, WeekTools
-from src.tools import ModConvertTools as ModTools
-
-from src.tools.CharacterTools import CharacterObject
-from src.tools.ChartTools import ChartObject 
-
-if __name__ == '__main__':
-    log.setup()
-    window.init()
 
 # Main
 
@@ -41,7 +20,7 @@ def folderMake(folder_path:str):
         except Exception as e:
             logging.error(f'Something went wrong: {e}')
     else:
-        logging.warn(f'{folder_path} already exists!')
+        logging.warning(f'{folder_path} already exists!')
 
 def fileCopy(source, destination):
     """
@@ -75,7 +54,7 @@ def treeCopy(source, destination):
     elif not Path(source).exists():
         logging.warn(f'Path {source} does not exist.')
 
-def convert(psych_mod_folder, result_folder, options):
+def convert(psych_mod_folder, result_folder, options:dict[str, any]):
     """
     Converts a mod.
     
@@ -218,7 +197,7 @@ def convert(psych_mod_folder, result_folder, options):
                 # Opens a new ChartObject instance with the chart's path, output path, and if it should convert events.
                 # Try except to avoid any crash
                 try:
-                    songChart = ChartObject(song, outputpath, chartOptions['events'])
+                    songChart = ChartTools.createChart(song, outputpath, chartOptions['events'])
                 except FileNotFoundError:
                     # If the charts arent found, this error will be thrown.
                     logging.warning(f"{song} data not found! Skipping...")
@@ -323,12 +302,13 @@ def convert(psych_mod_folder, result_folder, options):
         for character in files.findAll(f'{psychCharacters}*'):
             logging.info(f'Checking if {character} is a file...')
             
+            charpath = Path(character)
             # Checks if it ends with .json
-            if Path(character).is_file() and character.endswith('.json'):
+            if charpath.is_file() and character.endswith('.json'):
 
                 # Creates a character object instance
                 try:
-                    converted_char = CharacterObject(character, result_folder + f'/{modFoldername}' + bgCharacters)
+                    converted_char = CharacterTools.createCharacter(charpath, result_folder + f'/{modFoldername}' + bgCharacters)
 
                     converted_char.convert()
                     converted_char.save()
@@ -778,43 +758,65 @@ def convert(psych_mod_folder, result_folder, options):
 
         # Get all stage JSONS
         allStageJSON = files.findAll(f'{psychStages}*.json')
+
         # Iterate through all stage JSONS
         for asset in allStageJSON:
             logging.info(f'Converting {asset}')
+
+            curStage = Path(asset)
 
             # Make the folder for the stages
             folderMake(f'{result_folder}/{modFoldername}{baseStages}')
 
             # Open the stage JSON as a json object
-            stageJSON = json.loads(open(asset, 'r').read())
+            with open(asset) as f:
+                stageJSON = json.load(f)
 
             # Get the path to it
-            assetPath = f'{result_folder}/{modFoldername}{baseStages}{Path(asset).name}'
+            assetPath = Path(f"{result_folder}/{modFoldername}{baseStages}{curStage.name}")
         
             # Get the lua path
-            stageLua = asset.replace('.json', '.lua')
+            stageLua = Path(asset.replace('.json', '.lua'))
             logging.info(f'Parsing .lua with matching .json name: {stageLua}')
-
-            # Build array of lua props
-            luaProps = []
-
-            # Check if the lua file exists
-            if Path(stageLua).exists():
+            
+            if stageLua.exists():
                 logging.info(f'Parsing {stageLua} and attempting to extract methods and calls')
 
                 # Try except to avoid any errors
                 try:
-                    # Assign props by reading and parsing the lua file
-                    luaProps = StageLuaParse.parseStage(stageLua)
+                    # Parse the entire LUA script. That way we're being sure no extra steps are being skipped
+                    luaScript = LuaScript().init(stageLua)
+
                 except Exception as e:
+                    # If there is an error, we immediately skip this stage, to avoid any crashes
                     logging.error(f'Could not complete parsing of {stageLua}: {e}')
                     continue
 
             logging.info(f'Converting Stage JSON')
 
-            # Save the stage JSON as a JSON.
-            stageJSONConverted = json.dumps(StageTool.convert(stageJSON, Path(asset).name, luaProps), indent=4)
-            open(assetPath, 'w').write(stageJSONConverted)
+            convStage = StageTools.createStage(curStage.stem, stageJSON, luaScript.spriteData)
+            assetPath.write_text(json.dumps(convStage, indent = 2))
+
+            # # Build array of lua props
+            # luaProps = []
+
+            # # Check if the lua file exists
+            # if Path(stageLua).exists():
+            #     logging.info(f'Parsing {stageLua} and attempting to extract methods and calls')
+
+            #     # Try except to avoid any errors
+            #     try:
+            #         # Assign props by reading and parsing the lua file
+            #         luaProps = StageLuaParse.parseStage(stageLua)
+            #     except Exception as e:
+            #         logging.error(f'Could not complete parsing of {stageLua}: {e}')
+            #         continue
+
+            # logging.info(f'Converting Stage JSON')
+
+            # # Save the stage JSON as a JSON.
+            # stageJSONConverted = json.dumps(StageTool.convert(stageJSON, Path(asset).name, luaProps), indent=4)
+            # open(assetPath, 'w').write(stageJSONConverted)
 
     # Check if the user selected images
     if options.get('images'): # Images include XMLs
@@ -863,6 +865,57 @@ def convert(psych_mod_folder, result_folder, options):
                     fileCopy(asset, f'{result_folder}/{modFoldername}{baseImages}{Path(asset).name}')
                 except Exception as e:
                     logging.error(f'Failed to copy {asset}: {e}')
+
+    logging.info(Utils.coolText("Looking to fix character positions in stages.."))
+
+    stagesFixed = []
+
+    for metadata in ChartTools.chartMetadata.values():
+        try:
+            playData = metadata["playData"]
+            stageName = playData["stage"]
+            chartCharacters = playData["characters"]
+
+            if stageName in stagesFixed:
+                logging.info(f"{stageName} already patched, skipping..")
+                continue
+
+            stage = StageTools.stages.get(stageName)
+
+            if stage:
+                logging.info(f"STAGE {stageName} FOUND FOR SONG {metadata['songName']}!")
+
+                assetPath = Path(f"{result_folder}/{modFoldername}{Constants.FILE_LOCS.get('STAGE')[1]}{stageName}.json")
+                stageCharacters = stage.get("characters")
+
+                bf = CharacterTools.characters.get(chartCharacters.get("player"))
+                if bf:
+                    bfCoords = stageCharacters["bf"]["position"]
+                    bfOrigin = bf.characterOrigin
+                    bfCoords[0] += bf.position[0] + bfOrigin[0]
+                    bfCoords[1] += bf.position[1] + bfOrigin[1]
+
+                gf = CharacterTools.characters.get(chartCharacters.get("girlfriend"))
+                if gf:
+                    gfCoords = stageCharacters["gf"]["position"]
+                    gfOrigin = gf.characterOrigin
+                    gfCoords[0] += gf.position[0] + gfOrigin[0]
+                    gfCoords[1] += gf.position[1] + gfOrigin[1]
+
+                dad = CharacterTools.characters.get(chartCharacters.get("opponent"))
+                if dad:
+                    dadCoords = stageCharacters["dad"]["position"]
+                    dadOrigin = dad.characterOrigin
+                    dadCoords[0] += dad.position[0] + dadOrigin[0]
+                    dadCoords[1] += dad.position[0] + dadOrigin[1]
+
+                assetPath.write_text(json.dumps(stage, indent = 2))
+
+                logging.info(f"STAGE {stageName} successfully patched!")
+                stagesFixed.append(stageName)
+
+        except Exception as e:
+            logging.error(f"Fix failed! {e}. Skipping to next song..")
 
     # Complete the conversion by announcing it has completed
     logging.info(Utils.coolText("CONVERSION COMPLETED"))

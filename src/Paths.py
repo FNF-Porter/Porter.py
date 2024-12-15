@@ -17,7 +17,7 @@ class Paths:
 			return Paths.getPreloadPath(file)
 		return Paths.getLibraryPathForce(file, library)
 
-	getLibraryPathForce = staticmethod(lambda file, library: Paths.assetsDir / library / file)
+	getLibraryPathForce = staticmethod(lambda file, library: Path(Paths.assetsDir, library, file))
 	getPreloadPath = staticmethod(lambda file: Paths.assetsDir / Path(file))
 
 	txt = staticmethod(lambda key, library=None: Paths.getPath(f'{key}.txt', library))

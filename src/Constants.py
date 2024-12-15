@@ -32,57 +32,57 @@ DEFAULT_OPTIONS = {
 DIFFICULTIES:list = ["easy", "normal", "hard"]
 
 STAGES = {
-	"stage": "mainStage"
+    "stage": "mainStage"
 }
 
 CHARACTERS = {
-	"pico-player": "pico-playable"
+    "pico-player": "pico-playable"
 }
 
 ## templates begin here
 
 BASE_CHART_METADATA = {
-	"version": "2.2.0",
-	"songName": "",
-	"artist": "",
-	"looped": False,
+    "version": "2.2.0",
+    "songName": "",
+    "artist": "",
+    "looped": False,
 
-	"offsets": {
-		"instrumental": 0,
-		"altInstrumentals": {},
-		"vocals": {}
-	},
+    "offsets": {
+        "instrumental": 0,
+        "altInstrumentals": {},
+        "vocals": {}
+    },
 
-	"playData": {
-		"album": "volume1",
-		"previewStart": 0,
-		"previewEnd": 15000,
-		"songVariations": [],
-		"difficulties": [],
-		"characters": {
-			"album": "volume1",
-			"player": "bf",
-			"girlfriend": "gf",
-			"opponent": "dad",
-			"instrumental": "",
-			"altInstrumentals": []
-		},
-		"stage": "mainStage",
-		"noteStyle": "funkin",
-		"ratings": {}
-	},
+    "playData": {
+        "album": "volume1",
+        "previewStart": 0,
+        "previewEnd": 15000,
+        "songVariations": [],
+        "difficulties": [],
+        "characters": {
+            "album": "volume1",
+            "player": "bf",
+            "girlfriend": "gf",
+            "opponent": "dad",
+            "instrumental": "",
+            "altInstrumentals": []
+        },
+        "stage": "mainStage",
+        "noteStyle": "funkin",
+        "ratings": {}
+    },
 
-	"timeFormat": "ms",
-	"timeChanges": [],
-	"generatedBy": "FNF Porter (by Gusborg, tposejank, BombasticTom & VocalFan)"
+    "timeFormat": "ms",
+    "timeChanges": [],
+    "generatedBy": "FNF Porter (by Gusborg, tposejank, BombasticTom & VocalFan)"
 }
 
 BASE_CHART = {
-	"version": "2.0.0",
-	"scrollSpeed": {},
-	"events": [],
-	"notes": {},
-	"generatedBy": "FNF Porter (by Gusborg, tposejank, BombasticTom & VocalFan)"
+    "version": "2.0.0",
+    "scrollSpeed": {},
+    "events": [],
+    "notes": {},
+    "generatedBy": "FNF Porter (by Gusborg, tposejank, BombasticTom & VocalFan)"
 }
 
 BASE64_IMAGES = {
@@ -94,25 +94,25 @@ BASE64_IMAGES = {
 }
 
 CHARACTER = {
-	"version": "1.0.0",
-	"name": None,
-	"assetPath": None,
-	"singTime": None,
-	"isPixel": None,
-	"scale": None,
-	"healthIcon": {
-		"id": None,
-		"isPixel": None,
-		"flipX": False,
-		"scale": 1
-	},
-	"animations": []
+    "version": "1.0.0",
+    "name": None,
+    "assetPath": None,
+    "singTime": None,
+    "isPixel": None,
+    "scale": None,
+    "healthIcon": {
+        "id": None,
+        "isPixel": None,
+        "flipX": False,
+        "scale": 1
+    },
+    "animations": []
 }
 
 ANIMATION = {
-	"name": None,
-	"prefix": None,
-	"offsets": [0, 0],
+    "name": None,
+    "prefix": None,
+    "offsets": [0, 0],
   "frameRate": 24,
   "frameIndices": []
 }
@@ -151,7 +151,7 @@ LEVEL_PROP_DEFAULTS = {
                     ]
                 }
             ]
-		},
+        },
     "dad": {
       "assetPath": "storymenu/props/dad",
       "scale": 1.0,
@@ -277,75 +277,109 @@ LEVEL = {
     "songs": []
 }
 
-STAGE_PROP = {
-    "danceEvery": 0,
-    "zIndex": 10,
-    "position": [-600, -200],
-    "scale": [1, 1],
-    "animType": "multisparrow",
-    "name": "peachscastle",
-    "isPixel": False,
-    "assetPath": None,
-    "scroll": [0.9, 0.9],
-    "animations": []
-}
+# STAGE_PROP = {
+#     "danceEvery": 0,
+#     "zIndex": 10,
+#     "position": [-600, -200],
+#     "scale": [1, 1],
+#     "animType": "multisparrow",
+#     "name": "peachscastle",
+#     "isPixel": False,
+#     "assetPath": None,
+#     "scroll": [1.0,],
+#     "animations": []
+# }
 
 STAGE = {
+  "version": "1.0.2",
+  "name": "Unknown",
+  "directory": "shared",
+  "cameraZoom": 1.0,
   "props": [],
-  "cameraZoom": None,
-  "version": "1.0.0",
   "characters": {
     "bf": {
       "zIndex": 300,
-      "position": None,
+      "scale": 1,
+      "position": [0, 0],
       "cameraOffsets": [-100, -100]
     },
     "dad": {
       "zIndex": 200,
-      "position": None,
-      "cameraOffsets": [150, -100]
+      "scale": 1,
+      "position": [0, 0],
+      "cameraOffsets": [100, -100]
     },
     "gf": {
       "zIndex": 100,
-      "cameraOffsets": [0, 50],
-      "position": None
+      "scale": 1,
+      "position": [0, 0],
+      "cameraOffsets": [0, 0]
     }
-  },
-  "name": None
+  }
 }
 
-STAGE_PROP_ANIMATED = {
-    "zIndex": None,
+STAGE_PROP = {
+    "name": None, # Psych Engine TAG
+    "assetPath": "",
     "position": [0, 0],
-    "scale": [1, 1],
-    "animType": "sparrow",
-    "name": "", # Psych Engine TAG
+    "zIndex": 0,
     "isPixel": False,
+    "scale": [1, 1],
+    "alpha": 1,
+    "angle": 0,
+    "blend": "",
+    "color": "#FFFFFF",
+    "scroll": [0, 0],
+    "animType": "sparrow",
+    "animations": [],
     "startingAnimation": "Idle",
-    "assetPath": "stage assets/Road",
-    "scroll": [1, 1],
-    "animations": []
-}
-
-STAGE_PROP_ANIMATION = {
-    "offsets": [0, 0],
-    "flipY": False,
-    "frameRate": 24,
-    "prefix": None,
-    "looped": True,
-    "flipX": False,
-    "name": None
+    "danceEvery": 0
 }
 
 STAGE_PROP_IMAGE = {
-    "danceEvery": 0,
+    "name": None, # Psych Engine TAG
+    "assetPath": None,
     "zIndex": None,
     "position": [0, 0],
-    "scale": [1, 1],
-    "name": None, # Psych Engine TAG
     "isPixel": False,
+    "scale": [1, 1],
+    "alpha": 1,
+    "scroll": [1, 1],
+    "danceEvery": 0
+}
+
+STAGE_PROP_ANIMATED = {
+    "name": None, # Psych Engine TAG
     "assetPath": None,
-    "scroll": [1, 1]
+    "zIndex": None,
+    "position": [0, 0],
+    "isPixel": False,
+    "scale": [1, 1],
+    "alpha": 1,
+    "scroll": [1, 1],
+    "animType": "sparrow",
+    "animations": [],
+    "startingAnimation": "Idle",
+    "danceEvery": 0
+}
+
+STAGE_PROP_ANIMATION = {
+    "name": None,
+    "prefix": None,
+    "offsets": [0, 0],
+    "looped": True,
+    "flipX": False,
+    "flipY": False,
+    "frameRate": 24,
+    "frameIndices": [],
+    "assetPath": None
+}
+
+STAGE_CHARACTER_DATA = {
+	"zIndex": 0,
+	"position": [0, 0],
+	"scale": 1,
+	"cameraOffsets": [0, 0]
 }
 
 ## Folders which are IGNORED while copying images

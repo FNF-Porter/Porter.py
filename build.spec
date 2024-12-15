@@ -2,7 +2,7 @@
 
 
 a = Analysis(
-	['psychtobase\\main.py'],
+	['.\\main.py'],
 	pathex=[],
 	binaries=[],
 	datas=[],

@@ -5,7 +5,7 @@ import logging
 from .. import Constants, files
 from pathlib import Path
 
-# import lxml.etree as ET 
+import lxml.etree as ET 
 # from src import Utils
 # from src.Paths import Paths
 
@@ -17,6 +17,8 @@ class CharacterObject:
 		self.characterFile = Path(path).name
 		self.characterName = None
 		self.iconID = None
+
+		self.characterOrigin = [0, 0]
 
 		self.psychCharacter:dict = {}
 		self.character = copy.deepcopy(Constants.CHARACTER)
@@ -53,7 +55,10 @@ class CharacterObject:
 		"""
 
 		## It is fixed!
-		character['scale'] = psychCharacter['scale']
+		self.position = psychCharacter["position"]
+		scale = psychCharacter['scale']
+
+		character['scale'] = scale
 
 		character['isPixel'] = psychCharacter['scale'] >= 6
 		character['healthIcon']['id'] = psychCharacter['healthicon']
@@ -63,7 +68,15 @@ class CharacterObject:
 		self.iconID = psychCharacter['healthicon']
 
 		# I love object oriented programming and making a million variables for no reason!
+		idleAnim = None
+		idlePrefix = None
+
 		for animation in psychCharacter['animations']:
+			curAnim = animation.get("anim", None)
+			if curAnim == "idle" or curAnim == "danceLeft":
+				idleAnim = animation
+				idlePrefix = animation.get("name", None)
+
 			animTemplate = copy.deepcopy(Constants.ANIMATION)
 
 			animTemplate['name'] = animation['anim']
@@ -78,9 +91,29 @@ class CharacterObject:
 			self.character['animations'].append(animTemplate)
 
 		# STILL WORKING ON IT
-		# file = Paths.openFile(Paths.join(Utils.getModPath(), "images", self.psychCharacter.get("image", "")) + ".xml")
-		# if file != None:
-		# 	xml = ET.iterparse(file)
+		if idlePrefix != None:
+			quickPath = Path(self.pathName)
+			xmlPath = quickPath.parent.parent / f"images/{psychCharacter['image']}.xml"
+
+			if xmlPath.exists():
+				xml = ET.parse(xmlPath).getroot()
+				lastFrameIDX = -1
+
+				if idleAnim != None:
+					print(idleAnim.get("indices"))
+					indices = idleAnim.get("indices")
+					if (indices != None and len(indices) > 0):
+						lastFrameIDX = indices[-1]
+
+				frames = [child for child in xml if idlePrefix in child.attrib.get("name", "")]
+				lastFrame = frames[lastFrameIDX].attrib
+
+				self.characterOrigin = [
+					float(lastFrame.get("width")) * scale / 2,
+					float(lastFrame.get("height")) * scale
+				]
+
+				print(self.characterOrigin)
 
 		logging.info(f'Character {characterName} successfully converted')
 
@@ -91,3 +124,13 @@ class CharacterObject:
 
 		with open(f'{savePath}.json', 'w') as f:
 			json.dump(self.character, f, indent=4)
+
+characters:dict[str, CharacterObject] = {}
+
+def createCharacter(path:Path, savePath:str):
+	name = path.stem
+
+	newCharData = CharacterObject(path, savePath)
+	characters[name] = newCharData
+
+	return newCharData

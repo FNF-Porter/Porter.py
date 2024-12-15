@@ -323,3 +323,12 @@ class ChartObject:
 		Paths.writeJson(output, self.chart, 2)
 
 		logging.info(f"[{newSongFile}] Saving {self.songName} to {saveDir}")
+
+chartMetadata = {}
+
+def createChart(path:str, output:str, EventsYesOrNO:str):
+
+	newChartData = ChartObject(path, output, EventsYesOrNO)
+	chartMetadata[Utils.formatToSongPath(newChartData.songName)] = newChartData.metadata
+
+	return newChartData
