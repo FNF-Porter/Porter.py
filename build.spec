@@ -1,12 +1,11 @@
 # -*- mode: python ; coding: utf-8 -*-
 
-
 a = Analysis(
 	['.\\main.py'],
 	pathex=[],
 	binaries=[],
 	datas=[],
-	hiddenimports=[],
+	hiddenimports=["lupa.lua54"],
 	hookspath=[],
 	hooksconfig={},
 	runtime_hooks=[],
