@@ -356,7 +356,7 @@ class DefaultWindow(QMainWindow):
 
 		options.addWidget(self.createOption("Images"))
 		options.addWidget(self.createOption("Stages"))
-		options.addWidget(self.createOption(("Pack Meta", "meta")))
+		options.addWidget(self.createOption(("Pack Meta", "modpack_meta")))
 
 		## Convert button
 

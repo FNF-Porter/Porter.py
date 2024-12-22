@@ -402,61 +402,61 @@ EXCLUDE_FOLDERS_IMAGES = {
 FILE_LOCS = {	# If the indent fucks up again its GitHub's fault
     # Class, psych directory, base game directory, codename directory (coming soon)			
     'PACKJSON':
-    ['/pack.json',	'/_polymod_meta.json'],
+    ('pack.json',	'_polymod_meta.json'),
 
     'PACKPNG': 
-    ['/pack.png','/_polymod_icon.png'],
+    ('pack.png','_polymod_icon.png'),
 
     'CREDITSTXT':
-    ['/data/credits.txt','/mod-credits.txt'],
+    ('data/credits.txt','mod-credits.txt'),
 
     'CHARACTERASSETS':
-    ['/images/characters/',	'/shared/images/characters/'],
+    ('images/characters',	'shared/images/characters'),
 
     'CHARACTERJSONS':
-    ['/characters/', '/data/characters/'],
+    ('characters', 'data/characters'),
 
     'CHARACTERICON':
-    ['/images/icons/','/images/icons/'],
+    ('images/icons','images/icons'),
 
     'CHARTFOLDER':
-    ['/data/','/data/songs/'],
+    ('data','data/songs'),
 
     'SONGS':
-    ['/songs/','/songs/'],
+    ('songs','songs'),
 
     'SOUNDS':
-    ['/sounds/', '/sounds/'],
+    ('sounds', 'sounds'),
 
     'MUSIC':
-    ['/music/', '/music/'],
+    ('music', 'music'),
 
     'WEEKS':
-    ['/weeks/','/data/levels/'],
+    ('weeks','data/levels'),
 
     'WEEKCHARACTERASSET':
-    ['/images/menucharacters/',		'/images/storymenu/props/'],
+    ('images/menucharacters',		'images/storymenu/props'),
 
     'WEEKCHARACTERJSON': 
-    ['/images/menucharacters/',	  ''], # Embedded directly to the level.json
+    ('images/menucharacters',	  ''), # Embedded directly to the level.json
 
     'WEEKIMAGE': 
-    ['/images/storymenu/', '/images/storymenu/titles/'],
+    ('images/storymenu', 'images/storymenu/titles'),
 
     'WEEKIMAGE_WEEKJSON':
-    ['', 'storymenu/titles/'],
+    ('', 'storymenu/titles'),
 
     'STAGE': 
-    ['/stages/','/data/stages/'],
+    ('stages','data/stages'),
 
     'IMAGES':
-    ['/images/','/shared/images/'],
+    ('images','shared/images'),
     
     'FREEPLAYICON':
-    ['/images/icons/','/images/freeplay/icons'],
+    ('images/icons','images/freeplay/icons'),
 
     'SCRIPTS_DIR':
-    ['/scripts/', '/scripts/'] # Do we need this? YES!
+    ('scripts', 'scripts') # Do we need this? YES!
 }
 
 VERSION = "0.3"
