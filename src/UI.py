@@ -1,6 +1,5 @@
 import logging
 import platform
-import subprocess
 import webbrowser
 from base64 import b64decode
 from pathlib import Path
@@ -22,22 +21,15 @@ _windowTitleSuffix = f"- Build {GitHub.get_version()} [BETA]"
 _defaultsFile = main.root.joinpath(".defaults")
 _vocalSplitEnabledByDefault = platform.system() == 'Windows'
 
-class WindowData:
+class WindowUtil:
+	"Utility class for managing `DefaultUtil`"
+
 	WIDTH = 750
 	HEIGHT = 650
 
 	APP_ICON = b64decode(Constants.BASE64_IMAGES.get('windowIcon'))
 	icon:QIcon = None
 
-	"""
-		HOW TO USE:
-		- name: Name for your preset (The thing that will appear in frontend)
-		- options: The options it enables
-		- disableAllOptions: Disables EVERY option (useful for presets where you want to disable everything) (True by default)
-		- excludeSelected: Doesn't disable options inside of the options parameter (True by default)
-
-		KEEP IN MIND: ENABLING AND CHECKING AN OPTION IS NOT THE SAME!!!
-	"""
 	PRESETS:dict[dict[str, str | bool | list[str]]] = {
 		"charts": {
 			"name": "Only Charts",
@@ -66,6 +58,15 @@ class WindowData:
 			"disableAllOptions": False
 		}
 	}
+	"""
+	HOW TO USE:
+	- `name`: Name for your preset (The thing that will appear in frontend)
+	- `options`: The options it enables
+	- `disableAllOptions`: Disables EVERY option (useful for presets where you want to disable everything) (`True` by default)
+	- `excludeSelected`: Doesn't disable options inside of the options parameter (`True` by default)
+
+	KEEP IN MIND: ENABLING AND CHECKING AN OPTION IS NOT THE SAME!!!
+	"""
 
 	@staticmethod
 	def getIcon() -> QIcon:
@@ -73,12 +74,28 @@ class WindowData:
 		Method to get (or generate a new) app icon.
 		"""
 
-		if not WindowData.icon:
+		if not WindowUtil.icon:
 			iconMap = QPixmap()
-			iconMap.loadFromData(WindowData.APP_ICON)
-			WindowData.icon = QIcon(iconMap)
+			iconMap.loadFromData(WindowUtil.APP_ICON)
+			WindowUtil.icon = QIcon(iconMap)
 
-		return WindowData.icon
+		return WindowUtil.icon
+
+	@staticmethod
+	def getOptionData(obj: str | tuple) -> tuple:
+		"""
+		Packs all option data conveniently inside of a `tuple`.\n
+		First item is option's label, the second item is the object name.\n
+		In case this object is not a string or a tuple, it returns `None`
+		"""
+
+		if isinstance(obj, tuple):
+			return obj
+		if isinstance(obj, str):
+			newTuple = (obj, obj.lower())
+			return newTuple
+		
+		return None
 
 class DefaultWindow(QMainWindow):
 	# Welcome to the jungle 💀
@@ -88,26 +105,73 @@ class DefaultWindow(QMainWindow):
 		#time.sleep(0.1)
 		event.accept()
 
-	def createOption(self, codename:str, name:str, items:list[str] = None) -> QGroupBox | QCheckBox:
+	def getDirectory(self, foldertype:str, item:QLineEdit):
+		path = QFileDialog.getExistingDirectory(self, f"Select {foldertype.capitalize()} Folder", item.text())
+
+		if (len(path.strip()) > 0):
+			item.setText(path)
+
+	def generateOptionsMap(self) -> dict:
+		"""
+		Creates a map with all option data!
+		"""
+
+		options = {}
+
+		for i in range(self.options.count()):
+			option = self.options.itemAt(i).widget()
+			objName = option.objectName().strip()
+
+			if len(objName) < 1:
+				continue
+
+			if isinstance(option, QGroupBox):
+				objData = {}
+
+				for child in option.findChildren(QCheckBox):
+					objData[child.objectName()] = option.isChecked() and child.isChecked()
+
+				options[objName] = objData
+
+			if isinstance(option, QCheckBox):
+				options[objName] = option.isChecked()
+		
+		return options
+
+	def createOption(self, name: str | tuple, items:list[str] = None) -> QGroupBox | QCheckBox:
+		optData = WindowUtil.getOptionData(name)
 		isGroup = items != None and len(items) > 0
 
+		if optData == None:
+			print("[!] Corrupt option data for", name)
+			return
+
+		optionLabel, objectName = optData
+
 		if isGroup:
-			grp = QGroupBox(name)
-			grp.setObjectName(codename)
+			grp = QGroupBox(optionLabel)
+			grp.setObjectName(objectName)
 			grp.setCheckable(True)
 
 			_layout = QVBoxLayout()
 			_layout.setSpacing(0)
 
 			for item in items:
-				itemWidget = QCheckBox(item)
-				_layout.addWidget(itemWidget)
+				subOptData = WindowUtil.getOptionData(item)
+
+				if optData:
+					subOptionLabel, subObjectName = subOptData
+					itemWidget = QCheckBox(subOptionLabel)
+					itemWidget.setObjectName(subObjectName)
+					_layout.addWidget(itemWidget)
+				else:
+					print(f"[!] Corrupt option data for {subOptData} in group {optionLabel}")
 
 			grp.setLayout(_layout)
 			return grp
 		
-		checkbox = QCheckBox(name)
-		checkbox.setObjectName(codename)
+		checkbox = QCheckBox(optionLabel)
+		checkbox.setObjectName(objectName)
 
 		return checkbox
 
@@ -128,7 +192,7 @@ class DefaultWindow(QMainWindow):
 
 		name = sender.objectName()
 
-		preset = WindowData.PRESETS.get(name, {})
+		preset = WindowUtil.PRESETS.get(name, {})
 		options = preset.get("options", [])
 
 		selectEverything = len(options) == 1 and options[0] == "*"
@@ -186,11 +250,15 @@ class DefaultWindow(QMainWindow):
 		
 		findModButton = QPushButton("Locate...")
 		findModButton.setToolTip("Open File Dialog")
-		findModButton.clicked.connect(self.findMod)
+		findModButton.clicked.connect(
+			lambda: self.getDirectory("mod", modLineEdit)
+		)
 
 		findBaseGameButton = QPushButton("Locate...")
 		findBaseGameButton.setToolTip("Open File Dialog")
-		findBaseGameButton.clicked.connect(self.findBaseGame)
+		findBaseGameButton.clicked.connect(
+			lambda: self.getDirectory("base game", baseGameLineEdit)
+		)
 		
 		inputBoxes.addWidget(modLabel, 0, 0)
 		inputBoxes.addWidget(modLineEdit, 0, 1)
@@ -213,7 +281,7 @@ class DefaultWindow(QMainWindow):
 		presets.addWidget(defaultsLabel)
 		presets.addSpacing(5)
 
-		for name, preset in WindowData.PRESETS.items():
+		for name, preset in WindowUtil.PRESETS.items():
 			presetWidget = QRadioButton(preset.get("name", "???"))
 			presetWidget.setObjectName(name)
 			presetWidget.toggled.connect(self.setPreset)
@@ -256,47 +324,47 @@ class DefaultWindow(QMainWindow):
 
 		### CHART settings
 
-		options.addWidget(self.createOption("charts", "Charts", ["Events"]))
+		options.addWidget(self.createOption("Charts", ["Notes", "Events"]))
 
 		### AUDIO settings
 
-		options.addWidget(self.createOption("audio", "Audio", [
-			"Instrumentals",
+		options.addWidget(self.createOption("Audio", [
+			("Instrumentals", "inst"),
 			"Voices",
 			"Music",
 			"Sounds",
-			"Vocal Split"
+			("Vocal Split", "split")
 		]))
 
 		### CHARACTER settings
 
-		options.addWidget(self.createOption("characters", "Characters", [
-			"Health Icons",
-			"Character Files ('.json')",
-			"Character Assets ('.png', '.xml')"
+		options.addWidget(self.createOption("Characters", [
+			("Health Icons", "icons"),
+			("Character Files ('.json')", "json"),
+			("Character Assets ('.png', '.xml')", "assets")
 		]))
 
 		### WEEK settings
 
-		options.addWidget(self.createOption("weeks", "Weeks", [
-			"Menu Characters ('Props')",
-			"Week Images ('Titles')",
-			"Week Data ('Levels')"
+		options.addWidget(self.createOption("Weeks", [
+			("Menu Characters ('Props')", "props"),
+			("Week Images ('Titles')", "levels"),
+			("Week Data ('Levels')", "titles")
 		]))
 
 		### OTHER settings
 
-		options.addWidget(self.createOption("images", "Images"))
-		options.addWidget(self.createOption("stages", "Stages"))
-		options.addWidget(self.createOption("meta", "Pack Meta"))
+		options.addWidget(self.createOption("Images"))
+		options.addWidget(self.createOption("Stages"))
+		options.addWidget(self.createOption(("Pack Meta", "meta")))
 
 		## Convert button
 
 		convertSection = QHBoxLayout()
 		convertSection.addStretch()
 
-		convert = QPushButton("Convert")
-		convertSection.addWidget(convert)
+		convertButton = QPushButton("Convert")
+		convertSection.addWidget(convertButton)
 
 		# Layering everything properly
 
@@ -324,6 +392,7 @@ class DefaultWindow(QMainWindow):
 		self.presets = presets
 		self.options = options
 
+		self.convertButton = convertButton
 		self.baseGameLineEdit = baseGameLineEdit
 		self.modLineEdit = modLineEdit
 		self.logsLabel = logsLabel
@@ -331,71 +400,12 @@ class DefaultWindow(QMainWindow):
 		self.forceToggle()
 
 		self.setWindowTitle(f"FNF Porter {_windowTitleSuffix}")
-		self.setWindowIcon(WindowData.getIcon())
+		self.setWindowIcon(WindowUtil.getIcon())
 		self.setMaximumSize(QSize(1000, 720))
-		self.resize(QSize(WindowData.WIDTH, WindowData.HEIGHT))
-
-	def findMod(self):
-		modFolder = QFileDialog.getExistingDirectory(self, "Select Mod Folder")
-		self.modLineEdit.setText(modFolder)
-
-	def findBaseGame(self):
-		baseGameFolder = QFileDialog.getExistingDirectory(self, "Select Base Game Folder")
-		self.baseGameLineEdit.setText(baseGameFolder)
-
-	def convertCallback(self, what):
-		# the code below should go on the callback when the person presses the convert button
-		psych_mod_folder_path = self.modLineEdit.text()
-		result_path = self.baseGameLineEdit.text()
-		if Path(result_path).exists():	
-			logging.warn(f'Folder {result_path} already existed before porting, files may have been overwritten.')
-		options = Constants.DEFAULT_OPTIONS
-		options['charts']['songs'] = self.charts.isChecked()
-		if self.charts.isChecked():
-			logging.info('Misc of charts will be converted')
-			options['charts']['events'] = self.events.isChecked()
-		if self.songs.isChecked():
-			logging.info('Audio will be converted')
-			options['songs']['inst'] = self.insts.isChecked()
-			options['songs']['voices'] = self.voices.isChecked()
-			options['songs']['split'] = self.vocalsplit.isChecked()
-			options['songs']['music'] = self.music.isChecked()
-			options['songs']['sounds'] = self.sounds.isChecked()
-		if self.chars.isChecked():
-			logging.info('Characters will be converted')
-			options['characters']['json'] = self.jsons.isChecked()
-			options['characters']['icons'] = self.icons.isChecked()
-			options['characters']['assets'] = self.charassets.isChecked()
-		if self.weeks.isChecked():
-			logging.info('Weeks will be converted')
-			options['weeks']['props'] = self.props.isChecked()
-			options['weeks']['levels'] = self.levels.isChecked()
-			options['weeks']['titles'] = self.titles.isChecked()	
-		options['stages'] = self.stages.isChecked()
-		options['modpack_meta'] = self.meta.isChecked()
-		options['images'] = self.images.isChecked()
-
-		try:
-			optionsParsed = ''
-			for key in options:
-				optionsParsed += f'\n	{key = }'
-
-			# Now writing the last log file, which we can query to the user
-			with _defaultsFile.open("w") as f:
-				f.write(f'{psych_mod_folder_path}\n{result_path}\n\nLAST LOG: {log.getFile()}\n======================\nOPTIONS:{optionsParsed}')
-
-		except Exception as e:
-			logging.error(f'Problems with your save file: {e}')
-			self.throwError(f'Problems on your save file! {e}')
-
-		if psych_mod_folder_path != None and result_path != None:
-			# try:
-				main.convert(psych_mod_folder_path, result_path, options)
-			# except Exception as e:
-				# self.throwError('Exception ocurred', f'{e}')
-				# This is kinda(?) unfinished
-		else:
-			logging.warn('Select an input folder or output folder first!')
+		self.resize(QSize(WindowUtil.WIDTH, WindowUtil.HEIGHT))
+	
+	def addOnButtonEvent(self, handler):
+		self.convertButton.clicked.connect(handler)
 
 	def open_dialog(self, title, inputs, button, body):
 		self.dialog = SimpleDialog(title, inputs, button, body)
@@ -448,7 +458,7 @@ class SimpleDialog(QDialog):
 		self.setFixedSize(QSize(450, 250))
 		self.setWindowTitle(title)
 
-		self.setWindowIcon(WindowData.getIcon())
+		self.setWindowIcon(WindowUtil.getIcon())
 
 		self.exec()
 
@@ -503,19 +513,36 @@ class ErrorMessage(QDialog):
 	def on_button_clicked(self):
 		self.close()
 
-app = QApplication([])
-window = DefaultWindow()
+_isInit = False
+_app = None
 
-def init():
-	logging.info('Initiating window')
+window = None
 
-	# initiate the window
+def init() -> QApplication:
+	global _app, window, _isInit
+
 	try:
-		window.show()
-	except Exception as e:
-		logging.critical(f'Window could not show! {e}')
+		if _isInit:
+			logging.warning("Window was already initialized!")
+			return _app
 
-	app.exec()
+		logger, console_handler = log.setup()
+		logging.info('Initializing Window')
+
+		_app = QApplication([])
+		window = DefaultWindow()
+
+		console_handler.logsLabel = window.logsLabel
+		window.logsLabel.append("Welcome to FNF Porter!")
+
+		window.show()
+
+	except Exception as e:
+		logging.critical(f'Unable to setup! {type(e).__name__}: {e}')
+
+	else:
+		_isInit = True
+		return _app
 
 def prompt(prompt, body, inputs, file):
 	# Simple prompt

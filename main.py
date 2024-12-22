@@ -21,6 +21,11 @@ from src.tools import StageTools
 
 root = Path(__file__).parent
 
+def stupidFunction():
+	logging.info("KYS!!!")
+
 if __name__ == '__main__':
-    log.setup()
-    UI.init()
+	app = UI.init()
+
+	UI.window.addOnButtonEvent(stupidFunction)
+	app.exec()

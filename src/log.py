@@ -4,7 +4,8 @@ import logging
 import sys
 import webbrowser
 
-from . import UI
+from PyQt6.QtWidgets import QTextBrowser
+
 from pathlib import Path
 from time import strftime
 
@@ -18,12 +19,18 @@ def getFile() -> Path:
 	return "File not found..."
 
 class CustomHandler(logging.StreamHandler):
+	def __init__(self, logsLabel:QTextBrowser = None):
+		super().__init__()
+		self.logsLabel:QTextBrowser = logsLabel
+
 	def emit(self, record):
 		log_entry = self.format(record)
 		print(log_entry)
-		UI.window.logsLabel.append(log_entry)
 
-def setup() -> logging.RootLogger:
+		if self.logsLabel:
+			self.logsLabel.append(log_entry)
+
+def setup() -> tuple:
 	"Sets up a new Logger, which is used for advanced logging operations."
 
 	global _file
@@ -52,7 +59,7 @@ def setup() -> logging.RootLogger:
 	logger.addHandler(console_handler)
 	logger.info("Logger initialized!")
 
-	return logger
+	return (logger, console_handler)
 
 def open():
 	"Opens current log file"
