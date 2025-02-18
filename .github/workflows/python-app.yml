@@ -1,6 +1,7 @@
 name: FNF Porter Build
 
 on:
+  workflow_dispatch:
   push:
     branches: [ "main", "v1.0" ]
 
